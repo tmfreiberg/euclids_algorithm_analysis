@@ -485,7 +485,7 @@ ax.legend()
 plt.show()
 ```
 
-[!SegmentLocal](#fibonacci_time)
+![SegmentLocal](#fibonacci_time)
 
 We can show that if $\phi$ and $\psi$ are the roots of $x^2 - x - 1$, then for $n \ge 0$,
 
