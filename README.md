@@ -272,3 +272,117 @@ First let's record a result that will be useful in the sequel.
 >$$da = dr_0, db = dr_1 > dr_2 > \cdots > dr_n > dr_{n + 1} = 0$$
 >
 >is the remainder sequence given by Euclid's algorithm for $\gcd(da,db)$ (the quotients $q_i$ in [$(3.2)$](#eq:rem_seq2) won't change).
+
+```python
+# Let's illustrate the invariance of the number of divisions under (a,b) -> (da,db). 
+# Take (a,b) as in the previous code block and d = 67.
+
+write_euclid(67*1011,67*69)
+```
+
+```
+# Let's illustrate the invariance of the number of divisions under (a,b) -> (da,db). 
+# Take (a,b) as in the previous code block and d = 67.
+
+write_euclid(67*1011,67*69)
+```
+
+What are the smallest possible values of $a$ and $b$ if $a \ge b \ge 1$ and $T(a,b) = n$? If $n = 1$ we need only note that $T(1,1) = 1$ to see that the answer is $a = b = 1$. Since $T(a,b) = 1$ if and only if $b \mid a$, the answer for $n \ge 2$ must satisfy $a > b \ge 2$ and $b \nmid a$. (In fact, by [Proposition 4.1(c)](#prop:4.1), the answer in general must satisfy $\gcd(a,b) = 1$, i.e. $r_n = 1$.) Noting that $T(3,2) = 2$ then gives the answer for $n = 2$ as $a = 3$ and $b = 2$. 
+
+```python
+# Some very naive code to answer the question: what are the smallest possible values of a and b if 
+# a >= b >= 1 and T(a,b) = n?
+# Basically a very inefficient way of computing Fibonacci numbers, the code really starts to get slow for n = 16.
+# But the first few n are enough to help us see a pattern.
+
+def W(n):
+    a, b = 1, 1
+    while gcd_steps(a,b,0)[1] < n:
+        a += 1
+        for b in range(1,a+1):
+            if gcd_steps(a,b,0)[1] == n:
+                return a, b
+    return a, b
+
+print(W(1), W(2), W(3), W(4), W(5), W(6), W(7), W(8), W(9), W(10))
+```
+
+```
+(1, 1) (3, 2) (5, 3) (8, 5) (13, 8) (21, 13) (34, 21) (55, 34) (89, 55) (144, 89)
+```
+
+It isn't difficult to see that for a given $n \ge 2$, if $T(a,b) = n$, $a$ and $b$ will be minimal if, in [$(3.2)$](#eq:rem_seq2), $r_n = 1$, $r_{n - 1} = 2$, and $q_1 = q_2 = \cdots = q_{n - 1} = 1$. Thus, $r_{n - 2} = 1(2) + 1 = 3$, $r_{n - 3} = 1(3) + 2 = 5$, and so on.
+
+```python
+write_euclid(55,34)
+```
+
+```
+55 = 1*34 + 21 	 ∴ gcd(55,34) = gcd(34,21)
+34 = 1*21 + 13 	 ∴ gcd(34,21) = gcd(21,13)
+21 = 1*13 +  8 	 ∴ gcd(21,13) = gcd(13,8) 
+13 = 1* 8 +  5 	 ∴  gcd(13,8) = gcd(8,5)  
+ 8 = 1* 5 +  3 	 ∴   gcd(8,5) = gcd(5,3)  
+ 5 = 1* 3 +  2 	 ∴   gcd(5,3) = gcd(3,2)  
+ 3 = 1* 2 +  1 	 ∴   gcd(3,2) = gcd(2,1)  
+ 2 = 2* 1 +  0 	 ∴   gcd(2,1) = gcd(1,0)  
+
+gcd(55,34) = 1, T(55,34) = 8
+```
+
+These are the Fibonacci numbers!
+
+---
+**Definition 4.2.** Let $\mathrm{f}_0 = 0$, $\mathrm{f}_1 = 1$, and $\mathrm{f}_{n+2} = \mathrm{f}_{n + 1} + \mathrm{f}_{n}$ for $n \ge 0$. Then $(\mathrm{f}_0,\mathrm{f}_1,\ldots)$ is the _Fibonacci sequence_, and $\mathrm{f}_n$ is the $n$-th _Fibonacci number_.
+
+---
+<a id='prop:4.3'></a>
+**Proposition 4.3.** Let $a \ge b \ge 1$. (a) For $n \ge 0$, we have $\gcd(\mathrm{f}_{n + 1},\mathrm{f}_{n}) = 1$. For $n \ge 1$, we have $T(\mathrm{f}_{n + 2},\mathrm{f}_{n + 1}) = n$. (b) If $n \ge 1$ and $T(a,b) = n$, then $a \ge \mathrm{f}_{n + 2}$ and $b \ge \mathrm{f}_{n+1}$. 
+
+---
+>_Proof._ (a) Since $\mathrm{f}_{n + 2} = \mathrm{f}_{n + 1} + \mathrm{f}_{n}$, we have $\gcd(\mathrm{f}_{n + 2},\mathrm{f}_{n + 1}) = \gcd(\mathrm{f}_{n + 1},\mathrm{f}_{n})$. Since $\gcd(\mathrm{f}_1,\mathrm{f}_0) = \gcd(1,0) = 1$, that $\gcd(\mathrm{f}_{n + 1},\mathrm{f}_n) = 1$ for all $n \ge 0$ now follows by mathematical induction. 
+>
+>Also, since $\mathrm{f}_{n + 2} = \mathrm{f}_{n + 1} + \mathrm{f}_n$ _and_ $0 \le \mathrm{f}_n < \mathrm{f}_{n + 1}$ for $n \ge 2$, we have $T(\mathrm{f}_{n + 2},\mathrm{f}_{n + 1}) = T(\mathrm{f}_{n + 1}, \mathrm{f}_n) + 1$ for $n \ge 2$. Since $T(\mathrm{f}_{1 + 2},\mathrm{f}_{1 + 1}) = T(2,1) = 1$, that $T(\mathrm{f}_{n + 2},\mathrm{f}_{n + 1}) = n$ for all $n \ge 1$ now follows by mathematical induction. 
+>
+>(b) We've verified the result for $n = 1$ and $n = 2$, so let $n \ge 2$ and suppose the result holds for $n$. Let $T(a,b) = n + 1$. Since this is greater than $1$, $b \nmid a$ (as noted above), and $a = qb + r$ for some $q$ and $r$ with $q \ge 1$ and $1 \le r < b$. Now, $T(b,r) = n$ and so, by inductive hypothesis, $b \ge \mathrm{f}_{n + 2}$ and $r \ge \mathrm{f}_{n + 1}$. Thus, $a = qb + r \ge \mathrm{f}_{n + 2} + \mathrm{f}_{n+1} = \mathrm{f}_{n + 3}$. In conclusion, $a \ge \mathrm{f}_{n + 3}$ and $b \ge \mathrm{f}_{n + 2}$, and the result holds for all $n \ge 2$, by mathematical induction.
+
+---
+**Remark 4.4.** For $a \ge b \ge 1$ and $n \ge 1$, the contrapositive of part (b) of the above proposition is: if either $a < \mathrm{f}_{n + 2}$ or $b < \mathrm{f}_{n + 1}$, then $T(a,b) \le n - 1$.
+
+---
+
+```python
+# Let's test this out for small n. 
+# In the table below, row a column b contains T(a,b).
+# Below the diagonal corresponds to a > b.
+# Note that, for instance, the first time 4 appears below the diagonal is in row 8, column 5: 8 = f_6 and 5 = f_5.
+
+test_dict = {}
+for a in range(14):
+    test_dict[a] = {}
+    for b in range(14):
+        test_dict[a][b] = gcd_steps(a,b,0)[1]
+        
+# To "tabulate" our data, we'll use pandas. 
+# import pandas as pd # Only needed if not already pre-loaded.
+
+pd.DataFrame.from_dict(test_dict, orient='index')#.astype('int')
+```
+
+```
+	0	1	2	3	4	5	6	7	8	9	10	11	12	13
+0	0	1	1	1	1	1	1	1	1	1	1	1	1	1
+1	0	1	2	2	2	2	2	2	2	2	2	2	2	2
+2	0	1	1	3	2	3	2	3	2	3	2	3	2	3
+3	0	1	2	1	3	4	2	3	4	2	3	4	2	3
+4	0	1	1	2	1	3	3	4	2	3	3	4	2	3
+5	0	1	2	3	2	1	3	4	5	4	2	3	4	5
+6	0	1	1	1	2	2	1	3	3	3	4	4	2	3
+7	0	1	2	2	3	3	2	1	3	4	4	5	5	4
+8	0	1	1	3	1	4	2	2	1	3	3	5	3	6
+9	0	1	2	1	2	3	2	3	2	1	3	4	3	4
+10	0	1	1	2	2	1	3	3	2	2	1	3	3	4
+11	0	1	2	3	3	2	3	4	4	3	2	1	3	4
+12	0	1	1	1	1	3	1	4	2	2	2	2	1	3
+13	0	1	2	2	2	4	2	3	5	3	3	3	2	1
+```
