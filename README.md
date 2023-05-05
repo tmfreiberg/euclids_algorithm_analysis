@@ -487,3 +487,81 @@ plt.show()
 
 [!SegmentLocal](#fibonacci_time)
 
+We can show that if $\phi$ and $\psi$ are the roots of $x^2 - x - 1$, then for $n \ge 0$,
+
+<a id='eq:fib_phi'></a>
+$$\mathrm{f}_n = \frac{\phi^{n} - \psi^n}{\phi - \psi}. \tag{4.1}$$
+
+For any root $\lambda$ of $x^2 - x - 1$ satisfies $\lambda^{n + 2} - \lambda^{n + 1} - \lambda = 0$ for all $n \ge 0$, just as the Fibonacci numbers satisfy $\mathrm{f}_{n + 2} - \mathrm{f}_{n + 1} - \mathrm{f}_{n} = 0$ for $n \ge 0$. It follows that if $c_1$ and $c_2$ are constants such that $f_n = c_1\phi^n + c_2\psi^n$ for $n = 0$ and $n = 1$, then this equation holds for all $n \ge 0$. Letting $n = 0$ shows that $c_2 = -c_1$, and then letting $n = 1$ gives $c_1 = 1/(\phi - \psi)$. We let $\phi = \frac{1}{2}(1 + \sqrt{5})$ be the positive root (the golden ratio), and $\psi = \frac{1}{2}(1 - \sqrt{5})$ be the other. Thus, $\phi - \psi = \sqrt{5}$, and $\mathrm{f}_n$ is the integer nearest $\phi^n/\sqrt{5}$.
+
+```python
+# Let's try this out. 
+# In fact, phi^n/sqrt(5) < f_n when n is odd, and phi^n/sqrt(5) > f_n when n is even.
+
+# import numpy as np # Only needed if not already pre-loaded.
+
+phi, psi = np.roots([1,-1,-1])
+
+def fib_closed_form(n):
+    return (phi**(n) - psi**(n))/(phi - psi)
+
+for n in range(11):
+    print(f'n = {n}, f_n = {fib(n)}, phi^n/(phi - psi) = {phi**(n)/(phi - psi):.3f}..., nearest int = {int(np.rint(phi**(n)/(phi - psi)))}')
+```
+
+```
+# Let's try this out. 
+# In fact, phi^n/sqrt(5) < f_n when n is odd, and phi^n/sqrt(5) > f_n when n is even.
+
+# import numpy as np # Only needed if not already pre-loaded.
+
+phi, psi = np.roots([1,-1,-1])
+
+def fib_closed_form(n):
+    return (phi**(n) - psi**(n))/(phi - psi)
+
+for n in range(11):
+    print(f'n = {n}, f_n = {fib(n)}, phi^n/(phi - psi) = {phi**(n)/(phi - psi):.3f}..., nearest int = {int(np.rint(phi**(n)/(phi - psi)))}')
+```
+
+We are now ready to establish the worst-case result for the number of divisions in Euclid's algorithm: the next propostion implies that for $N \ge 2$, 
+
+$$\max\{T(a,b) : 1 \le b \le a \le N\} = \Theta(\log N).$$
+
+---
+<a id='prop:worst_case'></a>
+**Proposition 4.5.** For $N \ge 2$,  
+
+$$\frac{\log(N - 1)}{\log \phi} - 1.328 < \max\{T(a,b) : 1 \le b \le a \le N\} < \frac{\log(N + 1)}{\log \phi} - 0.327.$$
+
+---
+
+Note that $1/\log \phi = 2.0780869\ldots$.
+
+>_Proof._ First of all, if $m \ge 1$ then $\mathrm{f}_{n + 1} \le m < \mathrm{f}_{n + 2}$ for some $n \ge 1$. Thus, in view of [$(4.1)$](#eq:fib_phi), we have (for $m \ge 2$ in the left inequality)
+>
+>$$\frac{\log(m - 1)}{\log \phi} - 0.328 < n < \frac{\log(m + 1)}{\log \phi} + 0.673. \tag{$*$}$$
+>
+>To see this in more detail, note that $\mathrm{f}_{k} = \lfloor \phi^k/(\phi - \psi)\rfloor$ if $k$ is even, while $\mathrm{f}_{k} = \lceil \phi^k/(\phi - \psi)\rceil$ if $k$ is odd; also, $\phi - \psi = \sqrt{5}$. Thus, supposing first that $n$ is even, 
+>
+>$$\frac{\phi^{n+1}}{\sqrt{5}} < \mathrm{f}_n \le m < \mathrm{f}_{n + 2} < \frac{\phi^{n+2}}{\sqrt{5}}.$$
+>
+>Taking logarithms, we see that 
+>
+>$$n + 1 < \frac{\log m + \frac{1}{2}\log 5}{\log \phi} < n + 2,$$
+>
+> leading (after a calculation) to
+>$$ \frac{\log m}{\log \phi} - 0.3277\ldots < n < \frac{\log m}{\log \phi} + 0.6722\ldots .$$
+>
+> Similarly, if $n$ is odd and $m \ge 2$, then 
+>$$ \frac{\log(m-1)}{\log \phi} - 0.3277\ldots < n < \frac{\log(m + 1)}{\log \phi} + 0.6722\ldots .$$
+>
+> Combining gives $(*)$.
+>
+>(a) Now, let $N \ge 2$ be given, and let $n \ge 2$ be such that $\mathrm{f}_{n + 1} \le N < \mathrm{f}_{n + 2}$. By [Proposition 4.3(b)](#prop:4.3), for $1 \le b \le a \le N$, we have $T(a,b) \le n - 1$, with equality attained when $a = \mathrm{f}_{n + 1}$ and $b = \mathrm{f}_{n}$. That is, 
+>
+>$$\max \{T(a,b) : 1 \le b \le a \le N\} = n - 1,$$
+>
+>and the result follows by $(*)$. 
+
+We see that, for a given $N \ge 2$, as the pair $(a,b)$ ranges over $ 1 \le b < a \le N$, $T(a,b)$ ranges from $1$ to around $2.078 \log N$. What is the average value of $T(a,b)$ over $(a,b)$ in the same region? How are the values of $T(a,b)$ distributed? We will answer these questions, and more, below.
