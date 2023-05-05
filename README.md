@@ -14,3 +14,66 @@ Indeed, one of our goals here is to shed some light (numerically) on a certain "
 There are various ways of analysing Euclid's algorithm. Here is one example. Let $X$ be the random variable whose value is the number divisions performed in the computation of $\gcd(a,b)$ via Euclid's algorithm, with $(a,b)$ chosen uniformly at random from the region $1 \le b < a \le N$. It is known that $X$ is asymptotically normal (as $N \to \infty$), with mean close to $\lambda\log N + \nu - \frac{1}{2}$ and variance close to $\eta\log N + \kappa$, for certain constants $\lambda, \nu, \eta, \kappa$. While the constants associated with the mean can be written in closed form and easily calculated to any desired degree of accuracy ($\lambda = 0.8427659\ldots$ and $\nu = 0.0653514\ldots$), those associated with the variance cannot. Nevertheless, $\eta$ and $\kappa$ are polynomial-time computable, and the first seven digits of $\eta$ have been determined: $\eta = 0.5160524\ldots$. The "subdominant" constant $\kappa$ is even more mysterious, and our numerics will lead us to guess an approximate value for it (we believe it is around $-0.1$). 
 
 In the above animation, the distribution of $X$ is shown for various $N$ up to $10^5$ (starting with $N = 1000$ and going up by $1000$ in each frame). The large blue dots give the probability that $X$ equals a given number on the horizontal axis. The dotted blue curve is normal with mean $\mu = \mathbb{E}[X]$ and variance $\sigma^2 = \mathrm{Var}(X)$, while the light blue curve is normal with mean $\mu_* = \lambda\log N + \nu - \frac{1}{2}$ and variance $\sigma_*^2 = \eta \log N - 0.1$. The red dots and curves are analagous, but only coprime pairs $(a,b)$ are considered. See [Two-dimensional analysis: distribution](#2d-distribution) for more detail and context.
+
+<a id='pictures'></a>
+#### Some plots
+
+<sup>Jump to: ↑ [§ 1. Introduction](#introduction) | ↓ [Table of Contents](#toc)</sup>
+
+Is this a _random walk?_ See [One-dimensional analysis: mean and error term](#1d-investigation-mean) for the answer.
+
+![SegmentLocal](images/sum_sign_error_term_porter_1000.png)
+
+See [One-dimensional analysis: mean and error term](#1d-investigation-mean) for the context of this instance of _square-root-cancellation_.
+
+![SegmentLocal](images/error_term_porter_650.png)
+
+See [One-dimensional analysis: variance](#1d-investigation-variance) for more about the next two plots.
+
+![SegmentLocal](images/second_moment_1d_1000.png)
+
+![SegmentLocal](images/variance_error_1d_1000.png)
+
+See [One-dimensional analysis: distribution](#1d-investigation) for an explanation of the animation below.
+
+![SegmentLocal](images/euclid_steps_distribution_1d_10001_loop.gif)
+
+See [Two-dimensional analysis: error terms & subdominant constant in the variance](#2d-investigation) for an explanation of the plots below.
+
+![SegmentLocal](images/error_term_in_mean_and_variance_no_constant_100000.png)
+
+<a id='toc'></a>
+#### Table of Contents
+
+<sup>Jump to: ↑ [Some plots](#pictures) | ↓ [Libraries](#libraries) </sup>
+
+ § 1... [Introduction](#introduction) [Maths/Visuals] <br>
+ ............... [Some plots](#pictures) [Visuals] <br>
+ § 2... [Libraries](#libraries) [Code] <br>
+ § 3... [A quick recap of the GCD and Euclid's algorithm](#definitions) [Maths]<br>
+    ............... [Code for Euclid's algorithm](#codeEuclid) [Code] <br>
+ § 4... [Worst-case analysis](#worst-case) [Maths/Code] <br>
+    ............... [The Fibonacci numbers and dynamic programming](#fibonacci) [Code] <br>
+ § 5... [Constants](#constants) [Maths/Code] <br>
+ § 6... [One-dimensional analysis](#1d-analysis) [Maths] <br>
+    ............... [Average-case analysis](#1d-average-case) [Maths] <br>
+    ............... [Error term, variance, and distribution](#1d-higher-moments) [Maths] <br>
+ § 7... [Two-dimensional analysis](#2d-analysis) [Maths] <br> 
+    ............... [Average-case analysis](#average-case) [Maths] <br>
+    ............... [Variance and distribution](#distribution) [Maths] <br>
+ § 8... [Code for analysing Euclid's algorithm](#code-for-analysing) [Code] <br>
+ § 9... [Generating and exporting/importing the raw data](#raw-data) [Code] <br>
+ § 10... [Numerical investigation & data visualisation](#numerical-investigation) <br>
+     ............... [One-dimensional analysis: distribution](#1d-investigation) [Maths/Code/Visuals] <br>
+     ............... [One-dimensional analysis: mean and error term](#1d-investigation-mean) [Maths/Code/Visuals] <br>
+     ............... [One-dimensional analysis: variance](#1d-investigation-variance) [Maths/Code/Visuals] <br>
+     ............... [Two-dimensional analysis: error terms & subdominant constant in the variance](#2d-investigation) [Maths/Code/Visuals] <br>
+     ............... [Two-dimensional analysis: distribution](#2d-distribution) [Maths/Code/Visuals] <br>
+[References](#references) 
+
+<a id='libraries'></a>
+### § 2. Libraries
+
+<sup>Jump to: [Table of Contents](#toc) | ↓ [A quick recap of the GCD and Euclid's algorithm](#definitions)</sup>
+
+
