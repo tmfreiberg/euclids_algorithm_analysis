@@ -386,3 +386,104 @@ pd.DataFrame.from_dict(test_dict, orient='index')#.astype('int')
 12	0	1	1	1	1	3	1	4	2	2	2	2	1	3
 13	0	1	2	2	2	4	2	3	5	3	3	3	2	1
 ```
+
+<a id='fibonacci'></a>
+#### The Fibonacci numbers and dynamic programming
+
+<sup>Jump to: [Table of Contents](#toc) | ↑ [Worst-case analysis](#worst-case) | ↓ [Constants](#constants)</sup>
+
+```python
+# In this code block we will use matplotlib.pyplot and default_timer from timeit.
+# Let's take a detour and compute some Fibonacci numbers.
+# Computing f_n naively takes time exponential in n.
+# E.g. to compute f_5 naively we do this: 
+# f_5 = f_4 + f_3 
+#     = f_3 + f_2 + f_2 + f_1 
+#     = f_2 + f_1 + f_1 + f_0 + f_1 + f_0 + 1
+#     = f_1 + 1 + 1 + 0 + 1 + 0 + 1
+#     = 1 + 1 + 1 + 0 + 1 + 0 + 1
+#     = 5
+# We can think of this as a tree with f_5 at the top, 
+# and where each parent node has two children until the node corresponds to f_1 or f_0. 
+# We end up having to sum a sequence of 1's and 0's of length f_n, 
+# and we know f_n is of order phi^n, where phi is the golden ratio.
+
+def naive_fib(n):
+    if n == 0:
+        return 0
+    if n == 1:
+        return 1
+    if n > 1:
+        return naive_fib(n - 1) + naive_fib(n - 2)
+    if n < 0:
+        return naive_fib(-n) # Why not?
+
+# from timeit import default_timer as timer # Only needed if not already pre-loaded.
+naive_time = []
+for n in range(31):
+    start = timer()
+    naive_fib(n)
+    end = timer()
+    naive_time.append(end - start)
+    
+# Of course it is very silly to compute fib(n) from scratch if you've just computed f_0,f_1,...,f_{n-1}.
+# Let's compute f_n the way a human might do it: by starting at the beginning.
+
+FIB = []
+list_time = []
+for n in range(101):
+    start = timer()
+    if (n == 0 or n == 1):
+        FIB.append(n)
+    else:
+        FIB.append(FIB[n - 1] + FIB[n - 2])
+    end = timer()
+    list_time.append(end - start)
+
+# Now if we want to compute f_n but don't want to have to maintain an ever-expanding list 
+# of all previous Fibonacci numbers, we can do the following.
+# This algorithm computes f_n in O(n) time for n >= 1 
+# (a unit of time being the time taken to do an addition and update a couple of variables).
+# There are only about n additions needed in this algorithm.
+# This is the archetypal example of dynamic programming, specifically memoization.
+# a and b in the code below essentially constitute a hash table, which is updated in each iteration. 
+# Perhaps the previous code (generating a list of all Fibonacci numbers) up to f_n, is an example 
+# of tabulation.
+
+def fib(n):
+    a, b = 0, 1 # a and b will be placeholders for fib(n - 2) and fib(n - 1)
+    if n == 0:
+        return a
+    if n == 1:
+        return b
+    if n < 0: 
+        return fib(-n) # Why not?
+    for k in range(n-1):
+        c = a + b # c will be fib(n) ultimately. 
+        a = b # First, k = 0, c = 0 + 1 = 1, a -> 1, b -> 1.
+        b = c # Then, k = 1, c -> 1 + 1 = 2, a -> 1, b -> 2. And so on.
+    return c
+
+dynamic_time = []
+for n in range(101):
+    start = timer()
+    fib(n)
+    end = timer()
+    dynamic_time.append(end - start)
+
+#import matplotlib.pyplot as plt # Only needed if not already pre-loaded.
+fig, ax = plt.subplots()
+fig.suptitle('Time to compute nth Fibonacci number')
+x = [n for n in range(101)]
+ax.plot(x[:31],naive_time,'r.', label='Naive recursion')
+ax.plot(x,list_time,'b.', label=f'List all $f_k$ for $k \leq n$')
+plt.plot(x,dynamic_time,'g+', label='Dynamic algorithm')
+ax.set_xlabel(r'$n$')
+ax.set_ylabel('units of time')
+ax.grid(True)
+ax.legend()
+plt.show()
+```
+
+[!SegmentLocal](#fibonacci_time)
+
