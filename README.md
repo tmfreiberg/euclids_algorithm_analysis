@@ -561,7 +561,7 @@ Note that $1/\log \phi = 2.0780869\ldots$.
 >
 >(a) Now, let $N \ge 2$ be given, and let $n \ge 2$ be such that $f_{n + 1} \le N < f_{n + 2}$. By [Proposition 4.3(b)](#prop:4.3), for $1 \le b \le a \le N$, we have $T(a,b) \le n - 1$, with equality attained when $a = f_{n + 1}$ and $b = f_{n}$. That is, 
 >
->$$\max \{T(a,b) : 1 \le b \le a \le N\} = n - 1,$$
+>$$\max\{T(a,b) : 1 \le b \le a \le N\} = n - 1,$$
 >
 >and the result follows by $(*)$. 
 
