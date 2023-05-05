@@ -510,18 +510,17 @@ for n in range(11):
 ```
 
 ```
-# Let's try this out. 
-# In fact, phi^n/sqrt(5) < f_n when n is odd, and phi^n/sqrt(5) > f_n when n is even.
-
-# import numpy as np # Only needed if not already pre-loaded.
-
-phi, psi = np.roots([1,-1,-1])
-
-def fib_closed_form(n):
-    return (phi**(n) - psi**(n))/(phi - psi)
-
-for n in range(11):
-    print(f'n = {n}, f_n = {fib(n)}, phi^n/(phi - psi) = {phi**(n)/(phi - psi):.3f}..., nearest int = {int(np.rint(phi**(n)/(phi - psi)))}')
+n = 0, f_n = 0, phi^n/(phi - psi) = 0.447..., nearest int = 0
+n = 1, f_n = 1, phi^n/(phi - psi) = 0.724..., nearest int = 1
+n = 2, f_n = 1, phi^n/(phi - psi) = 1.171..., nearest int = 1
+n = 3, f_n = 2, phi^n/(phi - psi) = 1.894..., nearest int = 2
+n = 4, f_n = 3, phi^n/(phi - psi) = 3.065..., nearest int = 3
+n = 5, f_n = 5, phi^n/(phi - psi) = 4.960..., nearest int = 5
+n = 6, f_n = 8, phi^n/(phi - psi) = 8.025..., nearest int = 8
+n = 7, f_n = 13, phi^n/(phi - psi) = 12.985..., nearest int = 13
+n = 8, f_n = 21, phi^n/(phi - psi) = 21.010..., nearest int = 21
+n = 9, f_n = 34, phi^n/(phi - psi) = 33.994..., nearest int = 34
+n = 10, f_n = 55, phi^n/(phi - psi) = 55.004..., nearest int = 55
 ```
 
 We are now ready to establish the worst-case result for the number of divisions in Euclid's algorithm: the next propostion implies that for $N \ge 2$, 
@@ -682,53 +681,18 @@ print(f"{'gamma':>16} = {euler_mascheroni}" +'\n' +
 ```
 
 ```
-#CONSTANTS
-
-# Constants needed to define other subsequent constants...
-euler_mascheroni = 0.57721566490153286060 # Approximate value of Euler-Mascheroni constant.
-zeta_der_2 = -0.93754825431584375370 # Approximate value of zeta'(2)
-zeta_dder_2 = 1.98928 # Approximation to zeta''(2)
-
-# The constants we actually need...
-# For the mean in the one- and two-dimensional analyses
-
-# This is the reciprocal of Levy's constant. We'll name it here in honour of Dixon.
-lambda_dixon = 2*np.log(2)/zeta(2) 
-# Porter's constant
-porter_constant = ((np.log(2))/zeta(2))*(3*np.log(2) + 4*euler_mascheroni - 4*zeta_der_2/zeta(2) - 2) - (1/2) 
-
-# For the mean in the two-dimensional analysis (subdominant constants)
-
-# Norton's refinement of the mean. (Counting all pairs, not just a > b.)
-nu_norton = -1 + lambda_dixon*(2*euler_mascheroni + 1.5*np.log(2) - 1.5 - zeta_der_2/zeta(2)) 
-# Norton's constant for case of coprime pairs. (Counting all coprime pairs, not just a > b.)
-nu_norton_coprime = nu_norton - lambda_dixon*zeta_der_2/zeta(2) 
-
-# For the variance in the two-dimensional analysis
-
-# Hensley's constant in the variance, as given by Lhote.
-eta_hensley = 0.5160524 
-
-# Subdominant constants in the variance for the two-dimensional analysis
-
-# Our "guesstimate" of the subdominant constant in a certain variance
-kappa_var = -0.1 
-delta_kappa = np.around(eta_hensley*zeta_der_2/zeta(2) + (lambda_dixon**2)*((zeta_dder_2/zeta(2)) - (zeta_der_2/zeta(2))**2),3)
-# Our "guesstimate" of the subdominant constant in another variance
-kappa_var_coprime = np.around(kappa_var - delta_kappa,3) 
-
-print(f"{'gamma':>16} = {euler_mascheroni}" +'\n' + 
-      f"{'zeta(2)':>16} = {zeta(2)}" + '\n' +
-      f"{'der_zeta(2)':>16} = {zeta_der_2}" + '\n' +
-      f"{'dder_zeta(2)':>16} = {zeta_dder_2}" + '\n' +
-      f"{'lambda':>16} = {lambda_dixon}" + '\n' +
-      f"{'C_P':>16} = {porter_constant}" + '\n' +
-      f"{'nu':>16} = {nu_norton}" + '\n' +
-      f"{'nu_1':>16} = {nu_norton_coprime}" + '\n' +
-      f"{'eta':>16} = {eta_hensley}" + '\n' +
-      f"{'kappa - kappa_1':>16} = {delta_kappa}" + '\n' +
-      f"{'kappa':>16} = {kappa_var} (?)" + '\n' +
-      f"{'kappa_1':>16} = {kappa_var_coprime} (?)")
+gamma = 0.5772156649015329
+         zeta(2) = 1.6449340668482264
+     der_zeta(2) = -0.9375482543158438
+    dder_zeta(2) = 1.98928
+          lambda = 0.8427659132721945
+             C_P = 1.4670780794339755
+              nu = 0.06535142592303722
+            nu_1 = 0.5456951227978781
+             eta = 0.5160524
+ kappa - kappa_1 = 0.334
+           kappa = -0.1 (?)
+         kappa_1 = -0.434 (?)
 ```
 
 <a id='1d-analysis'></a>
