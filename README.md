@@ -550,9 +550,11 @@ Note that $1/\log \phi = 2.0780869\ldots$.
 >$$n + 1 < \frac{\log m + \frac{1}{2}\log 5}{\log \phi} < n + 2,$$
 >
 > leading (after a calculation) to
+> 
 >$$ \frac{\log m}{\log \phi} - 0.3277\ldots < n < \frac{\log m}{\log \phi} + 0.6722\ldots .$$
 >
-> Similarly, if $n$ is odd and $m \ge 2$, then 
+> Similarly, if $n$ is odd and $m \ge 2$, then
+>  
 >$$ \frac{\log(m-1)}{\log \phi} - 0.3277\ldots < n < \frac{\log(m + 1)}{\log \phi} + 0.6722\ldots .$$
 >
 > Combining gives $(*)$.
@@ -563,7 +565,7 @@ Note that $1/\log \phi = 2.0780869\ldots$.
 >
 >and the result follows by $(*)$. 
 
-We see that, for a given $N \ge 2$, as the pair $(a,b)$ ranges over $ 1 \le b < a \le N$, $T(a,b)$ ranges from $1$ to around $2.078 \log N$. What is the average value of $T(a,b)$ over $(a,b)$ in the same region? How are the values of $T(a,b)$ distributed? We will answer these questions, and more, below.
+We see that, for a given $N \ge 2$, as the pair $(a,b)$ ranges over $1 \le b < a \le N$, $T(a,b)$ ranges from $1$ to around $2.078 \log N$. What is the average value of $T(a,b)$ over $(a,b)$ in the same region? How are the values of $T(a,b)$ distributed? We will answer these questions, and more, below.
 
 <a id='constants'></a>
 ### § 5. Constants
