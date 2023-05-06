@@ -600,7 +600,7 @@ The reciprocal of [Lévy's constant](https://oeis.org/A086702):
 
 $$
 \begin{align*}
- \lambda = \frac{2\log 2}{\zeta(2)} = \frac{12 \log 2}{\pi^2} = 0.8427659\ldots, \tag{5.6}
+ \lambda = \frac{2\log 2}{\zeta(2)} = \frac{12 \log 2}{\pi^2} = 0.8427659\ldots. \tag{5.6}
 \end{align*}
 $$
 
@@ -702,7 +702,7 @@ print(f"{'gamma':>16} = {euler_mascheroni}" +'\n' +
 ```
 
 ```
-gamma = 0.5772156649015329
+           gamma = 0.5772156649015329
          zeta(2) = 1.6449340668482264
      der_zeta(2) = -0.9375482543158438
     dder_zeta(2) = 1.98928
@@ -728,21 +728,21 @@ As we will see, "one-dimensional analysis" is "harder" than "two-dimensional ana
 
 <sup>Jump to: [Table of Contents](#toc) | ↑ [§ 6. One-dimensional analysis](#1d-analysis) | ↓ [Error term, variance, and distribution](#1d-higher-moments) | ↓↓ [Numerics](#1d-investigation-mean)</sup>
 
-To formulate results precisely, given a positive integer $a$, set $\mathbb{Z}_a^{\times} = \\\{b \in [1,a] : \gcd(a,b) = 1\\\}$ (the _totatives_ of $a$), and define a random variable $Z : \mathbb{Z}_a^{\times} \to \mathbb{N}$ by letting $Z(b) = T(a,b)$ for each $b \in \mathbb{Z}_a^{\times}$ (with $b$ being chosen uniformly at random from $\mathbb{Z}_a^{\times}$). Thus, 
+To formulate results precisely, given a positive integer $a$, set $\mathbb{Z}\_a^{\times} = \\\{b \in [1,a] : \gcd(a,b) = 1\\\}$ (the _totatives_ of $a$), and define a random variable $Z : \mathbb{Z}\_a^{\times} \to \mathbb{N}$ by letting $Z(b) = T(a,b)$ for each $b \in \mathbb{Z}\_a^{\times}$ (with $b$ being chosen uniformly at random from $\mathbb{Z}\_a^{\times}$). Thus, 
 
 <a id='eq:EZ'></a>
 
 $$
 \begin{align*}
-\mathbb{E}[Z] = \frac{1}{\phi(a)}\sum_{\substack{b = 1 \\ \gcd(a,b) = 1}}^{a} T(a,b) \tag{6.1}
+\mathbb{E}[Z] = \frac{1}{\phi(a)}\sum_{\substack{b = 1 \\\ \gcd(a,b) = 1}}^{a} T(a,b) \tag{6.1}
 \end{align*}
 $$
 
-is the average number of divisions performed in Euclid's algorithm for $\gcd(a,b)$, over all $b$ satisfying $1 \le b \le a$ and $\gcd(a,b) = 1$. (Recall that Euler's totient function of $a$, $\phi(a)$, is just the size of $\mathbb{Z}_a^{\times}$.)
+is the average number of divisions performed in Euclid's algorithm for $\gcd(a,b)$, over all $b$ satisfying $1 \le b \le a$ and $\gcd(a,b) = 1$. (Recall that Euler's totient function of $a$, $\phi(a)$, is just the size of $\mathbb{Z}\_a^{\times}$.)
 
 Heilbronn [[3]](#references) considered (exercise to show the equivalence)
 
-$$\tau_a = \frac{1}{\phi(a)}\sum_{\substack{b = 0 \\ \gcd(a,b) = 1}}^{a - 1} T(b,a) = \mathbb{E}[Z] + 1,$$
+$$\tau_a = \frac{1}{\phi(a)}\sum_{\substack{b = 0 \\\ \gcd(a,b) = 1}}^{a - 1} T(b,a) = \mathbb{E}[Z] + 1,$$
 
 and showed that $\tau_a = \lambda \log a + O\left((\log\log a)^4\right)$, where $\lambda$ is as in [$(5.6)$](#eq:mu_dixon). Porter [[8]](#references) subsequently showed that for all $a \ge 1$ and any $\epsilon > 0$, $\tau_a = \lambda \log a + C_P + O_{\epsilon}\left(a^{\epsilon - 1/6}\right)$, where $C_P$ is _Porter's constant_ as in [$(5.7)$](#eq:porter_constant). This is equivalent to the following. 
 
@@ -810,10 +810,10 @@ As already mentioned, averaging the number of divisions in the Euclidean algorit
 
 $$
 \begin{align*}
- U & = \{1,\ldots,N\} \times \{1,\ldots,N\}\\
- U_{1} & = \{(a,b) \in U : \gcd(a,b) = 1\} \\
- \Omega & = \{(a,b) \in U : a > b\} \\
- \Omega_{1} & = \{(a,b) \in U_{1}: a > b\}
+ U & = \\\{1,\ldots,N\\\} \times \\\{1,\ldots,N\\\}\\
+ U_{1} & = \\\{(a,b) \in U : \gcd(a,b) = 1\\\} \\
+ \Omega & = \\\{(a,b) \in U : a > b\\\} \\
+ \Omega_{1} & = \\\{(a,b) \in U_{1}: a > b\\\}
 \end{align*} 
 $$
 
@@ -842,7 +842,7 @@ $$
 \end{align*}
 $$
 
-is the average number of divisions performed by Euclid's algorithm, over all pairs $(a,b)$ satisfying $1 \le a,b \le N$. (We'll discuss the restriction $a > b$ shortly.) Knuth [[5]](#references) gave a heuristic suggesting $\mathbb{E}[Y] = \lambda\log N + O(1)$ ($\mu$ as in [$(5.6)$](#eq:mu_dixon)), and numerical evidence suggesting the $O(1)$ is actually around $0.06$ plus a small error. This was first proved by Norton [[7]](#references) (whose proof hinged on [Theorem 6.1](#thm:porter) of Porter [[8]](#references)).
+is the average number of divisions performed by Euclid's algorithm, over all pairs $(a,b)$ satisfying $1 \le a,b \le N$. (We'll discuss the restriction $a > b$ shortly.) Knuth [[5]](#references) gave a heuristic suggesting $\mathbb{E}[Y] = \lambda\log N + O(1)$ ($\lambda$ as in [(5.6)](#eq:mu_dixon)), and numerical evidence suggesting the $O(1)$ is actually around $0.06$ plus a small error. This was first proved by Norton [[7]](#references) (whose proof hinged on [Theorem 6.1](#thm:porter) of Porter [[8]](#references)).
 
 ---
 <a id='thm:norton'></a>
@@ -898,7 +898,7 @@ $$
 
 $$
 \begin{align*}
- \mathbb{E}[Y] = \lambda \log N + \nu_1 + \mu\frac{\zeta'(2)}{\zeta(2)}+ O_{\epsilon}\left(N^{\epsilon - 1/6}\right).
+ \mathbb{E}[Y] = \lambda \log N + \nu_1 + \lambda\frac{\zeta'(2)}{\zeta(2)}+ O_{\epsilon}\left(N^{\epsilon - 1/6}\right).
 \end{align*}
 $$
 
@@ -908,28 +908,28 @@ $$
 >
 >$$
 >\begin{align*}
- \# U_1 \mathbb{E}[Y_1] & = \sum_{(a,b) \in U_1} T(a,b) \\
- & = \sum_{\substack{(a,b) \in U_1 \\ a > b}} T(a,b) + \sum_{\substack{(a,b) \in U_1 \\ b > a}} T(a,b) + \sum_{\substack{(a,b) \in U_1 \\ a = b}} T(a,b) \\
- & = \sum_{\substack{(a,b) \in U_1 \\ a > b}} T(a,b) + \sum_{\substack{(a,b) \in U_1 \\ a > b}} T(b,a) + T(1,1) \\
- & = \sum_{\substack{(a,b) \in U_1 \\ a > b}} T(a,b) + \sum_{\substack{(a,b) \in U_1 \\ a > b}} \left[T(a,b) + 1\right] + 1 \\
- & = 2\sum_{\substack{(a,b) \in U_1 \\ a > b}} T(a,b) + \sum_{\substack{(a,b) \in U_1 \\ a > b}} 1 + 1 \\
- & = 2\#\Omega_1 \mathbb{E}[X_1] + \#\Omega_1 + 1.
+ \\# U_1 \mathbb{E}[Y_1] & = \sum_{(a,b) \in U_1} T(a,b) \\
+ & = \sum_{\substack{(a,b) \in U_1 \\\ a > b}} T(a,b) + \sum_{\substack{(a,b) \in U_1 \\\ b > a}} T(a,b) + \sum_{\substack{(a,b) \in U_1 \\\ a = b}} T(a,b) \\
+ & = \sum_{\substack{(a,b) \in U_1 \\\ a > b}} T(a,b) + \sum_{\substack{(a,b) \in U_1 \\\ a > b}} T(b,a) + T(1,1) \\
+ & = \sum_{\substack{(a,b) \in U_1 \\\ a > b}} T(a,b) + \sum_{\substack{(a,b) \in U_1 \\\ a > b}} \left[T(a,b) + 1\right] + 1 \\
+ & = 2\sum_{\substack{(a,b) \in U_1 \\\ a > b}} T(a,b) + \sum_{\substack{(a,b) \in U_1 \\\ a > b}} 1 + 1 \\
+ & = 2\\#\Omega_1 \mathbb{E}[X_1] + \\#\Omega_1 + 1.
 \end{align*}
 >$$
 >
->Since $\#U_1 = 2\#\Omega_1 + N$ (if this isn't clear, replace $T(a,b)$ by $1$ in the above equations), this gives 
+>Since $\\#U_1 = 2\\#\Omega_1 + N$ (if this isn't clear, replace $T(a,b)$ by $1$ in the above equations), this gives 
 >
 >$$
 >\begin{align*}
- \#U_1\mathbb{E}[Y_1] = \#U_1 \mathbb{E}[X_1] - N\mathbb{E}[X_1] + {\textstyle \frac{1}{2}} \left(\#U_1 - N\right) + 1,
+ \\#U_1\mathbb{E}[Y_1] = \\#U_1 \mathbb{E}[X_1] - N\mathbb{E}[X_1] + {\textstyle \frac{1}{2}} \left(\\#U_1 - N\right) + 1,
 \end{align*}
 >$$
 >
->which upon dividing by $\#U_1$ becomes
+>which upon dividing by $\\#U_1$ becomes
 >
 >$$
 >\begin{align*}
- \mathbb{E}[Y_1] = \mathbb{E}[X_1] + {\textstyle \frac{1}{2}} - \frac{N}{\# U_1}\left(\mathbb{E}[X_1] + {\textstyle \frac{1}{2} + \frac{1}{N}}\right).
+ \mathbb{E}[Y_1] = \mathbb{E}[X_1] + {\textstyle \frac{1}{2}} - \frac{N}{\\# U_1}\left(\mathbb{E}[X_1] + {\textstyle \frac{1}{2} + \frac{1}{N}}\right).
 \end{align*}
 >$$
 >
@@ -938,23 +938,23 @@ $$
 >
 >$$
 >\begin{align*}
- \sum_{\substack{1 \le a,b \le N \\ \gcd(a,b) = 1}} 1 = \frac{N^2}{\zeta(2)} + O\left(N \log N\right). \tag{7.7}
+ \sum_{\substack{1 \le a,b \le N \\\ \gcd(a,b) = 1}} 1 = \frac{N^2}{\zeta(2)} + O\left(N \log N\right). \tag{7.7}
 \end{align*}
 >$$
 >
->We'll use this in the proof of part (b), but at this point we only need that $\#U_1 \gg N^2$. Combining gives the second equation in [$(7.6)$](#eq:ExpEquiv_a). The verification of the first equation in [$(7.6)$](#eq:ExpEquiv_a) is almost identical. 
+>We'll use this in the proof of part (b), but at this point we only need that $\\#U_1 \gg N^2$. Combining gives the second equation in [$(7.6)$](#eq:ExpEquiv_a). The verification of the first equation in [$(7.6)$](#eq:ExpEquiv_a) is almost identical. 
 >
->(b) We show that (i) implies (ii). Since $\gcd(c,d) = 1$ if and only if $\gcd(gc,gd) = g$, and since $T(gc,gd) = T(c,d)$,
+>(b) We show that (i) implies (ii). Since $\gcd(c,d) = 1$ if and only if $\gcd(gc,gd) = g$, and since $T(gc,gd) = T(c,d)$ ([Proposition 4.1(c)](#prop:4.1)),
 >
 >$$
 >\begin{align*}
  N^2 \mathbb{E}[Y] & = \sum_{1 \le a,b \le N} T(a,b) \\
- & = \sum_{g = 1}^{N} \sum_{\substack{1 \le a,b \le N \\ \gcd(a,b) = g}} T(a,b) \\
- & = \sum_{g = 1}^{N} \sum_{\substack{1 \le c,d \le N/g \\ \gcd(c,d) = 1}} T(gc,gd) \\
- & = \sum_{g = 1}^{N} \sum_{\substack{1 \le c,d \le N/g \\ \gcd(c,d) = 1}} T(c,d) \\
- & = \sum_{1 \le g \le N/2} \sum_{\substack{1 \le c,d \le N/g \\ \gcd(c,d) = 1}} T(c,d)
+ & = \sum_{g = 1}^{N} \sum_{\substack{1 \le a,b \le N \\\ \gcd(a,b) = g}} T(a,b) \\
+ & = \sum_{g = 1}^{N} \sum_{\substack{1 \le c,d \le N/g \\\ \gcd(c,d) = 1}} T(gc,gd) \\
+ & = \sum_{g = 1}^{N} \sum_{\substack{1 \le c,d \le N/g \\\ \gcd(c,d) = 1}} T(c,d) \\
+ & = \sum_{1 \le g \le N/2} \sum_{\substack{1 \le c,d \le N/g \\\ \gcd(c,d) = 1}} T(c,d)
       + \sum_{N/2 < g \le N} T(1,1) \\
- & = \sum_{1 \le g \le N/2} \sum_{\substack{1 \le c,d \le N/g \\ \gcd(c,d) = 1}} T(c,d) + O(N). \tag{$*$}
+ & = \sum_{1 \le g \le N/2} \sum_{\substack{1 \le c,d \le N/g \\\ \gcd(c,d) = 1}} T(c,d) + O(N). \tag{$\dagger$}
 \end{align*}
 >$$
 >
@@ -962,7 +962,7 @@ $$
 >
 >$$
 >\begin{align*}
- \sum_{\substack{1 \le c,d \le M \\ \gcd(c,d) = 1}} T(c,d) = \sum_{\substack{1 \le c,d \le M \\ \gcd(c,d) = 1}} \left(\lambda \log M + \nu_1 + O_{\epsilon}\left(M^{\epsilon - 1/6}\right)\right),
+ \sum_{\substack{1 \le c,d \le M \\\ \gcd(c,d) = 1}} T(c,d) = \sum_{\substack{1 \le c,d \le M \\\ \gcd(c,d) = 1}} \left(\lambda \log M + \nu_1 + O_{\epsilon}\left(M^{\epsilon - 1/6}\right)\right),
 \end{align*}
 >$$
 >
@@ -970,16 +970,16 @@ $$
 >
 >$$
 >\begin{align*}
- \sum_{\substack{1 \le c,d \le M \\ \gcd(c,d) = 1}} T(c,d) = \frac{M^2}{\zeta(2)}\left(\lambda \log M + \nu_1\right) + O_{\epsilon}\left(M^{2 + \epsilon - 1/6}\right).
+ \sum_{\substack{1 \le c,d \le M \\\ \gcd(c,d) = 1}} T(c,d) = \frac{M^2}{\zeta(2)}\left(\lambda \log M + \nu_1\right) + O_{\epsilon}\left(M^{2 + \epsilon - 1/6}\right).
 \end{align*}
 >$$
 >
->Putting this into $(*)$, we obtain
+>Putting this into $(\dagger)$, we obtain
 >
 >$$
 >\begin{align*}
  \mathbb{E}[Y] & = \sum_{1 \le g \le N/2} \left[\left(\frac{(1/g)^2}{\zeta(2)}\right)\left(\lambda \log(N/g) + \nu_1\right) + O_{\epsilon}\left(N^{\epsilon - 1/6}/g^{2 + \epsilon - 1/6}\right)\right] + O\left(N^{-1}\right)\\
- & = \lambda \log N \left(\frac{1}{\zeta(2)} \sum_{1 \le g \le N/2} \frac{1}{g^2}\right) + \lambda\left(\frac{1}{\zeta(2)} \sum_{1 \le g \le N/2} \frac{-\log g}{g^2}\right) + \nu_1 \left(\frac{1}{\zeta(2)} \sum_{1 \le g \le N/2} \frac{1}{g^2}\right) + O_{\epsilon}\left(N^{\epsilon - 1/6} \right), \tag{$**$}
+ & = \lambda \log N \left(\frac{1}{\zeta(2)} \sum_{1 \le g \le N/2} \frac{1}{g^2}\right) + \lambda\left(\frac{1}{\zeta(2)} \sum_{1 \le g \le N/2} \frac{-\log g}{g^2}\right) + \nu_1 \left(\frac{1}{\zeta(2)} \sum_{1 \le g \le N/2} \frac{1}{g^2}\right) + O_{\epsilon}\left(N^{\epsilon - 1/6} \right), \tag{$\ddagger$}
 \end{align*}
 >$$
 >
@@ -991,7 +991,7 @@ $$
 \end{align*}
 >$$
 >
->and making these substitutions in $(**)$ yields
+>and making these substitutions in $(\ddagger)$ yields
 >
 >$$
 >\begin{align*}
@@ -1003,7 +1003,7 @@ $$
 >
 >$$
 >\begin{align*}
- \sum_{\substack{1 \le a,b \le N \\ \gcd(a,b) = 1}} T(a,b) = \sum_{1 \le a,b \le N} T(a,b) \sum_{\substack{\delta \mid a \\ \delta \mid b}}  \mu(\delta) = \sum_{1 \le \delta \le N} \mu(\delta) \sum_{1 \le c,d \le N/\delta} T(\delta c,\delta d) = \sum_{1 \le \delta \le N} \mu(\delta) \sum_{1 \le c,d \le N/\delta} T(c,d).
+ \sum_{\substack{1 \le a,b \le N \\\ \gcd(a,b) = 1}} T(a,b) = \sum_{1 \le a,b \le N} T(a,b) \sum_{\substack{\delta \mid a \\\ \delta \mid b}}  \mu(\delta) = \sum_{1 \le \delta \le N} \mu(\delta) \sum_{1 \le c,d \le N/\delta} T(\delta c,\delta d) = \sum_{1 \le \delta \le N} \mu(\delta) \sum_{1 \le c,d \le N/\delta} T(c,d).
 \end{align*}
 >$$
 >
