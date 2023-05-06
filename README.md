@@ -526,14 +526,14 @@ n = 10, f_n = 55, phi^n/(phi - psi) = 55.004..., nearest int = 55
 We are now ready to establish the worst-case result for the number of divisions in Euclid's algorithm. The following propostion implies that for $N \ge 2$, 
 
 \begin{align*}
-\max\{T(a,b) : 1 \le b \le a \le N\} = \Theta(\log N).
+\max{T(a,b) : 1 \le b \le a \le N} = \Theta(\log N).
 \end{align*}
 
 ---
 <a id='prop:worst_case'></a>
 **Proposition 4.5.** For $N \ge 2$,  
 
-$$\frac{\log(N - 1)}{\log \phi} - 1.328 < \max\{T(a,b) : 1 \le b \le a \le N\} < \frac{\log(N + 1)}{\log \phi} - 0.327.$$
+$$\frac{\log(N - 1)}{\log \phi} - 1.328 < \max{T(a,b) : 1 \le b \le a \le N} < \frac{\log(N + 1)}{\log \phi} - 0.327.$$
 
 ---
 
@@ -563,7 +563,7 @@ Note that $1/\log \phi = 2.0780869\ldots$.
 >
 >(a) Now, let $N \ge 2$ be given, and let $n \ge 2$ be such that $f_{n + 1} \le N < f_{n + 2}$. By [Proposition 4.3(b)](#prop:4.3), for $1 \le b \le a \le N$, we have $T(a,b) \le n - 1$, with equality attained when $a = f_{n + 1}$ and $b = f_{n}$. That is, 
 >
->$$\max\{T(a,b) : 1 \le b \le a \le N\} = n - 1,$$
+>$$\max{T(a,b) : 1 \le b \le a \le N} = n - 1,$$
 >
 >and the result follows by $(*)$. 
 
