@@ -597,6 +597,7 @@ $$\frac{\zeta'(2)}{\zeta(2)} = -\sum_{n = 1}^{\infty} \frac{\Lambda(n)}{n^2} = 1
 The reciprocal of [Lévy's constant](https://oeis.org/A086702):
 
 <a id='eq:mu_dixon'></a>
+
 $$
 \begin{align*}
  \lambda = \frac{2\log 2}{\zeta(2)} = \frac{12 \log 2}{\pi^2} = 0.8427659\ldots, \tag{5.6}
@@ -606,6 +607,7 @@ $$
 [Porter's constant](https://en.wikipedia.org/wiki/Porter%27s_constant), also called the Lochs-Porter constant:
 
 <a id='eq:porter_constant'></a>
+
 $$
 \begin{align*}
  C_P = \frac{\log 2}{\zeta(2)}\left(3\log 2 + 4\gamma - \frac{4\zeta'(2)}{\zeta(2)} - 2 \right) - \frac{1}{2} = 1.4670780\ldots \tag{5.7}
@@ -617,6 +619,7 @@ Note also that $C_P - 1 = 0.4670780\ldots$.
 We also have: 
 
 <a id='eq:norton_constant'></a>
+
 $$
 \begin{align*}
  \nu & = \frac{2\log 2}{\zeta(2)}\left(-\frac{3}{2} - \frac{\zeta'(2)}{\zeta(2)} + \frac{3}{2}\log 2 + 2\gamma\right) - 1 = 0.0653514\ldots \tag{5.8} \\
@@ -629,6 +632,7 @@ Note also that $\nu - 1/2 = -0.4346485\ldots$ and $\nu_1 - 1/2 = 0.0456951\ldots
 Hensley's constant:
 
 <a id='eq:hensley_constant'></a>
+
 $$
 \begin{align*}
  \eta = 0.5160524\ldots \tag{5.10}
@@ -638,6 +642,7 @@ $$
 Finally, we have mysterious constants $\kappa$ and $\kappa_1$, whose values we do not know, but we know that
 
 <a id='eq:deltakappa'></a>
+
 $$
 \begin{align*}
  \kappa - \kappa_1 = \eta\frac{\zeta'(2)}{\zeta(2)} + \lambda^2\left(\frac{\zeta''(2)}{\zeta(2)} - \left(\frac{\zeta'(2)}{\zeta(2)}\right)^2\right) = 0.3340\ldots \tag{5.11}
@@ -723,12 +728,15 @@ As we will see, "one-dimensional analysis" is "harder" than "two-dimensional ana
 
 <sup>Jump to: [Table of Contents](#toc) | ↑ [§ 6. One-dimensional analysis](#1d-analysis) | ↓ [Error term, variance, and distribution](#1d-higher-moments) | ↓↓ [Numerics](#1d-investigation-mean)</sup>
 
-To formulate results precisely, given a positive integer $a$, set $\mathbb{Z}_a^{\times} = \{b \in [1,a] : \gcd(a,b) = 1\}$ (the _totatives_ of $a$), and define a random variable $Z : \mathbb{Z}_a^{\times} \to \mathbb{N}$ by letting $Z(b) = T(a,b)$ for each $b \in \mathbb{Z}_a^{\times}$ (with $b$ being chosen uniformly at random from $\mathbb{Z}_a^{\times}$). Thus, 
+To formulate results precisely, given a positive integer $a$, set $\mathbb{Z}_a^{\times} = \\\{b \in [1,a] : \gcd(a,b) = 1\\\}$ (the _totatives_ of $a$), and define a random variable $Z : \mathbb{Z}_a^{\times} \to \mathbb{N}$ by letting $Z(b) = T(a,b)$ for each $b \in \mathbb{Z}_a^{\times}$ (with $b$ being chosen uniformly at random from $\mathbb{Z}_a^{\times}$). Thus, 
 
 <a id='eq:EZ'></a>
+
+$$
 \begin{align*}
 \mathbb{E}[Z] = \frac{1}{\phi(a)}\sum_{\substack{b = 1 \\ \gcd(a,b) = 1}}^{a} T(a,b) \tag{6.1}
 \end{align*}
+$$
 
 is the average number of divisions performed in Euclid's algorithm for $\gcd(a,b)$, over all $b$ satisfying $1 \le b \le a$ and $\gcd(a,b) = 1$. (Recall that Euler's totient function of $a$, $\phi(a)$, is just the size of $\mathbb{Z}_a^{\times}$.)
 
@@ -743,9 +751,12 @@ and showed that $\tau_a = \lambda \log a + O\left((\log\log a)^4\right)$, where 
 **Theorem 6.1.** [[Porter](#references), 1975]. For all $a \ge 1$ and any $\epsilon > 0$, we have
 
 <a id='eq:porter_thm'></a>
+
+$$
 \begin{align*}
 \mathbb{E}[Z] = \lambda \log a + C_P - 1 + O_{\epsilon}\left(a^{\epsilon - 1/6}\right). \tag{6.2}
 \end{align*}
+$$
 
 ---
 
@@ -777,9 +788,12 @@ $$\mathbb{P}\left(\sqrt{\phi(a)} (\bar{Z}_a - \mu_a) > z\sigma_a\right) \approx 
 **Conjecture 6.2.** For all $a \ge 1$ and any $\epsilon > 0$, we have
 
 <a id='eq:porter_conjecture'></a>
+
+$$
 \begin{align*}
 \mathbb{E}[Z] = \lambda \log a + C_P - 1 + O_{\epsilon}\left(a^{\epsilon - 1/2}\right). \tag{6.3}
 \end{align*}
+$$
 
 ---
 
@@ -794,18 +808,22 @@ Regarding the variance, it seems that $\mathrm{Var}(Z) - \eta \log N$ converges 
 
 As already mentioned, averaging the number of divisions in the Euclidean algorithm over _both_ inputs allows us to prove much more than we can in the one-dimensional analysis. There are various equivalent ways to formulate results: let
 
+$$
 \begin{align*}
  U & = \{1,\ldots,N\} \times \{1,\ldots,N\}\\
  U_{1} & = \{(a,b) \in U : \gcd(a,b) = 1\} \\
  \Omega & = \{(a,b) \in U : a > b\} \\
  \Omega_{1} & = \{(a,b) \in U_{1}: a > b\}
 \end{align*} 
+$$
 
 then define random variables
 
+$$
 \begin{align*}
  Y : U \to \mathbb{N}, \quad Y_1 : U_1 \to \mathbb{N}, \quad X : \Omega \to \mathbb{N}, \quad X_1 : \Omega_1 \to \mathbb{N}
 \end{align*}
+$$
 
 by letting each be equal to $T$ restricted to its sample space ($Y(a,b) = T(a,b)$ for each $(a,b) \in U$, and so on), with $(a,b)$ being chosen uniformly at random from the sample space. 
 
@@ -817,9 +835,12 @@ by letting each be equal to $T$ restricted to its sample space ($Y(a,b) = T(a,b)
 Thus, for instance,
 
 <a id='eq:EY'></a>
+
+$$
 \begin{align*}
 \mathbb{E}[Y] = \frac{1}{N^2} \sum_{1 \le a,b \le N} T(a,b) \tag{7.1}
 \end{align*}
+$$
 
 is the average number of divisions performed by Euclid's algorithm, over all pairs $(a,b)$ satisfying $1 \le a,b \le N$. (We'll discuss the restriction $a > b$ shortly.) Knuth [[5]](#references) gave a heuristic suggesting $\mathbb{E}[Y] = \lambda\log N + O(1)$ ($\mu$ as in [$(5.6)$](#eq:mu_dixon)), and numerical evidence suggesting the $O(1)$ is actually around $0.06$ plus a small error. This was first proved by Norton [[7]](#references) (whose proof hinged on [Theorem 6.1](#thm:porter) of Porter [[8]](#references)).
 
@@ -827,9 +848,11 @@ is the average number of divisions performed by Euclid's algorithm, over all pai
 <a id='thm:norton'></a>
 **Theorem 7.1** [[Norton](#references), 1990]. For all $N \ge 2$ and any $\epsilon > 0$, 
 
+$$
 \begin{align*}
  \mathbb{E}[Y] = \lambda \log N + \nu + O_{\epsilon}\left(N^{\epsilon - 1/6}\right), \tag{7.2}
 \end{align*}
+$$
 
 with $\lambda$ as in [$(5.6)$](#eq:mu_dixon) and $\nu$ as in [$(5.8)$](#eq:norton_constant).
 
@@ -839,12 +862,15 @@ As one might expect, if [Conjecture 6.2](#con:porter) is true, the $O$-term in N
 By Norton's result and the next proposition, the following estimates all hold and are in fact equivalent: for $N \ge 2$ and $\epsilon > 0$,
 
 <a id='eq:EYequiv'></a>
+
+$$
 \begin{align*}
  \mathbb{E}[Y] & = \lambda \log N + \nu + O_{\epsilon}\left(N^{\epsilon - 1/6}\right) \\
  \mathbb{E}[Y_1] & = \lambda \log N + \nu_1 + O_{\epsilon}\left(N^{\epsilon - 1/6}\right) \tag{7.3} \\
  \mathbb{E}[X] & = \lambda \log N + \nu - {\textstyle \frac{1}{2}} + O_{\epsilon}\left(N^{\epsilon - 1/6}\right) \tag{7.4} \\
  \mathbb{E}[X_1] & = \lambda \log N + \nu_1 - {\textstyle \frac{1}{2}} + O_{\epsilon}\left(N^{\epsilon - 1/6}\right) \tag{7.5}
 \end{align*}
+$$
 
 with $\lambda$, $\nu$, and $\nu_1$ as in [$(5.6)$](#eq:mu_dixon), [$(5.8)$](#eq:norton_constant), and [$(5.9)$](#eq:norton_constant) respectively. Again, we believe the $O$-term in all four estimates can be replaced by $O_{\epsilon}(N^{\epsilon - 1/2})$ (and if such an $O$-term holds for one estimate, it holds in all four).
 
@@ -852,27 +878,35 @@ with $\lambda$, $\nu$, and $\nu_1$ as in [$(5.6)$](#eq:mu_dixon), [$(5.8)$](#eq:
 <a id='prop:ExpEquiv'></a>
 **Proposition 7.2.** (a) For $N \ge 2$ we have
 <a id='eq:ExpEquiv_a'></a>
+
+$$
 \begin{align*}
  \mathbb{E}[Y] = \mathbb{E}[X] + {\textstyle \frac{1}{2}} + O\left(N^{-1}\log N\right) \quad \text{and} \quad 
  \mathbb{E}[Y_1] = \mathbb{E}[X_1] + {\textstyle \frac{1}{2}} + O\left(N^{-1}\log N\right). \tag{7.6} 
 \end{align*}
+$$
 
 (b) The following statements are equivalent. (i) There exist constants $\lambda$ and $\nu_1$ such that, for $N \ge 2$ and $\epsilon > 0$, 
 
+$$
 \begin{align*}
  \mathbb{E}[Y_1] = \lambda \log N + \nu_1 + O_{\epsilon}\left(N^{\epsilon - 1/6}\right).
 \end{align*}
+$$
 
 (ii) There exist constants $\lambda$ and $\nu_1$ such that, for $N \ge 2$ and $\epsilon > 0$, 
 
+$$
 \begin{align*}
  \mathbb{E}[Y] = \lambda \log N + \nu_1 + \mu\frac{\zeta'(2)}{\zeta(2)}+ O_{\epsilon}\left(N^{\epsilon - 1/6}\right).
 \end{align*}
+$$
 
 ---
 
 >_Proof._ (a) For the second equation in [($7.6$)](#eq:ExpEquiv_a), note that 
 >
+>$$
 >\begin{align*}
  \# U_1 \mathbb{E}[Y_1] & = \sum_{(a,b) \in U_1} T(a,b) \\
  & = \sum_{\substack{(a,b) \in U_1 \\ a > b}} T(a,b) + \sum_{\substack{(a,b) \in U_1 \\ b > a}} T(a,b) + \sum_{\substack{(a,b) \in U_1 \\ a = b}} T(a,b) \\
@@ -881,30 +915,38 @@ with $\lambda$, $\nu$, and $\nu_1$ as in [$(5.6)$](#eq:mu_dixon), [$(5.8)$](#eq:
  & = 2\sum_{\substack{(a,b) \in U_1 \\ a > b}} T(a,b) + \sum_{\substack{(a,b) \in U_1 \\ a > b}} 1 + 1 \\
  & = 2\#\Omega_1 \mathbb{E}[X_1] + \#\Omega_1 + 1.
 \end{align*}
+>$$
 >
 >Since $\#U_1 = 2\#\Omega_1 + N$ (if this isn't clear, replace $T(a,b)$ by $1$ in the above equations), this gives 
 >
+>$$
 >\begin{align*}
  \#U_1\mathbb{E}[Y_1] = \#U_1 \mathbb{E}[X_1] - N\mathbb{E}[X_1] + {\textstyle \frac{1}{2}} \left(\#U_1 - N\right) + 1,
 \end{align*}
+>$$
 >
 >which upon dividing by $\#U_1$ becomes
 >
+>$$
 >\begin{align*}
  \mathbb{E}[Y_1] = \mathbb{E}[X_1] + {\textstyle \frac{1}{2}} - \frac{N}{\# U_1}\left(\mathbb{E}[X_1] + {\textstyle \frac{1}{2} + \frac{1}{N}}\right).
 \end{align*}
+>$$
 >
 >All of this is valid for $N \ge 1$. [Proposition 4.5(c)](#prop:worst_case) implies that $\mathbb{E}[X_1] \ll \log N$ for $N \ge 2$. Also, a classical result of Mertens is that for $N \ge 2$, 
 ><a id='eq:mertens'></a>
 >
+>$$
 >\begin{align*}
  \sum_{\substack{1 \le a,b \le N \\ \gcd(a,b) = 1}} 1 = \frac{N^2}{\zeta(2)} + O\left(N \log N\right). \tag{7.7}
 \end{align*}
+>$$
 >
 >We'll use this in the proof of part (b), but at this point we only need that $\#U_1 \gg N^2$. Combining gives the second equation in [$(7.6)$](#eq:ExpEquiv_a). The verification of the first equation in [$(7.6)$](#eq:ExpEquiv_a) is almost identical. 
 >
 >(b) We show that (i) implies (ii). Since $\gcd(c,d) = 1$ if and only if $\gcd(gc,gd) = g$, and since $T(gc,gd) = T(c,d)$,
 >
+>$$
 >\begin{align*}
  N^2 \mathbb{E}[Y] & = \sum_{1 \le a,b \le N} T(a,b) \\
  & = \sum_{g = 1}^{N} \sum_{\substack{1 \le a,b \le N \\ \gcd(a,b) = g}} T(a,b) \\
@@ -914,43 +956,56 @@ with $\lambda$, $\nu$, and $\nu_1$ as in [$(5.6)$](#eq:mu_dixon), [$(5.8)$](#eq:
       + \sum_{N/2 < g \le N} T(1,1) \\
  & = \sum_{1 \le g \le N/2} \sum_{\substack{1 \le c,d \le N/g \\ \gcd(c,d) = 1}} T(c,d) + O(N). \tag{$*$}
 \end{align*}
+>$$
 >
 >We now assume (i), which is tantamount to assuming that, for $M \ge 2$ and $\epsilon > 0$, 
 >
+>$$
 >\begin{align*}
  \sum_{\substack{1 \le c,d \le M \\ \gcd(c,d) = 1}} T(c,d) = \sum_{\substack{1 \le c,d \le M \\ \gcd(c,d) = 1}} \left(\lambda \log M + \nu_1 + O_{\epsilon}\left(M^{\epsilon - 1/6}\right)\right),
 \end{align*}
+>$$
 >
 >which, in view of [$(7.7)$](#eq:mertens), is equivalent to 
 >
+>$$
 >\begin{align*}
  \sum_{\substack{1 \le c,d \le M \\ \gcd(c,d) = 1}} T(c,d) = \frac{M^2}{\zeta(2)}\left(\lambda \log M + \nu_1\right) + O_{\epsilon}\left(M^{2 + \epsilon - 1/6}\right).
 \end{align*}
+>$$
 >
 >Putting this into $(*)$, we obtain
 >
+>$$
 >\begin{align*}
  \mathbb{E}[Y] & = \sum_{1 \le g \le N/2} \left[\left(\frac{(1/g)^2}{\zeta(2)}\right)\left(\lambda \log(N/g) + \nu_1\right) + O_{\epsilon}\left(N^{\epsilon - 1/6}/g^{2 + \epsilon - 1/6}\right)\right] + O\left(N^{-1}\right)\\
  & = \lambda \log N \left(\frac{1}{\zeta(2)} \sum_{1 \le g \le N/2} \frac{1}{g^2}\right) + \lambda\left(\frac{1}{\zeta(2)} \sum_{1 \le g \le N/2} \frac{-\log g}{g^2}\right) + \nu_1 \left(\frac{1}{\zeta(2)} \sum_{1 \le g \le N/2} \frac{1}{g^2}\right) + O_{\epsilon}\left(N^{\epsilon - 1/6} \right), \tag{$**$}
 \end{align*}
+>$$
 >
 >where we have used the fact that $$\sum_{g = 1}^{\infty} \frac{1}{g^{2 + \epsilon - 1/6}} \ll 1$$ in the $O$-term. Finally, 
 >
+>$$
 >\begin{align*}
  \sum_{1 \le g \le N/2} \frac{1}{g^2} = \sum_{g = 1}^{\infty} \frac{1}{g^2} + O\left(N^{-1}\right) = \zeta(2) + O\left(N^{-1}\right) \quad \text{and} \quad \sum_{1 \le g \le N/2} \frac{-\log g}{g^2} = \sum_{g = 1}^{\infty} \frac{\log g}{g^2} + O\left(N^{-1}\log N\right) = \zeta'(2) + O\left(N^{-1}\log N\right),
 \end{align*}
+>$$
 >
 >and making these substitutions in $(**)$ yields
 >
+>$$
 >\begin{align*}
  \mathbb{E}[Y] = \lambda\log N + \lambda \frac{\zeta'(2)}{\zeta(2)} + \nu_1 + O_{\epsilon}\left(N^{\epsilon - 1/6} \right).
 \end{align*}
+>$$
 >
 >Hence (i) implies (ii). The converse can be obtained similarly: we begin by noting that ($\mu$ denoting the Möbius function) 
 >
+>$$
 >\begin{align*}
  \sum_{\substack{1 \le a,b \le N \\ \gcd(a,b) = 1}} T(a,b) = \sum_{1 \le a,b \le N} T(a,b) \sum_{\substack{\delta \mid a \\ \delta \mid b}}  \mu(\delta) = \sum_{1 \le \delta \le N} \mu(\delta) \sum_{1 \le c,d \le N/\delta} T(\delta c,\delta d) = \sum_{1 \le \delta \le N} \mu(\delta) \sum_{1 \le c,d \le N/\delta} T(c,d).
 \end{align*}
+>$$
 >
 >We leave the remainder of the proof as an exercise for the reader.
 
@@ -968,9 +1023,12 @@ Dixon [[2]](#references) showed that $|T(a,b) - \lambda\log a| < (\log a)^{1/2 +
 **Theorem 7.3.** [[Hensley](#references), 1994.] There exist constants $\lambda$ and $\eta$ (as in [$(5.6)$](#eq:mu_dixon) and [$(5.10)$](#eq:hensley_constant)), such that the following holds for all sufficiently large $N$. Let $\mu = \lambda \log N$, and $\sigma = \sqrt{\eta \log N}$. Uniformly for $|s - \mu| \le \frac{1}{2}(\log N)^{1/2}(\log\log N)^2$,
 
 <a id='eq:hensleyprob'></a>
+
+$$
 \begin{align*}
  \mathbb{P}(X_1 = s) = \left(1 + O\left((\log N)^{-1/24}\right)\right) \frac{\exp\left(-\frac{1}{2}\left(\frac{s - \mu}{\sigma}\right)^2\right)}{\sigma \sqrt{2\pi}}. \tag{7.8}
 \end{align*}
+$$
 
 The same is true with $X$ in place of $X_1$.
 
@@ -983,23 +1041,32 @@ A unifying framework for analysing a general class of Euclidean (and other) algo
 **Theorem 7.4.** [[Baladi & Vallée](#references), 2005.] There exist constants $\lambda$, $\nu_1$, $\eta$ (as in [$(5.6)$](#eq:mu_dixon), [$(5.9)$](#eq:norton_constant), and [$(5.10)$](#eq:hensley_constant)), and $\kappa_1$ such that, for all $N \ge 2$ and any $\epsilon > 0$,
 
 <a id='eq:BalValEX1'></a>
+
+$$
 \begin{align*}
 \mathbb{E}[X_1] = \lambda\log N + \nu_1 + O_{\epsilon}\left(N^{\epsilon - 1/6}\right) \tag{7.9}
 \end{align*}
+$$
 
 and
 
 <a id='eq:BalValVarX1'></a>
+
+$$
 \begin{align*}
 \mathrm{Var}(X_1) = \eta\log N + \kappa_1 + O\left(N^{-c}\right) \tag{7.10}
 \end{align*}
+$$
 
 (for some positive constant $c$). Moreover, $X_1$ is asymptotically normal: for all $N \ge 2$ and all $z$, 
 
 <a id='eq:BalValDistX1'></a>
+
+$$
 \begin{align*}
 \mathbb{P}\left(\frac{X_1 - \lambda\log N}{\sqrt{\eta\log N}} \le z\right) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^z e^{-t^2/2} dt + O\left(\left(\log N\right)^{-1/2}\right). \tag{7.11}
 \end{align*}
+$$
 
 The same is true of $X$, with suitable constants $\nu$ and $\kappa$ in place of $\nu_1$ and $\kappa_1$ (the constants $\lambda$ and $\eta$ remain the same).
 
@@ -1015,10 +1082,13 @@ $$\kappa - \kappa_1 = \eta\frac{\zeta'(2)}{\zeta(2)} + \lambda^2\left(\frac{\zet
 Naturally, $Y$ and $Y_1$ are asymptotically normal as well, and analogously to [$(7.6)$](#eq:ExpEquiv_a) (another exercise for the reader), we have 
 
 <a id='eq:varequiv'></a>
+
+$$
 \begin{align*}
  \mathrm{Var}[Y] = \mathrm{Var}[X] + {\textstyle \frac{1}{4}} + O\left(N^{-1}(\log N)^2\right) \quad \text{and} \quad 
  \mathrm{Var}[Y_1] = \mathrm{Var}[X_1] + {\textstyle \frac{1}{4}} + O\left(N^{-1}(\log N)^2\right). \tag{7.12} 
 \end{align*}
+$$
 
 <a id='code-for-analysing'></a>
 ### § 8. Code for analysing Euclid's algorithm
