@@ -281,10 +281,13 @@ write_euclid(67*1011,67*69)
 ```
 
 ```
-# Let's illustrate the invariance of the number of divisions under (a,b) -> (da,db). 
-# Take (a,b) as in the previous code block and d = 67.
+67737 = 14*4623 + 3015 	 ∴ gcd(67737,4623) = gcd(4623,3015)
+ 4623 =  1*3015 + 1608 	 ∴  gcd(4623,3015) = gcd(3015,1608)
+ 3015 =  1*1608 + 1407 	 ∴  gcd(3015,1608) = gcd(1608,1407)
+ 1608 =  1*1407 +  201 	 ∴  gcd(1608,1407) = gcd(1407,201) 
+ 1407 =  7* 201 +    0 	 ∴   gcd(1407,201) = gcd(201,0)    
 
-write_euclid(67*1011,67*69)
+gcd(67737,4623) = 201, T(67737,4623) = 5
 ```
 
 What are the smallest possible values of $a$ and $b$ if $a \ge b \ge 1$ and $T(a,b) = n$? If $n = 1$ we need only note that $T(1,1) = 1$ to see that the answer is $a = b = 1$. Since $T(a,b) = 1$ if and only if $b \mid a$, the answer for $n \ge 2$ must satisfy $a > b \ge 2$ and $b \nmid a$. (In fact, by [Proposition 4.1(c)](#prop:4.1), the answer in general must satisfy $\gcd(a,b) = 1$, i.e. $r_n = 1$.) Noting that $T(3,2) = 2$ then gives the answer for $n = 2$ as $a = 3$ and $b = 2$. 
@@ -744,7 +747,7 @@ Heilbronn [[3]](#references) considered (exercise to show the equivalence)
 
 $$\tau_a = \frac{1}{\phi(a)}\sum_{\substack{b = 0 \\\ \gcd(a,b) = 1}}^{a - 1} T(b,a) = \mathbb{E}[Z] + 1,$$
 
-and showed that $\tau_a = \lambda \log a + O\left((\log\log a)^4\right)$, where $\lambda$ is as in [$(5.6)$](#eq:mu_dixon). Porter [[8]](#references) subsequently showed that for all $a \ge 1$ and any $\epsilon > 0$, $\tau_a = \lambda \log a + C_P + O_{\epsilon}\left(a^{\epsilon - 1/6}\right)$, where $C_P$ is _Porter's constant_ as in [$(5.7)$](#eq:porter_constant). This is equivalent to the following. 
+and showed that $\tau_a = \lambda \log a + O\left((\log\log a)^4\right)$, where $\lambda$ is as in [(5.6)](#eq:mu_dixon). Porter [[8]](#references) subsequently showed that for all $a \ge 1$ and any $\epsilon > 0$, $\tau_a = \lambda \log a + C_P + O_{\epsilon}\left(a^{\epsilon - 1/6}\right)$, where $C_P$ is _Porter's constant_ as in [$(5.7)$](#eq:porter_constant). This is equivalent to the following. 
 
 ---
 <a id='thm:porter'></a>
