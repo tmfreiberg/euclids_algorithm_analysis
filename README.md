@@ -525,15 +525,15 @@ n = 10, f_n = 55, phi^n/(phi - psi) = 55.004..., nearest int = 55
 
 We are now ready to establish the worst-case result for the number of divisions in Euclid's algorithm. The following propostion implies that for $N \ge 2$, 
 
-\begin{align*}
-\max{T(a,b) : 1 \le b \le a \le N} = \Theta(\log N).
-\end{align*}
+$$
+\max\\\{T(a,b) : 1 \le b \le a \le N\\\} = \Theta(\log N).
+$$
 
 ---
 <a id='prop:worst_case'></a>
 **Proposition 4.5.** For $N \ge 2$,  
 
-$$\frac{\log(N - 1)}{\log \phi} - 1.328 < \max{T(a,b) : 1 \le b \le a \le N} < \frac{\log(N + 1)}{\log \phi} - 0.327.$$
+$$\frac{\log(N - 1)}{\log \phi} - 1.328 < \max\\\{T(a,b) : 1 \le b \le a \le N\\\} < \frac{\log(N + 1)}{\log \phi} - 0.327.$$
 
 ---
 
@@ -563,7 +563,7 @@ Note that $1/\log \phi = 2.0780869\ldots$.
 >
 >(a) Now, let $N \ge 2$ be given, and let $n \ge 2$ be such that $f_{n + 1} \le N < f_{n + 2}$. By [Proposition 4.3(b)](#prop:4.3), for $1 \le b \le a \le N$, we have $T(a,b) \le n - 1$, with equality attained when $a = f_{n + 1}$ and $b = f_{n}$. That is, 
 >
->$$\max{T(a,b) : 1 \le b \le a \le N} = n - 1,$$
+>$$\max\\\{T(a,b) : 1 \le b \le a \le N\\\} = n - 1,$$
 >
 >and the result follows by $(*)$. 
 
@@ -582,11 +582,13 @@ $$\gamma = \lim_{n \to \infty}\left(-\log n + \sum_{k = 1}^n \frac{1}{k}\right) 
 
 The Riemann zeta function $\zeta(s)$, and its first and second derivatives $\zeta'(s)$ and $\zeta''(s)$, at $s = 2$:
 
+$$
 \begin{align*}
 \zeta(2) & = \sum_{n = 1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6} = 1.6449340\ldots \tag{5.2} \\
 \zeta'(2) & = -\sum_{n = 2}^{\infty} \frac{\log n}{n^2} = −0.9375482\ldots \tag{5.3} \\
 \zeta''(2) & = \sum_{n = 2}^{\infty} \frac{(\log n)^2}{n^2} = 1.98928\ldots \tag{5.4}
 \end{align*}
+$$
 
 There is also the logarithmic derivative ($\Lambda$ is the von-Mangoldt function here):
 
@@ -595,42 +597,52 @@ $$\frac{\zeta'(2)}{\zeta(2)} = -\sum_{n = 1}^{\infty} \frac{\Lambda(n)}{n^2} = 1
 The reciprocal of [Lévy's constant](https://oeis.org/A086702):
 
 <a id='eq:mu_dixon'></a>
+$$
 \begin{align*}
  \lambda = \frac{2\log 2}{\zeta(2)} = \frac{12 \log 2}{\pi^2} = 0.8427659\ldots, \tag{5.6}
 \end{align*}
+$$
 
 [Porter's constant](https://en.wikipedia.org/wiki/Porter%27s_constant), also called the Lochs-Porter constant:
 
 <a id='eq:porter_constant'></a>
+$$
 \begin{align*}
  C_P = \frac{\log 2}{\zeta(2)}\left(3\log 2 + 4\gamma - \frac{4\zeta'(2)}{\zeta(2)} - 2 \right) - \frac{1}{2} = 1.4670780\ldots \tag{5.7}
 \end{align*}
+$$
 
 Note also that $C_P - 1 = 0.4670780\ldots$.
 
 We also have: 
 
 <a id='eq:norton_constant'></a>
+$$
 \begin{align*}
  \nu & = \frac{2\log 2}{\zeta(2)}\left(-\frac{3}{2} - \frac{\zeta'(2)}{\zeta(2)} + \frac{3}{2}\log 2 + 2\gamma\right) - 1 = 0.0653514\ldots \tag{5.8} \\
  \nu_1 & = \nu - \lambda\frac{\zeta'(2)}{\zeta(2)} = 0.5456951\ldots \tag{5.9}
 \end{align*}
+$$
 
 Note also that $\nu - 1/2 = -0.4346485\ldots$ and $\nu_1 - 1/2 = 0.0456951\ldots$.
 
 Hensley's constant:
 
 <a id='eq:hensley_constant'></a>
+$$
 \begin{align*}
  \eta = 0.5160524\ldots \tag{5.10}
 \end{align*}
+$$
 
 Finally, we have mysterious constants $\kappa$ and $\kappa_1$, whose values we do not know, but we know that
 
 <a id='eq:deltakappa'></a>
+$$
 \begin{align*}
  \kappa - \kappa_1 = \eta\frac{\zeta'(2)}{\zeta(2)} + \lambda^2\left(\frac{\zeta''(2)}{\zeta(2)} - \left(\frac{\zeta'(2)}{\zeta(2)}\right)^2\right) = 0.3340\ldots \tag{5.11}
 \end{align*}
+$$
 
 (and our numerics suggest that $\kappa \approx -0.1$, meaning $\kappa_1 \approx -0.43$).
 
