@@ -525,7 +525,9 @@ n = 10, f_n = 55, phi^n/(phi - psi) = 55.004..., nearest int = 55
 
 We are now ready to establish the worst-case result for the number of divisions in Euclid's algorithm. The following propostion implies that for $N \ge 2$, 
 
-$$\max\{T(a,b) : 1 \le b \le a \le N\} = \Theta(\log N).$$
+\begin{align*}
+\max\{T(a,b) : 1 \le b \le a \le N\} = \Theta(\log N).
+\end{align*}
 
 ---
 <a id='prop:worst_case'></a>
