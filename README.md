@@ -769,19 +769,19 @@ $$
 
 Comparable estimates for the second moment of $Z$ have not been established, let alone its distribution. Much more has been proved in the "two-dimensional analysis", in which we may exploit the fact that we average over $b$ as well. But let us persevere with $Z$ for the moment: our numerical data will suggest a roughly normal distribution, with variance of order $\log a$.
 
-For a given $a$, let us model the summands $T(a,b)$, $b \in \mathbb{Z}_a^{\times}$, as a sequence $Z_1,\ldots,Z_{\phi(a)}$ of independent, identically distributed random variables, each with mean $\mu_a = \lambda\log a + C_P - 1$, and variance $\sigma_a^2 = \mathrm{Var}(Z)$ (whatever it is). In other words, let us model the sum in [$(6.1)$](#eq:EZ) as a sum $Z_1 + \cdots + Z_{\phi(a)}$ of i.i.d. random variables of mean $\mu_a$ and variance $\sigma_a^2$. If 
+For a given $a$, let us model the summands $T(a,b)$, $b \in \mathbb{Z}^{\times}\_{a}$, as a sequence $Z_1,\ldots,Z_{\phi(a)}$ of independent, identically distributed random variables, each with mean $\mu_a = \lambda\log a + C_P - 1$, and variance $\sigma_a^2 = \mathrm{Var}(Z)$ (whatever it is). In other words, let us model the sum in [$(6.1)$](#eq:EZ) as a sum $Z_1 + \cdots + Z_{\phi(a)}$ of i.i.d. random variables of mean $\mu_a$ and variance $\sigma_a^2$. If 
 
-$$\bar{Z}_a = \frac{Z_1 + \cdots + Z_{\phi(a)}}{\phi(a)},$$
+$$\bar{Z}\_a = \frac{Z_1 + \cdots + Z_{\phi(a)}}{\phi(a)},$$
 
 then, by the central limit theorem, 
 
-$$\frac{\sqrt{\phi(a)}(\bar{Z}_a - \mu_a)}{\sigma_a} \overset{d}{\to} \mathrm{Norm}(0,1)$$
+$$\frac{\sqrt{\phi(a)}(\bar{Z}\_a - \mu_a)}{\sigma_a} \overset{d}{\to} \mathrm{Norm}(0,1)$$
 
 as $\phi(a) \to \infty$ (and hence as $a \to \infty$). Thus, for large $\phi(a)$ (and hence for large $a$),
 
-$$\mathbb{P}\left(\sqrt{\phi(a)} (\bar{Z}_a - \mu_a) > z\sigma_a\right) \approx \frac{1}{\sqrt{2\pi}}\int_{z}^{\infty} e^{-t^2/2} dt \le \frac{e^{-z^2/2}}{z\sqrt{2\pi}} \quad (z > 0).$$
+$$\mathbb{P}\left(\sqrt{\phi(a)} (\bar{Z}\_a - \mu_a) > z\sigma_a\right) \approx \frac{1}{\sqrt{2\pi}}\int_{z}^{\infty} e^{-t^2/2} dt \le \frac{e^{-z^2/2}}{z\sqrt{2\pi}} \quad (z > 0).$$
 
-(Last inequality an exercise.) Similarly for the probability that $\sqrt{\phi(a)} (\bar{Z}_a - \mu_a) < -z\sigma_a$. This becomes vanishingly small as $z$ becomes large. As $\bar{Z}_a$ is our model for the RHS of [$(6.1)$](#eq:EZ), this leads us to suspect that the RHS of [$(6.1)$](#eq:EZ) virtually always takes values lying within $z\sigma_a/\sqrt{\phi(a)}$ of $\mu_a$, if $z$ is "large". Since $a^{1 - \epsilon} \ll_{\epsilon} \phi(a) < a$, and as we suspect that $\sigma_a$ is of order $\log a$, we suggest the following. 
+(Last inequality an exercise.) Similarly for the probability that $\sqrt{\phi(a)} (\bar{Z}\_a - \mu_a) < -z\sigma_a$. This becomes vanishingly small as $z$ becomes large. As $\bar{Z}\_a$ is our model for the RHS of [$(6.1)$](#eq:EZ), this leads us to suspect that the RHS of [$(6.1)$](#eq:EZ) virtually always takes values lying within $z\sigma_a/\sqrt{\phi(a)}$ of $\mu_a$, if $z$ is "large". Since $a^{1 - \epsilon} \ll_{\epsilon} \phi(a) < a$, and as we suspect that $\sigma_a$ is of order $\log a$, we suggest the following. 
 
 ---
 <a id='con:porter'></a>
