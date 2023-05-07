@@ -540,7 +540,7 @@ Note that $1/\log \phi = 2.0780869\ldots$.
 >
 >To see this in more detail, note that $f_{k} = \lfloor \phi^k/(\phi - \psi)\rfloor$ if $k$ is even, while $f_{k} = \lceil \phi^k/(\phi - \psi)\rceil$ if $k$ is odd; also, $\phi - \psi = \sqrt{5}$. Thus, supposing first that $n$ is even, 
 >
->$$\frac{\phi^{n+1}}{\sqrt{5}} < f_n \le m < f_{n + 2} < \frac{\phi^{n+2}}{\sqrt{5}}.$$
+>$$\frac{\phi^{n+1}}{\sqrt{5}} < f_{n+1} \le m < f_{n + 2} < \frac{\phi^{n+2}}{\sqrt{5}}.$$
 >
 >Taking logarithms, we see that 
 >
