@@ -112,7 +112,7 @@ How can we compute $\gcd(a,b)$ when $a$ and $b$ are nonzero?
 
 **Euclid's algorithm.** If $b \ge 1$, the division algorithm gives unique integers $q$ and $r$ such that $a = qb + r$ and $0 \le r < b$. It is straightforward to verify that the common divisors of $a$ and $b$ are precisely the common divisors of $b$ and $r$. Hence $\gcd(a,b) = \gcd(b,r)$. If $r > 0$ we may apply the division algorithm again: $b = q_2r + r_3$ with $0 \le r_3 < r$ and $\gcd(b,r) = \gcd(r,r_3)$. Repeating the process as many times as necessary, we obtain a sequence 
 
-<a id='eq:rem_seq'></a>
+<a id='eq:remseq'></a>
 $$a = r_0, b = r_1 > r = r_2 > r_3 > \cdots > r_n > r_{n + 1} = 0 \tag{3.1}$$ 
 
 with the property that $\gcd(r_{i-1},r_{i}) = \gcd(r_{i},r_{i + 1})$ for $i = 1,\ldots,n$, because
@@ -128,7 +128,7 @@ $$a = r_0, b = r_1 < r_2 < r_3 < \cdots < r_{n} < r_{n + 1} = 0 \tag{3.3}$$
 and $\gcd(a,b) = -r_n$. However, since $\gcd(a,b) = \gcd(|a|,|b|)$, we will typically assume that $a$ and $b$ are nonnegative.
 
 ---
-**Definition 3.3.** Given $a,b \in \mathbb{Z}$, let $T(a,b) = n$ with $n$ as in [(3.1)](#eq:rem_seq) (if $b \ge 0$) or [(3.3)](#eq:rem_seq_neg) (if $b \le 0$). Thus, $T(a,b)$ is the number of "steps" or "divisions" in Euclid's algorithm for computing $\gcd(a,b)$. 
+**Definition 3.3.** Given $a,b \in \mathbb{Z}$, let $T(a,b) = n$ with $n$ as in [(3.1)](#eq:remseq) (if $b \ge 0$) or [(3.3)](#eq:rem_seq_neg) (if $b \le 0$). Thus, $T(a,b)$ is the number of "steps" or "divisions" in Euclid's algorithm for computing $\gcd(a,b)$. 
 
 ---
 
@@ -267,7 +267,7 @@ First let's record a result that will be useful in the sequel.
 >
 >(b) If $1 \le b < a$ then the first two divisions of the Euclidean algorithm for $\gcd(b,a)$ are: $b = 0a + b$ and $a = qb + r$, $0 \le r < b$. The second division is the first done in the Euclidean algorithm for $\gcd(a,b)$.
 >
->(c) If [(3.1)](#eq:rem_seq) is the remainder sequence given by Euclid's algorithm for $\gcd(a,b)$, then for any positive integer $d$, 
+>(c) If [(3.1)](#eq:remseq) is the remainder sequence given by Euclid's algorithm for $\gcd(a,b)$, then for any positive integer $d$, 
 >
 >$$da = dr_0, db = dr_1 > dr_2 > \cdots > dr_n > dr_{n + 1} = 0$$
 >
@@ -393,7 +393,6 @@ pd.DataFrame.from_dict(test_dict, orient='index')#.astype('int')
 <sup>Jump to: [Table of Contents](#toc) | ↑ [Worst-case analysis](#worst-case) | ↓ [Constants](#constants)</sup>
 
 ```python
-# In this code block we will use matplotlib.pyplot and default_timer from timeit.
 # Let's take a detour and compute some Fibonacci numbers.
 # Computing f_n naively takes time exponential in n.
 # E.g. to compute f_5 naively we do this: 
