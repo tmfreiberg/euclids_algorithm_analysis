@@ -899,7 +899,7 @@ $$
 
 ---
 
->_Proof._ (a) For the second equation in [($7.6$)](#eqExpEquiv_a), note that 
+>_Proof._ (a) For the second equation in [(7.6)](#eqExpEquiv_a), note that 
 >
 >$$
 >\begin{align*}
