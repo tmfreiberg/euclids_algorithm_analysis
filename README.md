@@ -1980,6 +1980,587 @@ $$
 
 As we noted, $\lambda^2 = 0.7102543\ldots$. If we curve-fit the data for $\mathbb{E}[Z^2]$ with $\lambda^2(\log a)^2 + c_1\log a + c_0$, we get values for $c_1$ that are fairly close to $\eta + 2\lambda(C_P - 1) = 1.3033\ldots$. (See [$(5.10)$](#eq:hensley_constant) for Hensley's constant, which arises in the variance in the two-dimensional analysis.)
 
-In conclusion, we suspect that $\mathrm{Var}(Z) = \eta\log a + \mathrm{constant} + \mathrm{error}$, where $\mathrm{error} \ll\_{\epsilon} a^{\epsilon - 1/2}$ (but the error term dominates $\mathrm{constant}$ for $a$ in the range we are considering here). The $\mathrm{constant}$ appears to be around $-0.3$. Below is a plot of $\mathrm{Var}(Z) - (\eta\log a - 0.354)$ for $100 \le a \le 1000$. Also, the plots shows bounding curves growing like $(\log a)^2a^{-1/2}$. We'll animate a sequence of such plots, corresponding to $100 \le a \le N$ for $N = 1000,1100,\ldots,10000$.
+In conclusion, we suspect that $\mathrm{Var}(Z) = \eta\log a + \mathrm{constant} + \mathrm{error}$, where $\mathrm{error} \ll\_{\epsilon} a^{\epsilon - 1/2}$ (but the error term dominates $\mathrm{constant}$ for $a$ in the range we are considering here). The $\mathrm{constant}$ appears to be around $-0.3$. Below is a plot of $\mathrm{Var}(Z) - (\eta\log a - 0.354)$ for $100 \le a \le 1000$. Also, the plot shows bounding curves growing like $(\log a)^2a^{-1/2}$. We'll animate a sequence of such plots, corresponding to $100 \le a \le N$ for $N = 1000,1100,\ldots,10000$.
 
 ![SegmentLocal](images/variance_error_1d_1000.png) 
+
+```python
+# Let's investigate the variance of Z as a grows. Since we have good estimates for the mean of Z, 
+# estimating the variance is tantamount to estimating the second moment, so let's start with that.
+
+Z = H1
+Zstats = H1stats
+Zdist = H1dist
+
+# Let us assume that the second moment of Z is well-approximated by a function of the form P(log a),
+# where P is a degree-two polynomial. We'll curve-fit E[Z^2] to such a function.
+    
+def sec_mom_shape(x, c2, c1, c0):
+    return c2*(np.log(x))**2 + c1*np.log(x) + c0
+
+# Now for the animated sequence of plots.
+
+# The animation will arise from a sequence of plots corresponding to N in a "frame_list".
+# We might want the frame_list to start at N = MiNN, end at N = MaXN, and go up by increments of skip.
+# We could also enter any frame_list we wish, with N's not necessarily going up by regular increments.
+
+MiNN = 100 # Set N-value for first frame.
+MaXN = 10000 # Set N-value for last frame.
+skip = 100 # Set increment.
+
+frame_list = range(MiNN,MaXN + skip, skip)
+
+fig, ax = plt.subplots()
+fig.suptitle(r'Second moment of $Z$')
+
+def sec_mom_seq(N):
+    ax.clear()
+    
+    # A grid is helpful, but we want it to lie underneath everything else.
+    ax.grid(True,zorder=0,alpha=0.7)
+    
+    # Plot of the actual second moment of Z.
+    # Range for a. 
+    LBa, UBa = 1, N 
+    # We'll use this for the horizonal axis in both plots below...
+    hor_axis = [a for a in Zstats.keys() if LBa <= a <= UBa]
+    # ...and this for the data...
+    y_data = [Zstats[a]['2ndmom'] for a in hor_axis]
+    
+    # Plot of E[Z^2]
+    ax.plot(hor_axis, y_data, 'bx', label=r'$\frac{1}{\phi(a)}\sum_{b \in \mathbb{Z}_a^{\times}} T(a,b)^2$, ' + fr'${LBa} \leq a \leq {UBa}$')
+
+    # Now curve-fit each error with our err_shape model, and plot the curve of best fit.
+    popt, pcov = curve_fit(sec_mom_shape, hor_axis, y_data)
+    (c2, c1, c0) = tuple(popt)
+    ax.plot(hor_axis, sec_mom_shape(hor_axis, *popt), 'y:', label = fr'$c_2(\log a)^2 + c_1\log a + c_0$' + '\n' + fr'$(c_2,c_1,c_0) = ({c2:.4f}, {c1:.4f}, {c0:.4f})$')
+    
+    # Add labels, text, legend, etc.
+    ax.set_xlabel(r'$a$')
+    ax.set_ylabel(r'$\mathbb{E}[Z^2]$')
+    ax.legend(loc=4,framealpha=0.5)
+    
+sec_mom_seq_anim = animation.FuncAnimation(fig, sec_mom_seq, frames=frame_list, interval=500, blit=False, repeat=False)
+
+# This is supposed to remedy the blurry axis ticks/labels.
+plt.rcParams['savefig.facecolor'] = 'white' 
+
+# Just a sample frame.
+sec_mom_seq(1000)
+plt.show()
+```
+
+![SegmentLocal](images/second_moment_1d_1000.png)
+
+```python
+# Save a video of the animation. 
+HTML(sec_mom_seq_anim.to_html5_video())
+```
+
+```python
+#Alternatively...
+# rc('animation', html='html5')
+# sec_mom_seq_anim
+```
+
+```python
+# Define a function that we think approximated Var(Z) fairly well.
+# We determined guess_constant via a line of best fit not shown in this notebook.
+
+Z = H1
+Zstats = H1stats
+Zdist = H1dist
+
+guess_constant = -0.354293955
+def guess_var(a):
+    return eta_hensley*np.log(a) + guess_constant
+
+# Define a function that we think grows at the same rate as the error term
+# Var(Z) - guess_var(a)
+def err_var_shape(a):
+    if a == 1:
+        return 1
+    return (np.log(a))**2/np.sqrt(a)
+
+# Create a dictionary whose keys are those a for which we have data (i.e. the keys of Zstats),
+# and for which the value corresponding to key a is Var(Z) - guess_var(a), i.e. the error in 
+# our guess.
+
+VAR_GUESS_ERR = {}
+for a in Zstats.keys():
+    VAR_GUESS_ERR[a] = Zstats[a]['var'] - guess_var(a)
+```
+
+```python
+# We now plot the error term in the prediction that 
+# Var(Z) = eta*log(a) + guess_constant + O_{epsilon}(a^{epsilon - 1/2}).
+
+# The animation will arise from a sequence of plots corresponding to N in a "frame_list".
+# We might want the frame_list to start at N = MiNN, end at N = MaXN, and go up by increments of skip.
+# We could also enter any frame_list we wish, with N's not necessarily going up by regular increments.
+
+MiNN = 200 # Set N-value for first frame.
+MaXN = 10000 # Set N-value for last frame.
+skip = 100 # Set increment.
+
+frame_list = range(MiNN,MaXN + skip, skip)
+
+fig, ax = plt.subplots()
+fig.suptitle(r'Error in estimate variance of $Z$')
+
+def var_err(N):
+    ax.clear()
+    
+    # A grid is helpful, but we want it to lie underneath everything else.
+    ax.grid(True,zorder=0,alpha=0.7)
+    
+    # Range for a. 
+    LBa, UBa = 100, N 
+    # We'll use this for the horizonal axis in both plots below...
+    hor_axis = [a for a in VAR_GUESS_ERR.keys() if LBa <= a <= UBa]
+    # ...and this for the data...
+    y_data = [VAR_GUESS_ERR[a] for a in hor_axis]
+    
+    # Plot of Var(Z) - (eta*log(a) + guess_constant)
+    ax.plot(hor_axis, y_data, 'b-', label=r'$\mathrm{Var}(Z) - (\eta\log a -$' + f'{-guess_constant:.3f}' + r'$)$, ' + fr'${LBa} \leq a \leq {UBa}$')  
+    
+    # Plot bounding curves
+    cp = max([VAR_GUESS_ERR[a]/err_var_shape(a) for a in hor_axis])
+    cn = min([VAR_GUESS_ERR[a]/err_var_shape(a) for a in hor_axis])
+    ax.plot(hor_axis, [cp*err_var_shape(a) for a in hor_axis], 'y-', zorder=4.5, label=r'$c_+(\log a)^2/\sqrt{a}$, ' + fr'$c_+ = {cp:.3f}$')
+    ax.plot(hor_axis, [cn*err_var_shape(a) for a in hor_axis], 'g-', zorder=4.5, label=r'$c_-(\log a)^2/\sqrt{a}$, ' + fr'$c_- = -{-cn:.3f}$')
+
+    # Add labels, text, legend, etc.
+    ax.set_xlabel(r'$a$')
+    ax.set_ylabel(r'error')
+    ax.legend(loc=0,framealpha=0.8, ncol=1)
+    
+var_err_anim = animation.FuncAnimation(fig, var_err, frames=frame_list, interval=500, blit=False, repeat=False)
+
+# This is supposed to remedy the blurry axis ticks/labels.
+plt.rcParams['savefig.facecolor'] = 'white' 
+
+# Just a sample frame.
+var_err(1000)
+plt.show()
+```
+
+![SegmentLocal](images/variance_error_1d_1000.png)
+
+```python
+# Save a video of the animation. 
+HTML(var_err_anim.to_html5_video())
+```
+
+```python
+#Alternatively...
+# rc('animation', html='html5')
+# var_err_anim
+```
+
+<a id='2d-investigation'></a>
+#### Two-dimensional analysis: error terms & subdominant constant in the variance
+
+<sup>Jump to: [Table of Contents](#toc) | ↑ [One-dimensional analysis: variance](#1d-investigation-variance) | ↓ [Two-dimensional analysis: distribution](#2d-distribution) | ↑↑ Theory: [mean](#average-case), [variance](#distribution)</sup>
+
+We now generate an animation from a sequence of frames, one of which is shown below. Each frame contains four plots: the two plots on the left correspond to the random variable $X$, while the two on the right correspond to $X_1$. Recall that $X$ gives the value of $T(a,b)$, for $(a,b)$ chosen uniformly at random from ordered pairs with $1 \le b < a \le N$, and that $X_1$ is defined similarly, but with the restriction that $\gcd(a,b) = 1$. 
+
+Norton's theorem ([Theorem 7.1](#thm:norton)) tells us that $\mathbb{E}[X] - \lambda \log N = \nu - \frac{1}{2} + O\_{\epsilon}(N^{\epsilon - 1/6})$, and, equivalently (see [Proposition 7.2](#prop:ExpEquiv)), that $\mathbb{E}[X_1] - \lambda\log N = \nu_1 - \frac{1}{2} + O\_{\epsilon}(N^{\epsilon - 1/6})$. (See [$(5.6)$](#eq:mu_dixon), [$(5.8)$](#eq:norton_constant), and [$(5.9)$](#eq:norton_constant) for the constants.) If [Conjecture 6.2](#con:porter) is true, $1/6$ can be replaced by $1/2$ in the exponent of each $O$-term here. In the top two plots below, we see $\mathbb{E}[X] - \lambda\log N$ (left) and $\mathbb{E}[X_1] - \lambda \log N$ (right) for $N = 1000,2000,\ldots,100000$ (horizontal axis). We curve-fit the each set of points to curves $B + C_1/\sqrt{N}$ (left) and $B_1 + C_2/\sqrt{N}$ (right). These curves certainly seem to be of the right "shape", supporting the conjecture of "square-root cancellation". Moreover, $B$ should be close to $\nu - \frac{1}{2} = -0.4346485\ldots$, and $B_1$ should be close to $\nu_1 - \frac{1}{2} = 0.0456951\ldots$. Also, $B_1 - B$ should be close to $\nu_1 - \nu = 0.4803436\ldots$, as shown in [Proposition 7.2](#prop:ExpEquiv). Indeed, as displayed in the plot below, $B = -0.4357\ldots$, $B_1 = 0.0457\ldots$, and $B_1 - B = 0.4803\ldots$
+
+The bottom two plots are analogous, but for the variances of $X$ and $X_1$. These are also more interesting, because we don't really know what the "subdominant" constants should be. That is, by the theorem of Baladi and Vallée ([Theorem 7.4](#thm:BalVal)), we know that there exist constants $\kappa$ and $\kappa_1$ such that $\mathrm{Var}(X) - \eta\log N = \kappa + O(N^{-c})$ and $\mathrm{Var}(X_1) - \eta\log N = \kappa_1 + O(N^{-c})$ (where $c$ is some positive constant and $\eta$ is Hensley's constant [see [$(5.10)$](#eq:hensley_constant)]). While we don't know what $\kappa$ and $\kappa_1$ are numerically, according to our calculation, we should have $\kappa - \kappa_1 = 0.3340\ldots$ (see [$(5.11)$](#eq:deltakappa) and remarks following [Theorem 7.4](#thm:BalVal)). We also believe that we can take $c = \epsilon - 1/2$ here, as with the mean.
+
+Thus, in the bottom two plots, we curve-fit the set of points corresponding to $\mathrm{Var}(X) - \eta\log N$ to the curve $D + C_3/\sqrt{N}$ (left), and the set of points corresponding to $\mathrm{Var}(X_1) - \eta\log N$ and $D_1 + C_4/\sqrt{N}$ (right). Once again, the data seems to support square-root cancellation, and notice that $D - D_1 = 0.3383\ldots$, in agreement up to two decimal places with our calculation for $\kappa - \kappa_1$. Encouraged by this, we suspect that the values for $D$ and $D_1$ in our animation sequence hover around the true values of $\kappa$ and $\kappa_1$ respectively. It seems that $\kappa$ may be around $-0.09$ or $-0.1$, and that $\kappa_1$ may be around $-0.43$. (We'll go with $\kappa \approx -0.1$, a nice round number, in spite of the fact that $D = -0.09\ldots$ in most of the frames in our animation.)
+
+![SegmentLocal](images/error_term_in_mean_and_variance_no_constant_100000.png)
+
+In our animation, we start off with five points in each of the four plots, corresponding to $N = 1000, 2000,\ldots,5000$, then $N = 1000,\ldots,6000$, and so on up to $N = 1000,\ldots,100000$, as seen here. Then we proceed with $N = 2000,3000,\ldots,100000$, followed by $3000,\ldots,100000$, and so on, until $N = 96000,\ldots,100000$. The rationale behind this second sequence of plots is that the error term for smaller values of $N$ should be (and generally is) larger, so that looking at larger values of $N$ ought to give a more accurate picture. Then again, having fewer data points also gives a less accurate picture. Nevertheless, the values of $B$, $B_1$, $D$, and $D_1$ seem fairly stable throughout most of the plots in our animation.
+
+```python
+# Let's analyse our data to try to come up with a prediction for the 
+# subdominant constant in the asymptotic variance of our random variables.
+
+# We might decide to change our data before proceeding, but we won't want to overwrite our existing dictionaries.
+# We'll use new variables (e.g. D, E, F instead of A, B, C).
+# But we don't want to have to go through the below code and change A, B, C to D, E, F etc.
+# Hence we'll just do this, and work from hereon with X1stats etc.
+# If we want to work with different data, all we have to do is change the right-hand sides of the next four assignments.
+
+X1stats = Bstats
+X1dist = Bdist
+Xstats = Cstats
+Xdist = Cdist
+
+# We'll animate four plot sequences, but we'll combine four plots in each frame.
+# In each frame, there will be two one plot for the mean of X, one for the variance of X, 
+# and one for the mean of X_1, one for the variance of X_1. The plots will be of the 
+# respective error terms in the estimates for the means and variances (in the theorems of 
+# Norton and Hensley/Baladi-Vallee. Except, we will ignore subdominant constants. 
+# Thus, one plot will be of E[X] - mu*log N, another for Var(X) - eta*log N, and ditto for 
+# X_1. 
+
+# The animation will arise from a sequence of plots corresponding to N in a "frame_list".
+# We might want the frame_list to start at N = MiNN, end at N = MaXN, and go up by increments of skip.
+# We could also enter any frame_list we wish, with N's not necessarily going up by regular increments.
+
+MiNN = 5001 # Set N-value for first frame.
+MaXN = 100001 # Set N-value for last frame.
+skip = 1000 # Set increment.
+
+# Now we define the frame_list list. 
+# We just want to make sure we don't ask for a frame corresponding to an a we don't have data on.
+
+frame_list = []
+for N in range(MiNN,MaXN+skip,skip):
+    if N in list(Xdist.keys()): # We're assuming the keys of Xdist are the same as those of X1dist...
+        frame_list.append(N)
+        
+for N in range(MiNN,MaXN+skip,skip): # The reason for this will become apparent.
+    if N in list(Xdist.keys()):
+        frame_list.append(N - MaXN - 1)
+
+# Let's pull the means and variances from our "stats" dictionaries into new dictionaries with the same keys. 
+# Let's make simple lists with all of the data we need at the outset, so we don't have to 
+# repeat computations every time we call our function that defines a plot in our animation sequence.
+
+ERR_MEAN = {} # Dictionary for E[X] - mu*log N
+ERR_MEAN1 = {} # Dictionary for E[X_1] - mu*log N
+ERR_VAR = {} # Dictionary for Var(X) - eta*log N
+ERR_VAR1 = {} # Dictionary for Var(X_1) - eta*log N
+MEAN_DELTA = {} # Dictionary for E[X_1] - E[X] (which should be close to nu_1 - nu = 0.4803...)
+VAR_DELTA = {} # Dictionary for Var(X_1) - Var(X) (which should be close to kappa_1 - kappa = 0.3340...)
+
+for N in Xdist.keys():
+    ERR_MEAN[N] = Xstats[N]["mean"] - lambda_dixon*np.log(N - 1)
+    ERR_MEAN1[N] = X1stats[N]["mean"] - lambda_dixon*np.log(N - 1)
+    ERR_VAR[N] = Xstats[N]["var"] - eta_hensley*np.log(N - 1)
+    ERR_VAR1[N] = X1stats[N]["var"] - eta_hensley*np.log(N - 1)
+    MEAN_DELTA[N] = X1stats[N]["mean"] - Xstats[N]["mean"]
+    VAR_DELTA[N] = X1stats[N]["var"] - Xstats[N]["var"]
+
+# We're going to curve-fit the errors (1 <= b < a <= N) to a function of the form 
+# a/sqrt(N) + b. We know there is a subdominant constant b, and we believe, based on our 
+# heuristic, and empirical data from the 1-dimensional analysis, that we have square-root 
+# cancellation. Let's define a function for this model here. 
+
+def err_shape(x, a, b):
+    return a/(np.sqrt(x)) + b
+
+# Now set up the figure: four plots in a 2x2 grid.
+fig, ((ax, ax1), (axv, axv1)) = plt.subplots(2, 2, figsize=(15,10), sharey=False)
+plt.subplots_adjust(wspace=0.25, hspace=0.25)
+fig.suptitle('Error term in estimate for mean and variance')
+
+# Now let us define the four plots we want to see given an N in frame_list.
+
+def err_term_sequence(N):    
+    ax.clear() # For E[X] - mu*log N
+    ax1.clear() # For E[X_1] - mu*log N
+    axv.clear() # For Var(X) - eta*log N
+    axv1.clear() # For Var(X_1) - eta*log N
+    
+    # A grid is helpful, but we want it to lie underneath everything else.
+    ax.grid(True,zorder=0,alpha=0.7)
+    ax1.grid(True,zorder=0,alpha=0.7)
+    axv.grid(True,zorder=0,alpha=0.7)
+    axv1.grid(True,zorder=0,alpha=0.7)
+        
+    # Plots of the actual error terms 
+    # Range for n. First we plot points from 1000 [or...] to N as N increases from MiNN = 5001 [or...] to MaXN = 100001 [or...].
+    # Then, we plot points from 96001 + N [or...] to 100001 [or...] as N increases from -95001 to -1 [or...].
+    if N > 0:
+        LBn, UBn = MiNN - 4*skip - 1, N 
+    if N < 0:
+        LBn, UBn = 100001 + N - 4*skip, 100001
+    
+    # We'll use this for the horizonal axis in the next eight plots.
+    HOR_AXIS = [n for n in ERR_MEAN.keys() if n in range(LBn,UBn + 1)] 
+
+    ax.plot(HOR_AXIS, [ERR_MEAN[n] for n in ERR_MEAN.keys() if n in range(LBn,UBn + 1)], 'b.', label=r'$\mathbb{E}[X] - \lambda\log N$')
+    ax1.plot(HOR_AXIS, [ERR_MEAN1[n] for n in ERR_MEAN1.keys() if n in range(LBn,UBn + 1)], 'r.', label=r'$\mathbb{E}[X_1] - \lambda\log N$')
+    axv.plot(HOR_AXIS, [ERR_VAR[n] for n in ERR_VAR.keys() if n in range(LBn,UBn + 1)], 'g.', label=r'$\mathrm{Var}[X] - \eta\log N$')
+    axv1.plot(HOR_AXIS, [ERR_VAR1[n] for n in ERR_VAR1.keys() if n in range(LBn,UBn + 1)], 'y.', label=r'$\mathrm{Var}[X_1] - \eta\log N$')
+
+    # Now curve-fit each error with our err_shape model.
+    popt, pcov = curve_fit(err_shape, HOR_AXIS, [ERR_MEAN[n] for n in ERR_MEAN.keys() if n in range(LBn,UBn + 1)])
+    (a, b) = tuple(popt)
+    popt1, pcov1 = curve_fit(err_shape, HOR_AXIS, [ERR_MEAN1[n] for n in ERR_MEAN1.keys() if n in range(LBn,UBn + 1)])
+    (a1, b1) = tuple(popt1)
+    poptv, pcovv = curve_fit(err_shape, HOR_AXIS, [ERR_VAR[n] for n in ERR_VAR.keys() if n in range(LBn,UBn + 1)])
+    (av, bv) = tuple(poptv)
+    poptv1, pcovv1 = curve_fit(err_shape, HOR_AXIS, [ERR_VAR1[n] for n in ERR_VAR1.keys() if n in range(LBn,UBn + 1)])
+    (av1, bv1) = tuple(poptv1)
+        
+    # Plot the curves of best fit.
+    ax.plot(HOR_AXIS, err_shape(HOR_AXIS, *popt), '-', color='#34d5eb', label=r'$C_1/\sqrt{N} + B, $' + f' $C_1=${a:.4f}..., $B=${b:.4f}...')
+    ax1.plot(HOR_AXIS, err_shape(HOR_AXIS, *popt1), '-', color='#eb7734', label=r'$C_2/\sqrt{N} + B_1, $' + f' $ C_2=${a1:.4f}..., $B_1=${b1:.4f}...')
+    axv.plot(HOR_AXIS, err_shape(HOR_AXIS, *poptv), '-', color='#A4FD83', label=r'$C_3/\sqrt{N} + D, $' + f' $C_3=${av:.4f}..., $D=${bv:.4f}...')
+    axv1.plot(HOR_AXIS, err_shape(HOR_AXIS, *poptv1), '-', color='#FFF769', label=r'$C_4/\sqrt{N} + D_1, $' + f' $C_4=${av1:.4f}..., $D_1=${bv1:.4f}...')
+
+    # Add text to the plots.
+    ax.text(0.5, 0.73,fr'Limiting $B$-value: {nu_norton - 0.5:.4f}...', transform=ax.transAxes)
+    ax.text(0.5, 0.68,fr'$B_1 - B$ = {b1 - b:.4f}...', transform=ax.transAxes)
+    ax.text(0.5, 0.63,fr'Limiting $(B_1 - B)$-value: {nu_norton_coprime - nu_norton:.4f}...', transform=ax.transAxes)
+    
+    ax1.text(0.5, 0.73,fr'Limiting $B_1$-value: {nu_norton_coprime - 0.5:.4f}...', transform=ax1.transAxes)
+    ax1.text(0.5, 0.68,fr'$B_1 - B$ = {b1 - b:.4f}...', transform=ax1.transAxes)
+    ax1.text(0.5, 0.63,fr'Limiting $(B_1 - B)$-value: {nu_norton_coprime - nu_norton:.4f}...', transform=ax1.transAxes)
+    
+    axv.text(0.5, 0.35,f'Limiting $D$-value: open question!', transform=axv.transAxes)
+    axv.text(0.5, 0.3,fr'$D - D_1$ = {bv - bv1:.4f}...', transform=axv.transAxes)
+    axv.text(0.5, 0.25,fr'Limiting $(D - D_1)$-value: {delta_kappa:.3f}...', transform=axv.transAxes)
+    
+    axv1.text(0.5, 0.35,f'Limiting $D_1$-value: open question!', transform=axv1.transAxes)
+    axv1.text(0.5, 0.3,fr'$D - D_1$ = {bv - bv1:.4f}...', transform=axv1.transAxes)
+    axv1.text(0.5, 0.25,fr'Limiting $(D - D_1)$-value: {delta_kappa:.3f}...', transform=axv1.transAxes)
+    
+    # Axis labels, legend, etc. 
+    ax.set_xlabel(fr'$N = {LBn}, {LBn + skip},\ldots,{UBn-1}$')
+    ax.set_ylabel('error')
+    
+    ax1.set_xlabel(fr'$N = {LBn}, {LBn + skip},\ldots,{UBn-1}$')
+    ax1.set_ylabel('error')
+    
+    axv.set_xlabel(fr'$N = {LBn}, {LBn + skip},\ldots,{UBn-1}$')
+    axv.set_ylabel('error')
+    
+    axv1.set_xlabel(fr'$N = {LBn}, {LBn + skip},\ldots,{UBn-1}$')
+    axv1.set_ylabel('error')
+        
+    ax.legend(loc=0, ncol=1, framealpha=0.5)
+    ax1.legend(loc=0, ncol=1, framealpha=0.5)
+    axv.legend(loc=0, ncol=1, framealpha=0.5)
+    axv1.legend(loc=0, ncol=1, framealpha=0.5)
+       
+# Generate the animation
+err_term_sequence_anim = animation.FuncAnimation(fig, err_term_sequence, frames=frame_list, interval=500, blit=False, repeat=False) 
+
+# This is supposed to remedy the blurry axis ticks/labels. 
+plt.rcParams['savefig.facecolor'] = 'white' 
+
+# Just a sample frame.
+err_term_sequence(100001)
+plt.show()
+```
+
+![SegmentLocal](images/error_term_in_mean_and_variance_no_constant_100000.png)
+
+```python
+# Save a video of the animation.
+HTML(err_term_sequence_anim.to_html5_video())
+```
+
+```python
+# Alternatively...
+# rc('animation', html='html5')
+# err_term_sequence_anim
+```
+
+<a id='2d-distribution'></a>
+#### Two-dimensional analysis: distribution
+
+<sup>Jump to: [Table of Contents](#toc) | ↑ [Two-dimensional analysis: error terms & subdominant constant in the variance](#2d-investigation) | ↓ [References](#references) | ↑↑ [Theory](#distribution)</sup>
+
+Finally, in the culmination of the above theorems and numerical data, we generate an animation showing the distribution of our random variables $X$ and $X_1$. Recall that $X$ gives the value of $T(a,b)$, for $(a,b)$ chosen uniformly at random from ordered pairs with $1 \le b < a \le N$, and that $X_1$ is defined similarly, but with the restriction that $\gcd(a,b) = 1$. Below is the frame corresponding to $N = 1000$ in our sequence running over $N = 1000,2000,\ldots,100000$. (Well, we have written $N = 1001$ and so on, with $0 < b < a < N$.)
+
+![SegmentLocal](images/euclid_steps_distribution_1000.png)
+
+The horizontal axis shows the possible values $s$ that $X$ or $X_1$ may take (over all $N$ in our sequence). The blue and red dots show the probabilities that $X = s$ and $X_1 = s$, respectively, i.e.
+
+\begin{align*}
+ \mathbb{P}(X = s) = \frac{1}{\binom{N}{2}} \\#\\\{1 \le b < a \le N : T(a,b) = s\\\} \quad \textrm{and} \quad \mathbb{P}(X_1 = s) = \frac{\\#\\\{1 \le b < a \le N : T(a,b) = s\\\}}{\\#\\\{1 \le b < a \le N : \gcd(a,b) = 1\\\}}.
+\end{align*}
+
+Note that in view of [$(7.7)$](#eq:mertens),
+
+\begin{align*}
+\\#\\\{1 \le b < a \le N : \gcd(a,b) = 1\\\} = \frac{N^2}{2\zeta(2)} + O(N \log N).
+\end{align*}
+
+The plot also displays the means $\mu = \mathbb{E}[X]$ and $\mu_1 = \mathbb{E}[X_1]$, truncated at the third decimal place. Likewise, we have $\sigma^2 = \mathrm{Var}(X)$ and $\sigma_1^2 = \mathrm{Var}(X_1)$. The same notation with the $\*$-subscript stands for the estimates given for the expected values by Norton's theorem ([Theorem 7.1](#thm:norton)), i.e. $\mu_* = \lambda \log N + \nu - \frac{1}{2}$ and $\mu_{1*} = \lambda \log N + \nu_1 - \frac{1}{2}$, and for the variances by the theorem of Baladi and Vallée ([Theorem 7.4](#thm:BalVal)), with our "guesstimates" for the subdominant constants (viz. $\kappa = -0.1$ and $\kappa_1 = -0.434$): $\sigma_{\*}^2 = \eta \log N + \kappa$ and $\sigma_{1*}^2 = \eta \log N + \kappa_1$.
+
+The dotted blue curve is the PDF for the normal distribution of mean $\mathbb{E}[X]$ and variance $\mathrm{Var}[X]$. The solid (but pale) blue curve is the PDF of the normal distribution of mean $\mu\_\*$ and variance $\sigma^2\_\*$. The red curves are the same but for $X_1$. There is no visually discernable difference between curves of the same colour. Also, the dots all lie quite close to the curves of the same colour. Indeed, the estimations given by the theorems fit the data with a striking accuracy.
+
+We also display the mean, median, and mode of $X$ and $X_1$ (the subscript $1$ corresponds to $X_1$, naturally).
+
+```python
+# We might decide to change our data before proceeding, but we won't want to overwrite our existing dictionaries.
+# We'll use new variables (e.g. D, E, F instead of A, B, C).
+# But we don't want to have to go through the below code and change A, B, C to D, E, F etc.
+# Hence we'll just do this, and work from hereon with X1stats etc.
+# If we want to work with different data, all we have to do is change the right-hand sides of the next four assignments.
+
+X1stats = Bstats
+X1dist = Bdist
+Xstats = Cstats
+Xdist = Cdist
+
+fig, ax = plt.subplots()
+fig.suptitle('Distribution of number of divisions in Euclidean algorithm \nfor gcd(a,b) with 0 < b < a < N')
+
+# We want to animate a sequence of plots, one plot for each N in the list frame_list.
+# We might want the frame_list to start at N = MiNN, end at N = MaXN, and go up by increments of skip.
+# We could also enter any frame_list we wish, with a's not necessarily going up by regular increments.
+# To include all N in our frame_list, we could just set frame_list = list(X1dist.keys())
+
+MiNN = 1001 # Set N-value for first frame.
+MaXN = 100001 # Set N-value for last frame.
+skip = 1000 # Set increment.
+
+# Now we define the frame_list list. 
+# We just want to make sure we don't ask for a frame corresponding to an N we don't have data on.
+
+frame_list = []
+for N in range(MiNN,MaXN+skip,skip):
+    if N in list(X1dist.keys()): # We'll be plotting data from Xdist, Xstats, X1dist, X1stats dictionaries: we're assuming they all have the same keys.
+        frame_list.append(N)
+
+# We want a common horizontal axis for each frame in our sequence of plots. 
+# It needs to cover every possible value for the number of divisions T(a,b), 
+# for each (a,b) for each N in our frame_list.
+# In this case, this will just end up being list(X1dist[N].keys()) for the 
+# largest N in our frame_list, but the below code is a bit more flexible.
+
+hor_axis_set = set()
+for N in frame_list:
+    hor_axis_set = hor_axis_set.union(list(X1dist[N].keys()))
+
+hor_axis_list = list(hor_axis_set)
+hor_axis_list.sort() 
+
+# We can now define lower and upper bounds for the horizontal axis.
+# Likewise, we want a common vertical axis range for each plot in our sequence 
+# (otherwise it will appear to jump around).
+
+x_min, x_max = min(hor_axis_list), max(hor_axis_list)
+y_min, y_max = 0, max([max(list(X1dist[N].values())) for N in frame_list])
+
+# We can now define a function that gives the plot we want for a given N in our frame_list.
+
+def two_dim_dist_seq(N):
+    ax.clear()
+    
+    # Bounds for the plot, and horizontal/vertical axis tick marks. 
+    xleft, xright, ybottom, ytop = x_min - 0.5, x_max + 0.5, y_min - 0.01, np.ceil(10*y_max)/10 
+    ax.set(xlim=(xleft, xright), ylim=(ybottom, ytop))
+    ax.set_xticks(hor_axis_list)
+    gridnum = 10
+    ax.set_yticks(np.linspace(0, ytop, num=gridnum+1))
+    
+    # A grid is helpful, but we want it underneath everything else. 
+    ax.grid(True,zorder=0,alpha=0.7)
+    
+    # Plots of the actual data
+    ax.plot(list(Xdist[N].keys()),list(Xdist[N].values()),'b.',zorder=4.5, label='all (a,b)')
+    ax.plot(list(X1dist[N].keys()),list(X1dist[N].values()),'.', color = 'r', zorder=4.5, label='coprime (a,b)')
+    
+    # Plots of normal curves with mean and variance the same as the mean and variance of the data
+    mu = Xstats[N]['mean']
+    var = Xstats[N]['var']
+    sigma = np.sqrt(var)
+    mu1 = X1stats[N]['mean']
+    var1 = X1stats[N]['var']
+    sigma1 = np.sqrt(var1)
+    normal_points = np.linspace(list(Xdist[N].keys())[0], list(Xdist[N].keys())[-1]) 
+    ax.plot(normal_points, stats.norm.pdf(normal_points, mu, sigma), ':', color='b', alpha=0.9,zorder=3.5, label=r'$\mathrm{Norm}(\mu,\sigma^2)$')
+    ax.plot(normal_points, stats.norm.pdf(normal_points, mu1, sigma1), ':', color='r', alpha=0.9, zorder=3.5, label=r'$\mathrm{Norm}(\mu_1,\sigma_1^2)$')    
+    
+    # Plots of normal curves with mean given by the estimate in Norton's theorem, and 
+    # variance given by the estimate in Hensley's theorem (see Baladi/Vallee theorem as well), 
+    # but the subdominant constants in the variance given by our "guesstimate".
+    mu_p = lambda_dixon*np.log(N - 1) + nu_norton - 0.5
+    var_p = eta_hensley*np.log(N - 1) + kappa_var
+    sigma_p = np.sqrt(var_p)
+    mu1_p = lambda_dixon*np.log(N - 1) + nu_norton_coprime - 0.5
+    var1_p = eta_hensley*np.log(N - 1) + kappa_var_coprime
+    sigma1_p = np.sqrt(var1_p)
+    ax.plot(normal_points, stats.norm.pdf(normal_points, mu_p, sigma_p), '-',color='#34d5eb', alpha=0.5,zorder=2.5, label=r'$\mathrm{Norm}(\mu_{*},\sigma_{*}^2)$')
+    ax.plot(normal_points, stats.norm.pdf(normal_points, mu1_p, sigma1_p), '-',color='#eb7734', alpha=0.5,zorder=2.5, label=r'$\mathrm{Norm}(\mu_{1*},\sigma_{1*}^2)$')
+    
+    # Label the axes
+    ax.set_xlabel(r'$\#$steps of the form $(u,v) \mapsto (v,u$ mod $v)$')
+    ax.set_ylabel('probability')
+    
+    # Add text and legend on top of the plot
+    # We'll include the medians and modes...
+    median = Xstats[N]['med']
+    median1 = X1stats[N]['med']
+    mode = Xstats[N]['mode']
+    mode1 = X1stats[N]['mode']
+    # A bit of trial and error (view the plots) to get the positioning.
+    # Show N 
+    ax.text(xright-9, ytop*((gridnum - 3)/gridnum), fr'$N = {N}$')
+    # Show the mean and variance of the data (all (a,b)), then the estimates given by the theory.
+    ax.text(xright-9, ytop*((gridnum - 3.75)/gridnum), fr'$\mu = {mu:.3f}, \sigma^2 = {var:.3f}$')
+    ax.text(xright-9, ytop*((gridnum - 4.5)/gridnum), fr'$\mu_* = {mu_p:.3f}, \sigma_*^2 = {var_p:.3f}$')
+    # Show the mean and variance of the data (coprime (a,b)), then the estimates given by the theory.
+    ax.text(xright-9, ytop*((gridnum - 5.25)/gridnum), fr'$\mu_1 = {mu1:.3f}, \sigma^2_1 = {var1:.3f}$')
+    subscript = '_{1*}'
+    ax.text(xright-9, ytop*((gridnum - 6)/gridnum), fr'$\mu{subscript} = {mu1_p:.3f}, \sigma{subscript}^2 = {var1_p:.3f}$')
+    # Show the median and mode(s) (coprime (a,b))
+    ax.text(xright-6, ytop*((gridnum - 6.75)/gridnum), fr'median$_1$: {median1}')
+    ax.text(xright-6, ytop*((gridnum - 7.5)/gridnum), fr'mode(s)$_1$: {mode1}')
+    # Show the median and mode(s) (all (a,b))
+    ax.text(xright-6, ytop*((gridnum - 8.25)/gridnum), f'median: {median}')
+    ax.text(xright-6, ytop*((gridnum - 9)/gridnum), f'mode(s): {mode}') 
+    # Legend
+    ax.legend(loc=2, ncol=3, framealpha=0.5, mode="expand")
+
+# Generate the animation
+two_dim_dist_anim = animation.FuncAnimation(fig, two_dim_dist_seq, frames=frame_list, interval=500, blit=False, repeat=False) 
+
+# This is supposed to remedy the blurry axis ticks/labels. 
+plt.rcParams['savefig.facecolor'] = 'white' 
+
+# Just a sample frame
+two_dim_dist_seq(1001) 
+plt.show()    
+```
+
+![SegmentLocal](images/euclid_steps_distribution_1000.png)
+
+```python
+# Save a video of the animation.
+HTML(two_dim_dist_anim.to_html5_video())
+```
+
+```python
+# Alternatively...
+# rc('animation', html='html5')
+# two_dim_dist_anim
+```
+
+```python
+# Save the animation as an animated GIF
+
+f = r"images\euclid_steps_distribution.gif" 
+two_dim_dist_anim.save(f, dpi=100, writer='imagemagick', extra_args=['-loop','1'], fps=5)
+
+# extra_args=['-loop','1'] for no looping, '0' for looping.
+
+f = r"images\euclid_steps_distribution_loop.gif" 
+two_dim_dist_anim.save(f, dpi=100, writer='imagemagick', extra_args=['-loop','0'], fps=5)
+```
+
+<a id='references'></a>
+### References
+
+<sup>Jump to: [Table of Contents](#toc) | ↑ [Two-dimensional analysis: distribution](#2d-distribution)</sup>
+
+[1] V. BALADI & B. VALLÉE. "[Euclidean algorithms are Gaussian](https://doi.org/10.1016/j.jnt.2004.08.008)." _J. Number Theory_ 110(2):331–386, 2005.
+
+[2] J. D. DIXON. "[The number of steps in the Euclidean algorithm](https://doi.org/10.1016/0022-314X(70)90044-2)." _J. Number Theory_ 2(4):414–422, 1970.
+
+[3] H. HEILBRONN. "[On the average length of a class of finite continued fractions](https://doi.org/10.1007/978-1-4615-4819-5_7)." In _Abhandlungen aus Zahlentheorie und Analysis_, VEB Deutscher Verlag, Berlin 1968. 
+
+[4] D. HENSLEY. "[The number of steps in the Euclidean algorithm](https://doi.org/10.1006/jnth.1994.1088)." _J. Number Theory_ 49(2):142–182, 1994.
+
+[5] D. E. KNUTH. [_The Art of Computer Programming, Volume 2: Seminumerical Algorithms_](). 3rd Edn. Addison-Wesley, Reading, Mass., 1997.
+
+[6] L. LHOTE. "[Efficient computation of a class of continued fraction constants](https://clementj01.users.greyc.fr/publications/postscript/Lhote2003.pdf)." (Summary by J. CLEMENT.) pp. 71–74 in _Algorithms Seminar 2002–2004_ (Ed. F. CHYZAK), 2005.
+
+[7] G. H. NORTON. "[On the asymptotic analysis of the Euclidean algorithm](https://doi.org/10.1016/S0747-7171(08)80036-3)." _Journal of Symbolic Computation_ 10(1):53–58, 1990.
+
+[8] J. W. PORTER. "[On a theorem of Heilbronn](https://doi.org/10.1112/S0025579300004459)." _Mathematika_ 22(1):20–28, 1975.
+
+[9] J. SHALLIT. "[Origins of the analysis of the Euclidean algorithm](https://doi.org/10.1006/hmat.1994.1031)." _Historia Mathematica_ 21(4):401–419, 1994.
+
