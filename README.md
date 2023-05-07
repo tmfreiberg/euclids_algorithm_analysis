@@ -117,18 +117,18 @@ $$a = r_0, b = r_1 > r = r_2 > r_3 > \cdots > r_n > r_{n + 1} = 0 \tag{3.1}$$
 
 with the property that $\gcd(r_{i-1},r_{i}) = \gcd(r_{i},r_{i + 1})$ for $i = 1,\ldots,n$, because
 
-<a id='eq:rem_seq2'></a>
+<a id='eqrem_seq2'></a>
 $$r_{i - 1} = q_ir_i + r_{i + 1} \quad (i = 1,\ldots,n). \tag{3.2}$$
 
 But $\gcd(r_n,r_{n + 1}) = \gcd(r_n,0) = r_n$, and so in this way we find the gcd of $a$ and $b$ (and of $\gcd(r_{i},r_{i + 1})$ for $i = 1,\ldots,n$). The case $b \le -1$ is similar, but instead of [(3.1)](#eqremseq) we have
 
-<a id='eq:rem_seq_neg'></a>
+<a id='eqrem_seq_neg'></a>
 $$a = r_0, b = r_1 < r_2 < r_3 < \cdots < r_{n} < r_{n + 1} = 0 \tag{3.3}$$
 
 and $\gcd(a,b) = -r_n$. However, since $\gcd(a,b) = \gcd(|a|,|b|)$, we will typically assume that $a$ and $b$ are nonnegative.
 
 ---
-**Definition 3.3.** Given $a,b \in \mathbb{Z}$, let $T(a,b) = n$ with $n$ as in [(3.1)](#eqremseq) (if $b \ge 0$) or [(3.3)](#eq:rem_seq_neg) (if $b \le 0$). Thus, $T(a,b)$ is the number of "steps" or "divisions" in Euclid's algorithm for computing $\gcd(a,b)$. 
+**Definition 3.3.** Given $a,b \in \mathbb{Z}$, let $T(a,b) = n$ with $n$ as in [(3.1)](#eqremseq) (if $b \ge 0$) or [(3.3)](#eqrem_seq_neg) (if $b \le 0$). Thus, $T(a,b)$ is the number of "steps" or "divisions" in Euclid's algorithm for computing $\gcd(a,b)$. 
 
 ---
 
@@ -256,7 +256,7 @@ gcd(-1011,-69) = 3, T(-1011,-69) = 5
 First let's record a result that will be useful in the sequel.
 
 ---
-<a id='prop:4.1'></a>
+<a id='prop4.1'></a>
 **Proposition 4.1.** We have the following for $a \ge b \ge 1$. <br>
 (a) $T(a,b) = 1$ if and only if $b \mid a$. <br>
 (b) If $a > b$, $T(b,a) = T(a,b) + 1$. <br>
@@ -271,7 +271,7 @@ First let's record a result that will be useful in the sequel.
 >
 >$$da = dr_0, db = dr_1 > dr_2 > \cdots > dr_n > dr_{n + 1} = 0$$
 >
->is the remainder sequence given by Euclid's algorithm for $\gcd(da,db)$ (the quotients $q_i$ in [(3.2)](#eq:rem_seq2) won't change).
+>is the remainder sequence given by Euclid's algorithm for $\gcd(da,db)$ (the quotients $q_i$ in [(3.2)](#eqrem_seq2) won't change).
 
 ```python
 # Let's illustrate the invariance of the number of divisions under (a,b) -> (da,db). 
@@ -290,7 +290,7 @@ write_euclid(67*1011,67*69)
 gcd(67737,4623) = 201, T(67737,4623) = 5
 ```
 
-What are the smallest possible values of $a$ and $b$ if $a \ge b \ge 1$ and $T(a,b) = n$? If $n = 1$ we need only note that $T(1,1) = 1$ to see that the answer is $a = b = 1$. Since $T(a,b) = 1$ if and only if $b \mid a$, the answer for $n \ge 2$ must satisfy $a > b \ge 2$ and $b \nmid a$. (In fact, by [Proposition 4.1(c)](#prop:4.1), the answer in general must satisfy $\gcd(a,b) = 1$, i.e. $r_n = 1$.) Noting that $T(3,2) = 2$ then gives the answer for $n = 2$ as $a = 3$ and $b = 2$. 
+What are the smallest possible values of $a$ and $b$ if $a \ge b \ge 1$ and $T(a,b) = n$? If $n = 1$ we need only note that $T(1,1) = 1$ to see that the answer is $a = b = 1$. Since $T(a,b) = 1$ if and only if $b \mid a$, the answer for $n \ge 2$ must satisfy $a > b \ge 2$ and $b \nmid a$. (In fact, by [Proposition 4.1(c)](#prop4.1), the answer in general must satisfy $\gcd(a,b) = 1$, i.e. $r_n = 1$.) Noting that $T(3,2) = 2$ then gives the answer for $n = 2$ as $a = 3$ and $b = 2$. 
 
 ```python
 # Some very naive code to answer the question: what are the smallest possible values of a and b if 
@@ -314,7 +314,7 @@ print(W(1), W(2), W(3), W(4), W(5), W(6), W(7), W(8), W(9), W(10))
 (1, 1) (3, 2) (5, 3) (8, 5) (13, 8) (21, 13) (34, 21) (55, 34) (89, 55) (144, 89)
 ```
 
-It isn't difficult to see that for a given $n \ge 2$, if $T(a,b) = n$, $a$ and $b$ will be minimal if, in [(3.2)](#eq:rem_seq2), $r_n = 1$, $r_{n - 1} = 2$, and $q_1 = q_2 = \cdots = q_{n - 1} = 1$. Thus, $r_{n - 2} = 1(2) + 1 = 3$, $r_{n - 3} = 1(3) + 2 = 5$, and so on.
+It isn't difficult to see that for a given $n \ge 2$, if $T(a,b) = n$, $a$ and $b$ will be minimal if, in [(3.2)](#eqrem_seq2), $r_n = 1$, $r_{n - 1} = 2$, and $q_1 = q_2 = \cdots = q_{n - 1} = 1$. Thus, $r_{n - 2} = 1(2) + 1 = 3$, $r_{n - 3} = 1(3) + 2 = 5$, and so on.
 
 ```python
 write_euclid(55,34)
@@ -339,7 +339,7 @@ These are the Fibonacci numbers!
 **Definition 4.2.** Let $f_0 = 0$, $f_1 = 1$, and $f_{n+2} = f_{n + 1} + f_{n}$ for $n \ge 0$. Then $(f_0,f_1,\ldots)$ is the _Fibonacci sequence_, and $f_n$ is the $n$-th _Fibonacci number_.
 
 ---
-<a id='prop:4.3'></a>
+<a id='prop4.3'></a>
 **Proposition 4.3.** Let $a \ge b \ge 1$. (a) For $n \ge 0$, we have $\gcd(f_{n + 1},f_{n}) = 1$. For $n \ge 1$, we have $T(f_{n + 2},f_{n + 1}) = n$. (b) If $n \ge 1$ and $T(a,b) = n$, then $a \ge f_{n + 2}$ and $b \ge f_{n+1}$. 
 
 ---
@@ -486,7 +486,7 @@ plt.show()
 
 We can show that if $\phi$ and $\psi$ are the roots of $x^2 - x - 1$, then for $n \ge 0$,
 
-<a id='eq:fib_phi'></a>
+<a id='eqfib_phi'></a>
 $$f_n = \frac{\phi^{n} - \psi^n}{\phi - \psi}. \tag{4.1}$$
 
 For any root $\lambda$ of $x^2 - x - 1$ satisfies $\lambda^{n + 2} - \lambda^{n + 1} - \lambda = 0$ for all $n \ge 0$, just as the Fibonacci numbers satisfy $f_{n + 2} - f_{n + 1} - f_{n} = 0$ for $n \ge 0$. It follows that if $c_1$ and $c_2$ are constants such that $f_n = c_1\phi^n + c_2\psi^n$ for $n = 0$ and $n = 1$, then this equation holds for all $n \ge 0$. Letting $n = 0$ shows that $c_2 = -c_1$, and then letting $n = 1$ gives $c_1 = 1/(\phi - \psi)$. We let $\phi = \frac{1}{2}(1 + \sqrt{5})$ be the positive root (the golden ratio), and $\psi = \frac{1}{2}(1 - \sqrt{5})$ be the other. Thus, $\phi - \psi = \sqrt{5}$, and $f_n$ is the integer nearest $\phi^n/\sqrt{5}$.
@@ -525,7 +525,7 @@ $$
 $$
 
 ---
-<a id='prop:worst_case'></a>
+<a id='propworst_case'></a>
 **Proposition 4.5.** For $N \ge 2$,  
 
 $$\frac{\log(N - 1)}{\log \phi} - 1.328 < \max\\\{T(a,b) : 1 \le b \le a \le N\\\} < \frac{\log(N + 1)}{\log \phi} - 0.327.$$
@@ -534,7 +534,7 @@ $$\frac{\log(N - 1)}{\log \phi} - 1.328 < \max\\\{T(a,b) : 1 \le b \le a \le N\\
 
 Note that $1/\log \phi = 2.0780869\ldots$.
 
->_Proof._ First of all, if $m \ge 1$ then $f_{n + 1} \le m < f_{n + 2}$ for some $n \ge 1$. Thus, in view of [(4.1)](#eq:fib_phi), we have (for $m \ge 2$ in the left inequality)
+>_Proof._ First of all, if $m \ge 1$ then $f_{n + 1} \le m < f_{n + 2}$ for some $n \ge 1$. Thus, in view of [(4.1)](#eqfib_phi), we have (for $m \ge 2$ in the left inequality)
 >
 >$$\frac{\log(m - 1)}{\log \phi} - 0.328 < n < \frac{\log(m + 1)}{\log \phi} + 0.673. \tag{$\*$}$$
 >
@@ -556,7 +556,7 @@ Note that $1/\log \phi = 2.0780869\ldots$.
 >
 > Combining gives $(\*)$.
 >
->(a) Now, let $N \ge 2$ be given, and let $n \ge 2$ be such that $f_{n + 1} \le N < f_{n + 2}$. By [Proposition 4.3(b)](#prop:4.3), for $1 \le b \le a \le N$, we have $T(a,b) \le n - 1$, with equality attained when $a = f_{n + 1}$ and $b = f_{n}$. That is, 
+>(a) Now, let $N \ge 2$ be given, and let $n \ge 2$ be such that $f_{n + 1} \le N < f_{n + 2}$. By [Proposition 4.3(b)](#prop4.3), for $1 \le b \le a \le N$, we have $T(a,b) \le n - 1$, with equality attained when $a = f_{n + 1}$ and $b = f_{n}$. That is, 
 >
 >$$\max\\\{T(a,b) : 1 \le b \le a \le N\\\} = n - 1,$$
 >
@@ -591,7 +591,7 @@ $$\frac{\zeta'(2)}{\zeta(2)} = -\sum_{n = 1}^{\infty} \frac{\Lambda(n)}{n^2} = 1
 
 The reciprocal of [Lévy's constant](https://oeis.org/A086702):
 
-<a id='eq:mu_dixon'></a>
+<a id='eqmu_dixon'></a>
 
 $$
 \begin{align*}
@@ -601,7 +601,7 @@ $$
 
 [Porter's constant](https://en.wikipedia.org/wiki/Porter%27s_constant), also called the Lochs-Porter constant:
 
-<a id='eq:porter_constant'></a>
+<a id='eqporter_constant'></a>
 
 $$
 \begin{align*}
@@ -613,7 +613,7 @@ Note also that $C_P - 1 = 0.4670780\ldots$.
 
 We also have: 
 
-<a id='eq:norton_constant'></a>
+<a id='eqnorton_constant'></a>
 
 $$
 \begin{align*}
@@ -626,7 +626,7 @@ Note also that $\nu - 1/2 = -0.4346485\ldots$ and $\nu_1 - 1/2 = 0.0456951\ldots
 
 Hensley's constant:
 
-<a id='eq:hensley_constant'></a>
+<a id='eqhensley_constant'></a>
 
 $$
 \begin{align*}
@@ -636,7 +636,7 @@ $$
 
 Finally, we have mysterious constants $\kappa$ and $\kappa_1$, whose values we do not know, but we know that
 
-<a id='eq:deltakappa'></a>
+<a id='eqdeltakappa'></a>
 
 $$
 \begin{align*}
@@ -716,7 +716,7 @@ print(f"{'gamma':>16} = {euler_mascheroni}" +'\n' +
 
 <sup>Jump to: [Table of Contents](#toc) | ↑ [Constants](#constants) | ↓ [Average-case analysis](#1d-average-case)</sup>
 
-As we will see, "one-dimensional analysis" is "harder" than "two-dimensional analysis". We may study $T(a,b)$ for coprime pairs $(a,b)$, and deduce results of all pairs $(a,b)$, coprime or not, using [Proposition 4.1(c)](#prop:4.1) and the fact that $\gcd(a,b) = 1$ if and only if $\gcd(ga,gb) = g$ (positive integers $a,b,g$). It turns out that the techniques in the literature lead most naturally to results for sums over coprime pairs, with results for unrestricted counts effectively being corollaries. 
+As we will see, "one-dimensional analysis" is "harder" than "two-dimensional analysis". We may study $T(a,b)$ for coprime pairs $(a,b)$, and deduce results of all pairs $(a,b)$, coprime or not, using [Proposition 4.1(c)](#prop4.1) and the fact that $\gcd(a,b) = 1$ if and only if $\gcd(ga,gb) = g$ (positive integers $a,b,g$). It turns out that the techniques in the literature lead most naturally to results for sums over coprime pairs, with results for unrestricted counts effectively being corollaries. 
 
 <a id='1d-average-case'></a>
 #### Average-case analysis
@@ -725,7 +725,7 @@ As we will see, "one-dimensional analysis" is "harder" than "two-dimensional ana
 
 To formulate results precisely, given a positive integer $a$, set $\mathbb{Z}\_a^{\times} = \\\{b \in [1,a] : \gcd(a,b) = 1\\\}$ (the _totatives_ of $a$), and define a random variable $Z : \mathbb{Z}\_a^{\times} \to \mathbb{N}$ by letting $Z(b) = T(a,b)$ for each $b \in \mathbb{Z}\_a^{\times}$ (with $b$ being chosen uniformly at random from $\mathbb{Z}\_a^{\times}$). Thus, 
 
-<a id='eq:EZ'></a>
+<a id='eqEZ'></a>
 
 $$
 \begin{align*}
@@ -739,13 +739,13 @@ Heilbronn [[3]](#references) considered (exercise to show the equivalence)
 
 $$\tau_a = \frac{1}{\phi(a)}\sum_{\substack{b = 0 \\\ \gcd(a,b) = 1}}^{a - 1} T(b,a) = \mathbb{E}[Z] + 1,$$
 
-and showed that $\tau_a = \lambda \log a + O\left((\log\log a)^4\right)$, where $\lambda$ is as in [(5.6)](#eq:mu_dixon). Porter [[8]](#references) subsequently showed that for all $a \ge 1$ and any $\epsilon > 0$, $\tau_a = \lambda \log a + C_P + O_{\epsilon}\left(a^{\epsilon - 1/6}\right)$, where $C_P$ is _Porter's constant_ as in [(5.7)](#eq:porter_constant). This is equivalent to the following. 
+and showed that $\tau_a = \lambda \log a + O\left((\log\log a)^4\right)$, where $\lambda$ is as in [(5.6)](#eqmu_dixon). Porter [[8]](#references) subsequently showed that for all $a \ge 1$ and any $\epsilon > 0$, $\tau_a = \lambda \log a + C_P + O_{\epsilon}\left(a^{\epsilon - 1/6}\right)$, where $C_P$ is _Porter's constant_ as in [(5.7)](#eqporter_constant). This is equivalent to the following. 
 
 ---
-<a id='thm:porter'></a>
+<a id='thmporter'></a>
 **Theorem 6.1.** [[Porter](#references), 1975]. For all $a \ge 1$ and any $\epsilon > 0$, we have
 
-<a id='eq:porter_thm'></a>
+<a id='eqporter_thm'></a>
 
 $$
 \begin{align*}
@@ -764,7 +764,7 @@ $$
 
 Comparable estimates for the second moment of $Z$ have not been established, let alone its distribution. Much more has been proved in the "two-dimensional analysis", in which we may exploit the fact that we average over $b$ as well. But let us persevere with $Z$ for the moment: our numerical data will suggest a roughly normal distribution, with variance of order $\log a$.
 
-For a given $a$, let us model the summands $T(a,b)$, $b \in \mathbb{Z}^{\times}\_{a}$, as a sequence $Z_1,\ldots,Z_{\phi(a)}$ of independent, identically distributed random variables, each with mean $\mu_a = \lambda\log a + C_P - 1$, and variance $\sigma_a^2 = \mathrm{Var}(Z)$ (whatever it is). In other words, let us model the sum in [(6.1)](#eq:EZ) as a sum $Z_1 + \cdots + Z_{\phi(a)}$ of i.i.d. random variables of mean $\mu_a$ and variance $\sigma_a^2$. If 
+For a given $a$, let us model the summands $T(a,b)$, $b \in \mathbb{Z}^{\times}\_{a}$, as a sequence $Z_1,\ldots,Z_{\phi(a)}$ of independent, identically distributed random variables, each with mean $\mu_a = \lambda\log a + C_P - 1$, and variance $\sigma_a^2 = \mathrm{Var}(Z)$ (whatever it is). In other words, let us model the sum in [(6.1)](#eqEZ) as a sum $Z_1 + \cdots + Z_{\phi(a)}$ of i.i.d. random variables of mean $\mu_a$ and variance $\sigma_a^2$. If 
 
 $$\bar{Z}\_a = \frac{Z_1 + \cdots + Z_{\phi(a)}}{\phi(a)},$$
 
@@ -776,13 +776,13 @@ as $\phi(a) \to \infty$ (and hence as $a \to \infty$). Thus, for large $\phi(a)$
 
 $$\mathbb{P}\left(\sqrt{\phi(a)} (\bar{Z}\_a - \mu_a) > z\sigma_a\right) \approx \frac{1}{\sqrt{2\pi}}\int_{z}^{\infty} e^{-t^2/2} dt \le \frac{e^{-z^2/2}}{z\sqrt{2\pi}} \quad (z > 0).$$
 
-(Last inequality an exercise.) Similarly for the probability that $\sqrt{\phi(a)} (\bar{Z}\_a - \mu_a) < -z\sigma_a$. This becomes vanishingly small as $z$ becomes large. As $\bar{Z}\_a$ is our model for the RHS of [(6.1)](#eq:EZ), this leads us to suspect that the RHS of [(6.1)](#eq:EZ) virtually always takes values lying within $z\sigma_a/\sqrt{\phi(a)}$ of $\mu_a$, if $z$ is "large". Since $a^{1 - \epsilon} \ll_{\epsilon} \phi(a) < a$, and as we suspect that $\sigma_a$ is of order $\log a$, we suggest the following. 
+(Last inequality an exercise.) Similarly for the probability that $\sqrt{\phi(a)} (\bar{Z}\_a - \mu_a) < -z\sigma_a$. This becomes vanishingly small as $z$ becomes large. As $\bar{Z}\_a$ is our model for the RHS of [(6.1)](#eqEZ), this leads us to suspect that the RHS of [(6.1)](#eqEZ) virtually always takes values lying within $z\sigma_a/\sqrt{\phi(a)}$ of $\mu_a$, if $z$ is "large". Since $a^{1 - \epsilon} \ll_{\epsilon} \phi(a) < a$, and as we suspect that $\sigma_a$ is of order $\log a$, we suggest the following. 
 
 ---
-<a id='con:porter'></a>
+<a id='conporter'></a>
 **Conjecture 6.2.** For all $a \ge 1$ and any $\epsilon > 0$, we have
 
-<a id='eq:porter_conjecture'></a>
+<a id='eqporter_conjecture'></a>
 
 $$
 \begin{align*}
@@ -792,9 +792,9 @@ $$
 
 ---
 
-We might be able to replace the $O$-term by something like $O(a^{-1/2}\log a)$, or even $O(a^{-1/2})$. If true, [Conjecture 6.2](#con:porter) would be one of numerous instances of "square-root cancellation" in number theory, the most famous example of which is a conjecture concerning the Mertens function, which is equivalent to the Riemann hypothesis! Moreover, we believe that for "most" $a$, if not all sufficiently large $a$, $Z$ is "approximately" normally distributed, with mean $\lambda \log a + C_P - 1$ and variance of order $\log a$. The empirical evidence in [§ 10](#1d-investigation) seems to back this up. 
+We might be able to replace the $O$-term by something like $O(a^{-1/2}\log a)$, or even $O(a^{-1/2})$. If true, [Conjecture 6.2](#conporter) would be one of numerous instances of "square-root cancellation" in number theory, the most famous example of which is a conjecture concerning the Mertens function, which is equivalent to the Riemann hypothesis! Moreover, we believe that for "most" $a$, if not all sufficiently large $a$, $Z$ is "approximately" normally distributed, with mean $\lambda \log a + C_P - 1$ and variance of order $\log a$. The empirical evidence in [§ 10](#1d-investigation) seems to back this up. 
 
-Regarding the variance, it seems that $\mathrm{Var}(Z) - \eta \log N$ converges (slowly) to some constant as $\phi(a) \to \infty$. (See [(5.10)](#eq:hensley_constant) and [§ 7](#distribution) for more about Hensley's constant $\eta = 0.5160524\ldots$, which arises in the variance of the two-dimensional analysis.) That is, we suspect that $\mathrm{Var}(Z) = \eta \log N + \mathrm{constant} + \mathrm{error}$, where $\mathrm{constant} \approx -0.3$ and $\mathrm{error} \ll_{\epsilon} a^{\epsilon - 1/2}$ for any $\epsilon > 0$. Admittedly, our numerical evidence for this could be stronger (see [One-dimensional analysis: variance](#1d-investigation-variance)).
+Regarding the variance, it seems that $\mathrm{Var}(Z) - \eta \log N$ converges (slowly) to some constant as $\phi(a) \to \infty$. (See [(5.10)](#eqhensley_constant) and [§ 7](#distribution) for more about Hensley's constant $\eta = 0.5160524\ldots$, which arises in the variance of the two-dimensional analysis.) That is, we suspect that $\mathrm{Var}(Z) = \eta \log N + \mathrm{constant} + \mathrm{error}$, where $\mathrm{constant} \approx -0.3$ and $\mathrm{error} \ll_{\epsilon} a^{\epsilon - 1/2}$ for any $\epsilon > 0$. Admittedly, our numerical evidence for this could be stronger (see [One-dimensional analysis: variance](#1d-investigation-variance)).
 
 <a id='2d-analysis'></a>
 ### § 7. Two-dimensional analysis
@@ -829,7 +829,7 @@ by letting each be equal to $T$ restricted to its sample space ($Y(a,b) = T(a,b)
 
 Thus, for instance,
 
-<a id='eq:EY'></a>
+<a id='eqEY'></a>
 
 $$
 \begin{align*}
@@ -837,10 +837,10 @@ $$
 \end{align*}
 $$
 
-is the average number of divisions performed by Euclid's algorithm, over all pairs $(a,b)$ satisfying $1 \le a,b \le N$. (We'll discuss the restriction $a > b$ shortly.) Knuth [[5]](#references) gave a heuristic suggesting $\mathbb{E}[Y] = \lambda\log N + O(1)$ ($\lambda$ as in [(5.6)](#eq:mu_dixon)), and numerical evidence suggesting the $O(1)$ is actually around $0.06$ plus a small error. This was first proved by Norton [[7]](#references) (whose proof hinged on [Theorem 6.1](#thm:porter) of Porter [[8]](#references)).
+is the average number of divisions performed by Euclid's algorithm, over all pairs $(a,b)$ satisfying $1 \le a,b \le N$. (We'll discuss the restriction $a > b$ shortly.) Knuth [[5]](#references) gave a heuristic suggesting $\mathbb{E}[Y] = \lambda\log N + O(1)$ ($\lambda$ as in [(5.6)](#eqmu_dixon)), and numerical evidence suggesting the $O(1)$ is actually around $0.06$ plus a small error. This was first proved by Norton [[7]](#references) (whose proof hinged on [Theorem 6.1](#thmporter) of Porter [[8]](#references)).
 
 ---
-<a id='thm:norton'></a>
+<a id='thmnorton'></a>
 **Theorem 7.1** [[Norton](#references), 1990]. For all $N \ge 2$ and any $\epsilon > 0$, 
 
 $$
@@ -849,14 +849,14 @@ $$
 \end{align*}
 $$
 
-with $\lambda$ as in [(5.6)](#eq:mu_dixon) and $\nu$ as in [(5.8)](#eq:norton_constant).
+with $\lambda$ as in [(5.6)](#eqmu_dixon) and $\nu$ as in [(5.8)](#eqnorton_constant).
 
 ---
-As one might expect, if [Conjecture 6.2](#con:porter) is true, the $O$-term in Norton's theorem can be replaced by $O_{\epsilon}\left(N^{\epsilon - 1/2}\right)$, and as we will see, the numerical evidence seems to support this. 
+As one might expect, if [Conjecture 6.2](#conporter) is true, the $O$-term in Norton's theorem can be replaced by $O_{\epsilon}\left(N^{\epsilon - 1/2}\right)$, and as we will see, the numerical evidence seems to support this. 
 
 By Norton's result and the next proposition, the following estimates all hold and are in fact equivalent: for $N \ge 2$ and $\epsilon > 0$,
 
-<a id='eq:EYequiv'></a>
+<a id='eqEYequiv'></a>
 
 $$
 \begin{align*}
@@ -867,12 +867,12 @@ $$
 \end{align*}
 $$
 
-with $\lambda$, $\nu$, and $\nu_1$ as in [(5.6)](#eq:mu_dixon), [(5.8)](#eq:norton_constant), and [(5.9)](#eq:norton_constant) respectively. Again, we believe the $O$-term in all four estimates can be replaced by $O_{\epsilon}(N^{\epsilon - 1/2})$ (and if such an $O$-term holds for one estimate, it holds in all four).
+with $\lambda$, $\nu$, and $\nu_1$ as in [(5.6)](#eqmu_dixon), [(5.8)](#eqnorton_constant), and [(5.9)](#eqnorton_constant) respectively. Again, we believe the $O$-term in all four estimates can be replaced by $O_{\epsilon}(N^{\epsilon - 1/2})$ (and if such an $O$-term holds for one estimate, it holds in all four).
 
 ---
-<a id='prop:ExpEquiv'></a>
+<a id='propExpEquiv'></a>
 **Proposition 7.2.** (a) For $N \ge 2$ we have
-<a id='eq:ExpEquiv_a'></a>
+<a id='eqExpEquiv_a'></a>
 
 $$
 \begin{align*}
@@ -899,7 +899,7 @@ $$
 
 ---
 
->_Proof._ (a) For the second equation in [($7.6$)](#eq:ExpEquiv_a), note that 
+>_Proof._ (a) For the second equation in [($7.6$)](#eqExpEquiv_a), note that 
 >
 >$$
 >\begin{align*}
@@ -928,8 +928,8 @@ $$
 \end{align*}
 >$$
 >
->All of this is valid for $N \ge 1$. [Proposition 4.5(c)](#prop:worst_case) implies that $\mathbb{E}[X_1] \ll \log N$ for $N \ge 2$. Also, a classical result of Mertens is that for $N \ge 2$, 
-><a id='eq:mertens'></a>
+>All of this is valid for $N \ge 1$. [Proposition 4.5(c)](#propworst_case) implies that $\mathbb{E}[X_1] \ll \log N$ for $N \ge 2$. Also, a classical result of Mertens is that for $N \ge 2$, 
+><a id='eqmertens'></a>
 >
 >$$
 >\begin{align*}
@@ -937,9 +937,9 @@ $$
 \end{align*}
 >$$
 >
->We'll use this in the proof of part (b), but at this point we only need that $\\#U_1 \gg N^2$. Combining gives the second equation in [(7.6)](#eq:ExpEquiv_a). The verification of the first equation in [(7.6)](#eq:ExpEquiv_a) is almost identical. 
+>We'll use this in the proof of part (b), but at this point we only need that $\\#U_1 \gg N^2$. Combining gives the second equation in [(7.6)](#eqExpEquiv_a). The verification of the first equation in [(7.6)](#eqExpEquiv_a) is almost identical. 
 >
->(b) We show that (i) implies (ii). Since $\gcd(c,d) = 1$ if and only if $\gcd(gc,gd) = g$, and since $T(gc,gd) = T(c,d)$ ([Proposition 4.1(c)](#prop:4.1)),
+>(b) We show that (i) implies (ii). Since $\gcd(c,d) = 1$ if and only if $\gcd(gc,gd) = g$, and since $T(gc,gd) = T(c,d)$ ([Proposition 4.1(c)](#prop4.1)),
 >
 >$$
 >\begin{align*}
@@ -961,7 +961,7 @@ $$
 \end{align*}
 >$$
 >
->which, in view of [(7.7)](#eq:mertens), is equivalent to 
+>which, in view of [(7.7)](#eqmertens), is equivalent to 
 >
 >$$
 >\begin{align*}
@@ -1011,13 +1011,13 @@ Naturally, the next questions are related to variance, and, ultimately, distribu
 
 <sup>Jump to: [Table of Contents](#toc) | ↑ [Average-case analysis](#average-case) | ↓ [§ 8. Code for analysing Euclid's algorithm](#code-for-analysing) | ↓↓ Numerics for [variance](#2d-investigation) and [distribution](#2d-distribution)</sup>
 
-Dixon [[2]](#references) showed that $|T(a,b) - \lambda\log a| < (\log a)^{1/2 + \epsilon}$ (with $\lambda$ as in [(5.6)](#eq:mu_dixon)) for all but at most $N^2\exp\left(-c_0(\log N)^{\epsilon/2}\right)$ ($c_0$ a constant) of the pairs $(a,b)$ in the range $1 \le b < a \le N$. This may hint at a variance, but it was Hensley [[4]](#references) who, in a _tour de force_ of functional analysis, first attained a sharp estimate for the variance of $X_1$ (and $X$), and also established that the distribution of $X$ (and of $X_1$) is asymptotically normal. 
+Dixon [[2]](#references) showed that $|T(a,b) - \lambda\log a| < (\log a)^{1/2 + \epsilon}$ (with $\lambda$ as in [(5.6)](#eqmu_dixon)) for all but at most $N^2\exp\left(-c_0(\log N)^{\epsilon/2}\right)$ ($c_0$ a constant) of the pairs $(a,b)$ in the range $1 \le b < a \le N$. This may hint at a variance, but it was Hensley [[4]](#references) who, in a _tour de force_ of functional analysis, first attained a sharp estimate for the variance of $X_1$ (and $X$), and also established that the distribution of $X$ (and of $X_1$) is asymptotically normal. 
 
 ---
-<a id='thm:hensley'></a>
-**Theorem 7.3.** [[Hensley](#references), 1994.] There exist constants $\lambda$ and $\eta$ (as in [(5.6)](#eq:mu_dixon) and [(5.10)](#eq:hensley_constant)), such that the following holds for all sufficiently large $N$. Let $\mu = \lambda \log N$, and $\sigma = \sqrt{\eta \log N}$. Uniformly for $|s - \mu| \le \frac{1}{2}(\log N)^{1/2}(\log\log N)^2$,
+<a id='thmhensley'></a>
+**Theorem 7.3.** [[Hensley](#references), 1994.] There exist constants $\lambda$ and $\eta$ (as in [(5.6)](#eqmu_dixon) and [(5.10)](#eqhensley_constant)), such that the following holds for all sufficiently large $N$. Let $\mu = \lambda \log N$, and $\sigma = \sqrt{\eta \log N}$. Uniformly for $|s - \mu| \le \frac{1}{2}(\log N)^{1/2}(\log\log N)^2$,
 
-<a id='eq:hensleyprob'></a>
+<a id='eqhensleyprob'></a>
 
 $$
 \begin{align*}
@@ -1032,10 +1032,10 @@ The same is true with $X$ in place of $X_1$.
 A unifying framework for analysing a general class of Euclidean (and other) algorithms has been developed, principally, by Vallée. The methods rely on properties of transfer operators suitably adapted from dynamical systems theory. The following is a special case of a very deep result of Baladi and Vallée [[1]](#references).
 
 ---
-<a id='thm:BalVal'></a>
-**Theorem 7.4.** [[Baladi & Vallée](#references), 2005.] There exist constants $\lambda$, $\nu_1$, $\eta$ (as in [(5.6)](#eq:mu_dixon), [(5.9)](#eq:norton_constant), and [(5.10)](#eq:hensley_constant)), and $\kappa_1$ such that, for all $N \ge 2$ and any $\epsilon > 0$,
+<a id='thmBalVal'></a>
+**Theorem 7.4.** [[Baladi & Vallée](#references), 2005.] There exist constants $\lambda$, $\nu_1$, $\eta$ (as in [(5.6)](#eqmu_dixon), [(5.9)](#eqnorton_constant), and [(5.10)](#eqhensley_constant)), and $\kappa_1$ such that, for all $N \ge 2$ and any $\epsilon > 0$,
 
-<a id='eq:BalValEX1'></a>
+<a id='eqBalValEX1'></a>
 
 $$
 \begin{align*}
@@ -1045,7 +1045,7 @@ $$
 
 and
 
-<a id='eq:BalValVarX1'></a>
+<a id='eqBalValVarX1'></a>
 
 $$
 \begin{align*}
@@ -1055,7 +1055,7 @@ $$
 
 (for some positive constant $c$). Moreover, $X_1$ is asymptotically normal: for all $N \ge 2$ and all $z$, 
 
-<a id='eq:BalValDistX1'></a>
+<a id='eqBalValDistX1'></a>
 
 $$
 \begin{align*}
@@ -1066,17 +1066,17 @@ $$
 The same is true of $X$, with suitable constants $\nu$ and $\kappa$ in place of $\nu_1$ and $\kappa_1$ (the constants $\lambda$ and $\eta$ remain the same).
 
 ---
-As we mentioned following [Theomem 7.1](#thm:norton) of Norton, if [Conjecture 6.2](#con:porter) is true, the $O$-term in [(7.9)](#eq:BalValEX1) can be replaced by $O_{\epsilon}\left(N^{\epsilon - 1/2}\right)$. We also believe that the $O$-term in [(7.10)](#eq:BalValVarX1) can be replaced by $O_{\epsilon}\left(N^{\epsilon - 1/2}\right)$.
+As we mentioned following [Theomem 7.1](#thmnorton) of Norton, if [Conjecture 6.2](#conporter) is true, the $O$-term in [(7.9)](#eqBalValEX1) can be replaced by $O_{\epsilon}\left(N^{\epsilon - 1/2}\right)$. We also believe that the $O$-term in [(7.10)](#eqBalValVarX1) can be replaced by $O_{\epsilon}\left(N^{\epsilon - 1/2}\right)$.
 
-In the variance [(7.10)](#eq:BalValVarX1), Hensley's constant $\eta$ (see [(5.10)](#eq:hensley_constant)) does not admit a simple closed form (it can be described in terms of the spectrum of a certain transfer operator), but was shown by Lhote [[6]](#references) to be polynomial-time computable, and the first seven digits ($\eta = 0.5160524\ldots$) were given by Lhote _op. cit_. The constant $\kappa_1$ is "even more obscure" (in the words of Baladi and Vallée [[1]](#references)), and to our knowledge has not been investigated numerically. What we can say is that, assuming our back-of-the-envelope calculation is correct (we invite the reader to verify this along the lines of the above proposition), $\mathrm{Var}[X] - \mathrm{Var}[X_1]$ is (up to an $O$-term)
+In the variance [(7.10)](#eqBalValVarX1), Hensley's constant $\eta$ (see [(5.10)](#eqhensley_constant)) does not admit a simple closed form (it can be described in terms of the spectrum of a certain transfer operator), but was shown by Lhote [[6]](#references) to be polynomial-time computable, and the first seven digits ($\eta = 0.5160524\ldots$) were given by Lhote _op. cit_. The constant $\kappa_1$ is "even more obscure" (in the words of Baladi and Vallée [[1]](#references)), and to our knowledge has not been investigated numerically. What we can say is that, assuming our back-of-the-envelope calculation is correct (we invite the reader to verify this along the lines of the above proposition), $\mathrm{Var}[X] - \mathrm{Var}[X_1]$ is (up to an $O$-term)
 
 $$\kappa - \kappa_1 = \eta\frac{\zeta'(2)}{\zeta(2)} + \lambda^2\left(\frac{\zeta''(2)}{\zeta(2)} - \left(\frac{\zeta'(2)}{\zeta(2)}\right)^2\right) = 0.3340\ldots$$
 
-(see [(5.11)](#eq:deltakappa)). Our numerical data leads us to "guesstimate" the numerical value of $\kappa$ to be somewhere around $-0.1$.
+(see [(5.11)](#eqdeltakappa)). Our numerical data leads us to "guesstimate" the numerical value of $\kappa$ to be somewhere around $-0.1$.
 
-Naturally, $Y$ and $Y_1$ are asymptotically normal as well, and analogously to [(7.6)](#eq:ExpEquiv_a) (another exercise for the reader), we have 
+Naturally, $Y$ and $Y_1$ are asymptotically normal as well, and analogously to [(7.6)](#eqExpEquiv_a) (another exercise for the reader), we have 
 
-<a id='eq:varequiv'></a>
+<a id='eqvarequiv'></a>
 
 $$
 \begin{align*}
@@ -1539,7 +1539,7 @@ $$
 \end{align*}
 $$
 
-We also see the value of $\mathbb{E}[Z]$ and the estimate $\mu\_\* = \lambda \log a + C_P - 1$ given by Porter's theorem ([Theorem 6.1](#thm:porter)), both truncated three places after the decimal point. As we will see, there is usually agreement between the two values up to one or two decimal places.
+We also see the value of $\mathbb{E}[Z]$ and the estimate $\mu\_\* = \lambda \log a + C_P - 1$ given by Porter's theorem ([Theorem 6.1](#thmporter)), both truncated three places after the decimal point. As we will see, there is usually agreement between the two values up to one or two decimal places.
 
 We also show the variance $\sigma^2$ of $Z$, and a curve showing the PDF for the normal distribution with mean $\mu\_\*$ and variance $\sigma^2$. For most $a$ in our animation sequence, it would seem that the distribution of $Z$ is reasonably well-approximated by this normal distribution, i.e. for most $s$, 
 
@@ -1694,7 +1694,7 @@ We now generate an animation consisting of a sequence of frames like the one bel
 
 ![SegmentLocal](images/sum_sign_error_term_porter_1000.png)
 
-This frame corresponds to $N = 1000$. Our animation will show 2000 frames, corresponding to $N = 1, 2, \ldots, 2000$. Recall that for a given $a$, $Z$ is a random variable whose value at $b$ (chosen uniformly at random from among the totatives of $a$, i.e. from $\mathbb{Z}\_a^{\times}$), is $T(a,b)$. Porter's theorem ([Theorem 6.1](#thm:porter)) gives a very precise estimate for $\mathbb{E}[Z]$, which is equivalent to
+This frame corresponds to $N = 1000$. Our animation will show 2000 frames, corresponding to $N = 1, 2, \ldots, 2000$. Recall that for a given $a$, $Z$ is a random variable whose value at $b$ (chosen uniformly at random from among the totatives of $a$, i.e. from $\mathbb{Z}\_a^{\times}$), is $T(a,b)$. Porter's theorem ([Theorem 6.1](#thmporter)) gives a very precise estimate for $\mathbb{E}[Z]$, which is equivalent to
 
 $$
 \begin{align*}
@@ -1716,7 +1716,7 @@ we expect this to behave like the distance from the origin in a one-dimensional 
 
 The frame corresponding to $N$ in our animation shows $1,2,\ldots,N$ on the horizontal axis, and above each of these points it shows the value of the above sum. The animation does appear to be consistent with the random walk analogy. 
 
-We also produce a second animation in relation to the error term in Porter's theorem. Recall [Conjecture 6.1](#con:porter), effectively assering that $1/6$ can be replaced by $1/2$ in the $O$-term exponent in Porter's theorem. Equivalently, for all $a \ge 1$ and any $\epsilon > 0$, 
+We also produce a second animation in relation to the error term in Porter's theorem. Recall [Conjecture 6.1](#conporter), effectively assering that $1/6$ can be replaced by $1/2$ in the $O$-term exponent in Porter's theorem. Equivalently, for all $a \ge 1$ and any $\epsilon > 0$, 
 
 $$
 \begin{align*}
@@ -1944,7 +1944,7 @@ $$
 \end{align*}
 $$
 
-Although Porter's theorem ([Theorem 6.1](#thm:porter)) gives a very precise estimate for $\mathbb{E}[Z]$, namely 
+Although Porter's theorem ([Theorem 6.1](#thmporter)) gives a very precise estimate for $\mathbb{E}[Z]$, namely 
 $\mathbb{E}[Z] = \lambda \log a + C_P - 1 + O\_{\epsilon}(a^{\epsilon - 1/6})$, a precise estimate for $\mathrm{Var}(Z)$ has not been established. 
 
 We consider the second moment 
@@ -1959,7 +1959,7 @@ of $Z$. We suspect that this is reasonably well-approximated by $c_2(\log a)^2 +
 
 In the plot above, the horizontal axis shows $a$-values for $1 \le a \le N$, and above each such point we plot the value of $\mathbb{E}[Z^2]$. We also plot the best-fitting curve of the form $c_2(\log a)^2 + c_1 \log a + c_0$ to the data shown in the plot, and display $c_2,c_1,c_0$, truncated at the fourth decimal place. 
 
-The curve certainly seems to have the right rate of growth, but $\mathbb{E}[Z^2]$ seems to oscillate quite widely around it, possibly because the $a$-values we are considering are fairly small. Notice that, in the above plot, $c_2 \approx 0.71$, and that $\lambda^2 = 0.7102543\ldots$ (see [(5.6)](#eq:mu_dixon)). Coincidence? We think not. In fact, by Porter's theorem we have
+The curve certainly seems to have the right rate of growth, but $\mathbb{E}[Z^2]$ seems to oscillate quite widely around it, possibly because the $a$-values we are considering are fairly small. Notice that, in the above plot, $c_2 \approx 0.71$, and that $\lambda^2 = 0.7102543\ldots$ (see [(5.6)](#eqmu_dixon)). Coincidence? We think not. In fact, by Porter's theorem we have
 
 $$
 \begin{align*}
@@ -1967,7 +1967,7 @@ $$
 \end{align*}
 $$
 
-As we noted, $\lambda^2 = 0.7102543\ldots$. If we curve-fit the data for $\mathbb{E}[Z^2]$ with $\lambda^2(\log a)^2 + c_1\log a + c_0$, we get values for $c_1$ that are fairly close to $\eta + 2\lambda(C_P - 1) = 1.3033\ldots$. (See [(5.10)](#eq:hensley_constant) for Hensley's constant, which arises in the variance in the two-dimensional analysis.)
+As we noted, $\lambda^2 = 0.7102543\ldots$. If we curve-fit the data for $\mathbb{E}[Z^2]$ with $\lambda^2(\log a)^2 + c_1\log a + c_0$, we get values for $c_1$ that are fairly close to $\eta + 2\lambda(C_P - 1) = 1.3033\ldots$. (See [(5.10)](#eqhensley_constant) for Hensley's constant, which arises in the variance in the two-dimensional analysis.)
 
 In conclusion, we suspect that $\mathrm{Var}(Z) = \eta\log a + \mathrm{constant} + \mathrm{error}$, where $\mathrm{error} \ll\_{\epsilon} a^{\epsilon - 1/2}$ (but the error term dominates $\mathrm{constant}$ for $a$ in the range we are considering here). The $\mathrm{constant}$ appears to be around $-0.3$. Below is a plot of $\mathrm{Var}(Z) - (\eta\log a - 0.354)$ for $100 \le a \le 1000$. Also, the plot shows bounding curves growing like $(\log a)^2a^{-1/2}$. We'll animate a sequence of such plots, corresponding to $100 \le a \le N$ for $N = 1000,1100,\ldots,10000$.
 
@@ -2154,9 +2154,9 @@ HTML(var_err_anim.to_html5_video())
 
 We now generate an animation from a sequence of frames, one of which is shown below. Each frame contains four plots: the two plots on the left correspond to the random variable $X$, while the two on the right correspond to $X_1$. Recall that $X$ gives the value of $T(a,b)$, for $(a,b)$ chosen uniformly at random from ordered pairs with $1 \le b < a \le N$, and that $X_1$ is defined similarly, but with the restriction that $\gcd(a,b) = 1$. 
 
-Norton's theorem ([Theorem 7.1](#thm:norton)) tells us that $\mathbb{E}[X] - \lambda \log N = \nu - \frac{1}{2} + O\_{\epsilon}(N^{\epsilon - 1/6})$, and, equivalently (see [Proposition 7.2](#prop:ExpEquiv)), that $\mathbb{E}[X_1] - \lambda\log N = \nu_1 - \frac{1}{2} + O\_{\epsilon}(N^{\epsilon - 1/6})$. (See [(5.6)](#eq:mu_dixon), [(5.8)](#eq:norton_constant), and [(5.9)](#eq:norton_constant) for the constants.) If [Conjecture 6.2](#con:porter) is true, $1/6$ can be replaced by $1/2$ in the exponent of each $O$-term here. In the top two plots below, we see $\mathbb{E}[X] - \lambda\log N$ (left) and $\mathbb{E}[X_1] - \lambda \log N$ (right) for $N = 1000,2000,\ldots,100000$ (horizontal axis). We curve-fit the each set of points to curves $B + C_1/\sqrt{N}$ (left) and $B_1 + C_2/\sqrt{N}$ (right). These curves certainly seem to be of the right "shape", supporting the conjecture of "square-root cancellation". Moreover, $B$ should be close to $\nu - \frac{1}{2} = -0.4346485\ldots$, and $B_1$ should be close to $\nu_1 - \frac{1}{2} = 0.0456951\ldots$. Also, $B_1 - B$ should be close to $\nu_1 - \nu = 0.4803436\ldots$, as shown in [Proposition 7.2](#prop:ExpEquiv). Indeed, as displayed in the plot below, $B = -0.4357\ldots$, $B_1 = 0.0457\ldots$, and $B_1 - B = 0.4803\ldots$
+Norton's theorem ([Theorem 7.1](#thmnorton)) tells us that $\mathbb{E}[X] - \lambda \log N = \nu - \frac{1}{2} + O\_{\epsilon}(N^{\epsilon - 1/6})$, and, equivalently (see [Proposition 7.2](#propExpEquiv)), that $\mathbb{E}[X_1] - \lambda\log N = \nu_1 - \frac{1}{2} + O\_{\epsilon}(N^{\epsilon - 1/6})$. (See [(5.6)](#eqmu_dixon), [(5.8)](#eqnorton_constant), and [(5.9)](#eqnorton_constant) for the constants.) If [Conjecture 6.2](#conporter) is true, $1/6$ can be replaced by $1/2$ in the exponent of each $O$-term here. In the top two plots below, we see $\mathbb{E}[X] - \lambda\log N$ (left) and $\mathbb{E}[X_1] - \lambda \log N$ (right) for $N = 1000,2000,\ldots,100000$ (horizontal axis). We curve-fit the each set of points to curves $B + C_1/\sqrt{N}$ (left) and $B_1 + C_2/\sqrt{N}$ (right). These curves certainly seem to be of the right "shape", supporting the conjecture of "square-root cancellation". Moreover, $B$ should be close to $\nu - \frac{1}{2} = -0.4346485\ldots$, and $B_1$ should be close to $\nu_1 - \frac{1}{2} = 0.0456951\ldots$. Also, $B_1 - B$ should be close to $\nu_1 - \nu = 0.4803436\ldots$, as shown in [Proposition 7.2](#propExpEquiv). Indeed, as displayed in the plot below, $B = -0.4357\ldots$, $B_1 = 0.0457\ldots$, and $B_1 - B = 0.4803\ldots$
 
-The bottom two plots are analogous, but for the variances of $X$ and $X_1$. These are also more interesting, because we don't really know what the "subdominant" constants should be. That is, by the theorem of Baladi and Vallée ([Theorem 7.4](#thm:BalVal)), we know that there exist constants $\kappa$ and $\kappa_1$ such that $\mathrm{Var}(X) - \eta\log N = \kappa + O(N^{-c})$ and $\mathrm{Var}(X_1) - \eta\log N = \kappa_1 + O(N^{-c})$ (where $c$ is some positive constant and $\eta$ is Hensley's constant [see [(5.10)](#eq:hensley_constant)]). While we don't know what $\kappa$ and $\kappa_1$ are numerically, according to our calculation, we should have $\kappa - \kappa_1 = 0.3340\ldots$ (see [(5.11)](#eq:deltakappa) and remarks following [Theorem 7.4](#thm:BalVal)). We also believe that we can take $c = \epsilon - 1/2$ here, as with the mean.
+The bottom two plots are analogous, but for the variances of $X$ and $X_1$. These are also more interesting, because we don't really know what the "subdominant" constants should be. That is, by the theorem of Baladi and Vallée ([Theorem 7.4](#thmBalVal)), we know that there exist constants $\kappa$ and $\kappa_1$ such that $\mathrm{Var}(X) - \eta\log N = \kappa + O(N^{-c})$ and $\mathrm{Var}(X_1) - \eta\log N = \kappa_1 + O(N^{-c})$ (where $c$ is some positive constant and $\eta$ is Hensley's constant [see [(5.10)](#eqhensley_constant)]). While we don't know what $\kappa$ and $\kappa_1$ are numerically, according to our calculation, we should have $\kappa - \kappa_1 = 0.3340\ldots$ (see [(5.11)](#eqdeltakappa) and remarks following [Theorem 7.4](#thmBalVal)). We also believe that we can take $c = \epsilon - 1/2$ here, as with the mean.
 
 Thus, in the bottom two plots, we curve-fit the set of points corresponding to $\mathrm{Var}(X) - \eta\log N$ to the curve $D + C_3/\sqrt{N}$ (left), and the set of points corresponding to $\mathrm{Var}(X_1) - \eta\log N$ and $D_1 + C_4/\sqrt{N}$ (right). Once again, the data seems to support square-root cancellation, and notice that $D - D_1 = 0.3383\ldots$, in agreement up to two decimal places with our calculation for $\kappa - \kappa_1$. Encouraged by this, we suspect that the values for $D$ and $D_1$ in our animation sequence hover around the true values of $\kappa$ and $\kappa_1$ respectively. It seems that $\kappa$ may be around $-0.09$ or $-0.1$, and that $\kappa_1$ may be around $-0.43$. (We'll go with $\kappa \approx -0.1$, a nice round number, in spite of the fact that $D = -0.09\ldots$ in most of the frames in our animation.)
 
@@ -2361,7 +2361,7 @@ $$
 \end{align*}
 $$
 
-Note that in view of [(7.7)](#eq:mertens),
+Note that in view of [(7.7)](#eqmertens),
 
 $$
 \begin{align*}
@@ -2369,7 +2369,7 @@ $$
 \end{align*}
 $$
 
-The plot also displays the means $\mu = \mathbb{E}[X]$ and $\mu_1 = \mathbb{E}[X_1]$, truncated at the third decimal place. Likewise, we have $\sigma^2 = \mathrm{Var}(X)$ and $\sigma_1^2 = \mathrm{Var}(X_1)$. The same notation with the $\*$-subscript stands for the estimates given for the expected values by Norton's theorem ([Theorem 7.1](#thm:norton)), i.e. $\mu_* = \lambda \log N + \nu - \frac{1}{2}$ and $\mu_{1*} = \lambda \log N + \nu_1 - \frac{1}{2}$, and for the variances by the theorem of Baladi and Vallée ([Theorem 7.4](#thm:BalVal)), with our "guesstimates" for the subdominant constants (viz. $\kappa = -0.1$ and $\kappa_1 = -0.434$): $\sigma_{\*}^2 = \eta \log N + \kappa$ and $\sigma_{1*}^2 = \eta \log N + \kappa_1$.
+The plot also displays the means $\mu = \mathbb{E}[X]$ and $\mu_1 = \mathbb{E}[X_1]$, truncated at the third decimal place. Likewise, we have $\sigma^2 = \mathrm{Var}(X)$ and $\sigma_1^2 = \mathrm{Var}(X_1)$. The same notation with the $\*$-subscript stands for the estimates given for the expected values by Norton's theorem ([Theorem 7.1](#thmnorton)), i.e. $\mu_* = \lambda \log N + \nu - \frac{1}{2}$ and $\mu_{1*} = \lambda \log N + \nu_1 - \frac{1}{2}$, and for the variances by the theorem of Baladi and Vallée ([Theorem 7.4](#thmBalVal)), with our "guesstimates" for the subdominant constants (viz. $\kappa = -0.1$ and $\kappa_1 = -0.434$): $\sigma_{\*}^2 = \eta \log N + \kappa$ and $\sigma_{1*}^2 = \eta \log N + \kappa_1$.
 
 The dotted blue curve is the PDF for the normal distribution of mean $\mathbb{E}[X]$ and variance $\mathrm{Var}[X]$. The solid (but pale) blue curve is the PDF of the normal distribution of mean $\mu\_\*$ and variance $\sigma^2\_\*$. The red curves are the same but for $X_1$. There is no visually discernable difference between curves of the same colour. Also, the dots all lie quite close to the curves of the same colour. Indeed, the estimations given by the theorems fit the data with a striking accuracy.
 
