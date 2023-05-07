@@ -2366,15 +2366,19 @@ Finally, in the culmination of the above theorems and numerical data, we generat
 
 The horizontal axis shows the possible values $s$ that $X$ or $X_1$ may take (over all $N$ in our sequence). The blue and red dots show the probabilities that $X = s$ and $X_1 = s$, respectively, i.e.
 
+$$
 \begin{align*}
  \mathbb{P}(X = s) = \frac{1}{\binom{N}{2}} \\#\\\{1 \le b < a \le N : T(a,b) = s\\\} \quad \textrm{and} \quad \mathbb{P}(X_1 = s) = \frac{\\#\\\{1 \le b < a \le N : T(a,b) = s\\\}}{\\#\\\{1 \le b < a \le N : \gcd(a,b) = 1\\\}}.
 \end{align*}
+$$
 
 Note that in view of [$(7.7)$](#eq:mertens),
 
+$$
 \begin{align*}
 \\#\\\{1 \le b < a \le N : \gcd(a,b) = 1\\\} = \frac{N^2}{2\zeta(2)} + O(N \log N).
 \end{align*}
+$$
 
 The plot also displays the means $\mu = \mathbb{E}[X]$ and $\mu_1 = \mathbb{E}[X_1]$, truncated at the third decimal place. Likewise, we have $\sigma^2 = \mathrm{Var}(X)$ and $\sigma_1^2 = \mathrm{Var}(X_1)$. The same notation with the $\*$-subscript stands for the estimates given for the expected values by Norton's theorem ([Theorem 7.1](#thm:norton)), i.e. $\mu_* = \lambda \log N + \nu - \frac{1}{2}$ and $\mu_{1*} = \lambda \log N + \nu_1 - \frac{1}{2}$, and for the variances by the theorem of Baladi and Vallée ([Theorem 7.4](#thm:BalVal)), with our "guesstimates" for the subdominant constants (viz. $\kappa = -0.1$ and $\kappa_1 = -0.434$): $\sigma_{\*}^2 = \eta \log N + \kappa$ and $\sigma_{1*}^2 = \eta \log N + \kappa_1$.
 
