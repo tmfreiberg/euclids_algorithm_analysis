@@ -1743,4 +1743,243 @@ The horizontal axis shows $1,2,\ldots,650$, and above each point the value of $\
 
 In the data for $a$ up to $2000$, it would certainly seem that $\mathcal{E}(a)$ grows not much faster than $\sqrt{a}$.
 
+```python
+# We analyse the error term in the theorem of Porter. 
+# For a given a, compute sum [T(a,b) - (lambda*log(a) + C_P - 1)] over totatives b of a.
+# This should be <<_{epsilon} phi(a)*a^{epsilon - 1/6} according to the theorem, and 
+# <<_{epsilon} a^{epsilon + 1/2} conjecturally.
 
+def porter_err(a):
+    return sum([(s - (lambda_dixon*np.log(a) + porter_constant - 1))*Z[a][s] for s in Z[a].keys()])
+
+# For each key in our dictionary, make an item in a new dictionary whose value is err(a).
+# Thus, a typical entry in PORTER_ERR is of the form a : err(a)
+
+PORTER_ERR = {}
+for a in Z.keys():
+    PORTER_ERR[a] = porter_err(a)
+```
+
+```python
+# Let's take a look at the sign of the error term err(a).
+# If err(a) behaves like a normal random variable centred at 0, it should be positive more or less half of the time.
+# Indeed, this seems to be the case for the data we have.
+
+# Note that this will only work/make sense if we have err(a) for every a from 1 to some upper bound, 
+# i.e. if Z.keys() (and hence PORTER_ERR.keys()) contain all a from a = 1 to a = list(Z.keys())[-1].
+
+POS = [0] # POS[N] will be the number of a in {1,...,N} for which err(a) is positive. 
+NEG = [0] # NEG[N] will be the number of a in {1,...,N} for which err(a) is negative (or zero... which won't happen).
+
+for a in PORTER_ERR.keys():
+    if PORTER_ERR[a] > 0:
+        POS.append(POS[a-1] + 1)
+        NEG.append(NEG[a-1])
+    else:
+        POS.append(POS[a-1])
+        NEG.append(NEG[a-1] + 1) 
+
+prop_pos = [0]
+prop_neg = [0]
+for a in PORTER_ERR.keys():
+    prop_pos.append(POS[a]/a)
+    prop_neg.append(NEG[a]/a)
+
+# Let's sum sgn(err(a)). 
+# The value of the sum should look like the distance from the origin of a random walk 
+# that goes left/right with probability 1/2.
+
+sum_sign = [POS[a] - NEG[a] for a in PORTER_ERR.keys()] 
+
+fig, ax = plt.subplots()
+fig.suptitle(r'Sum of sign of error term in estimate for $\mathbb{E}[Z]$')
+
+def err_sgn_seq(N):
+    ax.clear()
+    ax.plot(range(1,N + 1),sum_sign[1:N + 1], label=r'$\sum_{a = 1}^{N}\mathrm{sgn}(\mathbb{E}[Z] - (\lambda\log a + C_P - 1))$')
+    ax.set_xlabel(fr'$N$')
+    # Note that err(a) > 0 if and only if err(a)/phi(a) > 0...
+    #ax.set_ylabel(r'$\sum_{1 \leq a \leq N}\mathrm{sgn}(\mathbb{E}[Z] - (\lambda\log a + C_P - 1))$')
+    ax.text(0.8, 0.9,fr'$N = {N}$', transform=ax.transAxes)
+    ax.text(0.8, 0.83,fr'{100*prop_pos[N+1]:.2f}$\% +$', transform=ax.transAxes)
+    ax.text(0.8, 0.76,fr'{100*prop_neg[N+1]:.2f}$\% -$', transform=ax.transAxes)
+    ax.legend(loc=3,framealpha=0.5)
+
+err_sgn_seq_anim = animation.FuncAnimation(fig, err_sgn_seq, frames=list(range(1,2001)), interval=25, blit=False, repeat=False) 
+
+# This is supposed to remedy the blurry axis ticks/labels. 
+plt.rcParams['savefig.facecolor'] = 'white' 
+
+# Just a sample frame.
+err_sgn_seq(1000)
+
+plt.show()
+```
+
+![SegmentLocal](images/sum_sign_error_term_porter_1000.png)
+
+```python
+# Save a video of the animation.
+HTML(err_sgn_seq_anim.to_html5_video())
+```
+
+```python
+# Alternatively...
+# rc('animation', html='html5')
+# err_sgn_seq_anim
+```
+
+```python
+# Let's make a dictionary whose keys are what we will call "error champions".
+# We call a an error champion if err(a)/sqrt(a) > err(a')/sqrt(a') for all 1 <= a' < a, 
+# or if err(a)/sqrt(a) < err(a')/sqrt(a') for all 1 <= a' < a.
+# In other words, the maximum (minimum) relative error err(a)/sqrt(a) "jumps" at the error champions.
+
+err_champs = {}
+
+c_pos, c_neg, c = 0, 0, 0
+for a in PORTER_ERR.keys():
+    if PORTER_ERR[a]/np.sqrt(a) > c_pos:
+        c_pos = PORTER_ERR[a]/np.sqrt(a)
+        c = max(c_pos,-c_neg)
+        err_champs[a] = (PORTER_ERR[a], c_pos, c_neg, c)
+    if PORTER_ERR[a]/np.sqrt(a) < c_neg:
+        c_neg = PORTER_ERR[a]/np.sqrt(a)
+        c = max(c_pos,-c_neg)
+        err_champs[a] = (PORTER_ERR[a], c_pos, c_neg, c) 
+```
+
+```python
+fig, ax = plt.subplots()
+fig.suptitle('Error term in Porter\'s estimate')
+
+# We want to animate a sequence of plots, one plot for each a in the list frame_list.
+# We might want the frame_list to start at a = MiNa, end at a = MaXa, and go up by increments of skip.
+# We could also enter any frame_list we wish, with a's not necessarily going up by regular increments.
+
+MiNa = 1 # Set a-value for first frame.
+MaXa = 2000 # Set a-value for last frame.
+skip = 1 # Set increment.
+
+# Now we define the frame_list list. 
+# We just want to make sure we don't ask for a frame corresponding to an a we don't have data on.
+
+frame_list = []
+for a in range(MiNa,MaXa+skip,skip):
+    if a in list(PORTER_ERR.keys()):
+        frame_list.append(a)
+
+# We can now define lower and upper bounds for the horizontal axis.
+# Likewise, we want a common vertical axis range for each plot in our sequence 
+# (otherwise it will appear to jump around).
+
+x_min, x_max = min(frame_list), max(frame_list)
+y_min, y_max = min([PORTER_ERR[a] for a in frame_list]), max([PORTER_ERR[a] for a in frame_list])
+
+# We can now define a function that gives the plot we want for a given a in our frame_list.
+
+def err_seq(N):
+    ax.clear()
+
+# Uncomment the next few lines if static axes/bacground are desired.    
+#     # Bounds for the plot, and horizontal axis tick marks. 
+#     xleft, xright, ybottom, ytop = x_min - 0.5, x_max + 0.5, y_min - 10, y_max + 10
+#     ax.set(xlim=(xleft, xright), ylim=(ybottom, ytop))
+#     ax.set_xticks(frame_list)
+    
+#     # A grid is helpful, but we want it underneath everything else. 
+#     ax.grid(True,zorder=0,alpha=0.7)
+    
+    # The plots
+    # The error term
+    ax.plot(list(PORTER_ERR.keys())[1:N+1], list(PORTER_ERR.values())[1:N+1], label=r'$\sum_{b \in \mathbb{Z}_a^{\times}} [T(a,b)  - (\lambda \log a + C_P - 1)]$')
+    # y = +/- sqrt(x)
+    ax.plot(list(PORTER_ERR.keys())[1:N+1], [a/(np.sqrt(a)) for a in range(1,N+1)], 'r:', label=r'$\pm\sqrt{a}$')
+    ax.plot(list(PORTER_ERR.keys())[1:N+1], [-a/(np.sqrt(a)) for a in range(1,N+1)], 'r:')
+    # y = +/- c sqrt(x), where c is such that the error term lies inside the parabola.
+    # c comes from the "error champion" dictionary, defined in the previous code block.
+    c = max([err_champs[a][3] for a in err_champs.keys() if a < N + 1])
+    ax.plot(list(PORTER_ERR.keys())[1:N+1], [c*a/(np.sqrt(a)) for a in range(1,N+1)], 'y:', label=fr'$\pm${c:.3f}' + r'$\sqrt{a}$')
+    ax.plot(list(PORTER_ERR.keys())[1:N+1], [-c*a/(np.sqrt(a)) for a in range(1,N+1)], 'y:')
+    
+    # Labels, text, and legend
+    ax.set_xlabel(fr'$a$')
+    ax.set_ylabel('error')
+    ax.text(0.05, 0.93,fr'$a \leq $ {N}', transform=ax.transAxes)
+    # We'll label the "error champion" points. Leave the label for 50 frames.
+    for a in err_champs.keys():
+        if N - 50 < a < N + 1:
+            ax.annotate(f'a = {a}', (a,PORTER_ERR[a]), textcoords="offset points", xytext=(0,0), ha='center')
+        else:
+            pass
+    ax.legend(loc=3, framealpha=0.5)
+    
+err_seq_anim = animation.FuncAnimation(fig, err_seq, frames=frame_list, interval=50, blit=False, repeat=False) 
+
+# This is supposed to remedy the blurry axis ticks/labels.
+plt.rcParams['savefig.facecolor'] = 'white' 
+
+# Just a sample frame.
+err_seq(650)
+
+plt.show()
+```
+
+![SegmentLocal](images/error_term_porter_650.png)
+
+```python
+# Save a video of the animation.
+HTML(err_seq_anim.to_html5_video())
+```
+
+```python
+#Alternatively...
+# rc('animation', html='html5')
+# err_seq_anim
+```
+
+<a id='1d-investigation-variance'></a>
+ #### One-dimensional analysis: variance
+ 
+<sup>Jump to: [Table of Contents](#toc) | ↑ [One-dimensional analysis: mean and error term](#1d-investigation-mean) | ↓ [Two-dimensional analysis: error terms & subdominant constant in the variance](#2d-investigation) | ↑↑ [Theory](#1d-higher-moments)</sup>
+ 
+We now generate an animation consisting of a sequence of frames like the one below.
+
+![SegmentLocal](images/second_moment_1d_1000.png)
+
+This frame corresponds to $N = 1000$. Our animation will show 100 frames, corresponding to $N = 100, 200, \ldots, 10000$. Recall that for a given $a$, $Z$ is a random variable whose value at $b$ (chosen uniformly at random from among the totatives of $a$, i.e. from $\mathbb{Z}\_a^{\times}$), is $T(a,b)$. The variance of $Z$ is thus
+
+$$
+\begin{align*}
+ \mathrm{Var}(Z) = \mathbb{E}[Z^2] - (\mathbb{E}[Z])^2.
+\end{align*}
+$$
+
+Although Porter's theorem ([Theorem 6.1](#thm:porter)) gives a very precise estimate for $\mathbb{E}[Z]$, namely 
+$\mathbb{E}[Z] = \lambda \log a + C_P - 1 + O\_{\epsilon}(a^{\epsilon - 1/6})$, a precise estimate for $\mathrm{Var}(Z)$ has not been established. 
+
+We consider the second moment 
+
+$$
+\begin{align*}
+\mathbb{E}[Z^2] = \frac{1}{\phi(a)} \sum_{b \in \mathbb{Z}\_a^{\times}} T(a,b)^2
+\end{align*}
+$$
+
+of $Z$. We suspect that this is reasonably well-approximated by $c_2(\log a)^2 + c_1 \log a + c_0$ for certain constants $c_2,c_1,c_0$. 
+
+In the plot above, the horizontal axis shows $a$-values for $1 \le a \le N$, and above each such point we plot the value of $\mathbb{E}[Z^2]$. We also plot the best-fitting curve of the form $c_2(\log a)^2 + c_1 \log a + c_0$ to the data shown in the plot, and display $c_2,c_1,c_0$, truncated at the fourth decimal place. 
+
+The curve certainly seems to have the right rate of growth, but $\mathbb{E}[Z^2]$ seems to oscillate quite widely around it, possibly because the $a$-values we are considering are fairly small. Notice that, in the above plot, $c_2 \approx 0.71$, and that $\lambda^2 = 0.7102543\ldots$ (see [$(5.6)$](#eq:mu_dixon)). Coincidence? We think not. In fact, by Porter's theorem we have
+
+$$
+\begin{align*}
+ (\mathbb{E}[Z])^2 \approx (\lambda\log a + C_P - 1)^2 = \lambda^2(\log a)^2 + 2\lambda(C_P - 1)\log a + (C_P - 1)^2.
+\end{align*}
+$$
+
+As we noted, $\lambda^2 = 0.7102543\ldots$. If we curve-fit the data for $\mathbb{E}[Z^2]$ with $\lambda^2(\log a)^2 + c_1\log a + c_0$, we get values for $c_1$ that are fairly close to $\eta + 2\lambda(C_P - 1) = 1.3033\ldots$. (See [$(5.10)$](#eq:hensley_constant) for Hensley's constant, which arises in the variance in the two-dimensional analysis.)
+
+In conclusion, we suspect that $\mathrm{Var}(Z) = \eta\log a + \mathrm{constant} + \mathrm{error}$, where $\mathrm{error} \ll\_{\epsilon} a^{\epsilon - 1/2}$ (but the error term dominates $\mathrm{constant}$ for $a$ in the range we are considering here). The $\mathrm{constant}$ appears to be around $-0.3$. Below is a plot of $\mathrm{Var}(Z) - (\eta\log a - 0.354)$ for $100 \le a \le 1000$. Also, the plots shows bounding curves growing like $(\log a)^2a^{-1/2}$. We'll animate a sequence of such plots, corresponding to $100 \le a \le N$ for $N = 1000,1100,\ldots,10000$.
+
+![SegmentLocal](images/variance_error_1d_1000.png) 
