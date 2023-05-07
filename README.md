@@ -1011,7 +1011,7 @@ Naturally, the next questions are related to variance, and, ultimately, distribu
 
 <sup>Jump to: [Table of Contents](#toc) | ↑ [Average-case analysis](#average-case) | ↓ [§ 8. Code for analysing Euclid's algorithm](#code-for-analysing) | ↓↓ Numerics for [variance](#2d-investigation) and [distribution](#2d-distribution)</sup>
 
-Dixon [[2]](#references) showed that $|T(a,b) - \lambda\log a| < (\log a)^{1/2 + \epsilon}$ (with $\lambda$ as in [(5.6)](#eqmu_dixon)) for all but at most $N^2\exp\left(-c_0(\log N)^{\epsilon/2}\right)$ ($c_0$ a constant) of the pairs $(a,b)$ in the range $1 \le b < a \le N$. This may hint at a variance, but it was Hensley [[4]](#references) who, in a _tour de force_ of functional analysis, first attained a sharp estimate for the variance of $X_1$ (and $X$), and also established that the distribution of $X$ (and of $X_1$) is asymptotically normal. 
+Dixon [[2]](#references) showed that $|T(a,b) - \lambda\log a| < (\log a)^{1/2 + \epsilon}$ (with $\lambda$ as in [(5.6)](#eqmu_dixon)) for all but at most $N^2\exp\left(-c(\log N)^{\epsilon/2}\right)$ ($c$ a constant) of the pairs $(a,b)$ in the range $1 \le b < a \le N$. This may hint at a variance, but it was Hensley [[4]](#references) who, in a _tour de force_ of functional analysis, first attained a sharp estimate for the variance of $X_1$ (and $X$), and also established that the distribution of $X$ (and of $X_1$) is asymptotically normal. 
 
 ---
 <a id='thmhensley'></a>
@@ -1068,7 +1068,7 @@ The same is true of $X$, with suitable constants $\nu$ and $\kappa$ in place of 
 ---
 As we mentioned following [Theomem 7.1](#thmnorton) of Norton, if [Conjecture 6.2](#conporter) is true, the $O$-term in [(7.9)](#eqBalValEX1) can be replaced by $O_{\epsilon}\left(N^{\epsilon - 1/2}\right)$. We also believe that the $O$-term in [(7.10)](#eqBalValVarX1) can be replaced by $O_{\epsilon}\left(N^{\epsilon - 1/2}\right)$.
 
-In the variance [(7.10)](#eqBalValVarX1), Hensley's constant $\eta$ (see [(5.10)](#eqhensley_constant)) does not admit a simple closed form (it can be described in terms of the spectrum of a certain transfer operator), but was shown by Lhote [[6]](#references) to be polynomial-time computable, and the first seven digits ($\eta = 0.5160524\ldots$) were given by Lhote _op. cit_. The constant $\kappa_1$ is "even more obscure" (in the words of Baladi and Vallée [[1]](#references)), and to our knowledge has not been investigated numerically. What we can say is that, assuming our back-of-the-envelope calculation is correct (we invite the reader to verify this along the lines of the above proposition), $\mathrm{Var}[X] - \mathrm{Var}[X_1]$ is (up to an $O$-term)
+In the variance [(7.10)](#eqBalValVarX1), Hensley's constant $\eta$ (see [(5.10)](#eqhensley_constant)) does not admit a simple closed form (it can be described in terms of the spectrum of a certain transfer operator), but was shown by Lhote [[6]](#references) to be polynomial-time computable, and the first seven digits ($\eta = 0.5160524\ldots$) were given by Lhote _op. cit_. The constant $\kappa_1$ is "even more obscure" (in the words of Baladi and Vallée [[1]](#references)), and to our knowledge has not been investigated numerically. What we can say is that, assuming our back-of-the-envelope calculation is correct (we invite the reader to verify this along the lines of [Proposition 7.2(b)](#propExpEquiv)), $\mathrm{Var}[X] - \mathrm{Var}[X_1]$ is (up to an $O$-term)
 
 $$\kappa - \kappa_1 = \eta\frac{\zeta'(2)}{\zeta(2)} + \lambda^2\left(\frac{\zeta''(2)}{\zeta(2)} - \left(\frac{\zeta'(2)}{\zeta(2)}\right)^2\right) = 0.3340\ldots$$
 
@@ -1320,7 +1320,7 @@ def tabulate(meta_dictionary):
 
 ```python
 # Here's where we generate the raw data (one-dimensional case).
-# We'll comment this code out once it's done because we don't want to re-do it every time we run our Notebook.
+# We'll comment this code out once it's done because we don't want to re-do it every time we run our notebook.
 #a_list = list(range(1,10001))
 #start = timer()
 #H1, H = heilbronn([1],a_list)
@@ -1336,7 +1336,6 @@ def tabulate(meta_dictionary):
 ```python
 # Here's where we generate the raw data (two-dimensional case). 
 # It will take a while if we want to look at pairs up to tens of thousands. 
-# We time it with the timeit library.
 # We'll comment this code out once it's done because we don't want to re-do it every time we run our notebook.
 
 #checkpoints = list(range(1,101001,1000))
@@ -1354,7 +1353,7 @@ def tabulate(meta_dictionary):
 ```python
 # Convert dictionaries to data frames for a nice display of the data (if desired).
 # This code block uses pandas to create the data frames (in our "tabulate function"), then export to csv. 
-# We'll comment this code once it's done becuse we don't want to re-generate our raw data every time we run our Notebook.
+# We'll comment this code once it's done becuse we don't want to re-generate our raw data every time we run our notebook.
 
 #Adf = tabulate(A)
 #Bdf = tabulate(B)
