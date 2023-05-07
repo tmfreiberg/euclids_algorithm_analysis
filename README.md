@@ -1321,4 +1321,426 @@ def tabulate(meta_dictionary):
         return pd.DataFrame.from_dict(meta_dictionary).fillna(0).apply(np.float64) # Fill empty cells with 0. Not really necessary. np.float64 is probably overkill.
 ```
 
+<a id='raw-data'></a>
+### § 9. Generating and exporting/importing the raw data
+
+<sup>Jump to: [Table of Contents](#toc) | ↑ [§ 8. Code for analysing Euclid's algorithm](#code-for-analysing) | ↓ [§ 10. Numerical investigation & data visualisation](#numerical-investigation)</sup>
+
+```python
+# Here's where we generate the raw data (one-dimensional case).
+# We'll comment this code out once it's done because we don't want to re-do it every time we run our Notebook.
+#a_list = list(range(1,10001))
+#from timeit import default_timer as timer # Only needed if not already pre-loaded.
+#start = timer()
+#H1, H = heilbronn([1],a_list)
+#end = timer()
+#print(end - start)
+# Output: 201.3096869001165
+```
+
+```
+201.3096869001165
+```
+
+```python
+# Here's where we generate the raw data (two-dimensional case). 
+# It will take a while if we want to look at pairs up to tens of thousands. 
+# We time it with the timeit library.
+# We'll comment this code out once it's done because we don't want to re-do it every time we run our notebook.
+
+#checkpoints = list(range(1,101001,1000))
+#from timeit import default_timer as timer # Only needed if not already pre-loaded.
+#start = timer()
+#A, B, C = euclid_alg_frequencies([1], [], checkpoints, {}, {}, {})
+#end = timer()
+#print(end - start)
+# Output: 17615.60527349997
+```
+
+```
+17615.60527349997
+```
+
+```python
+# Convert dictionaries to data frames for a nice display of the data (if desired).
+# This code block uses pandas to create the data frames (in our "tabulate function"), then export to csv. 
+# We'll comment this code once it's done becuse we don't want to re-generate our raw data every time we run our Notebook.
+
+#Adf = tabulate(A)
+#Bdf = tabulate(B)
+#Cdf = tabulate(C)
+
+#H1df = tabulate(H1)
+#Hdf = tabulate(H)
+
+# Save the data as a csv file for later use.
+
+#Adf.to_csv(r'data\gcd_pairs_100001df.csv')
+#Bdf.to_csv(r'data\euclid_steps_coprime_100001df.csv')
+#Cdf.to_csv(r'data\euclid_steps_100001df.csv')
+
+#H1df.to_csv(r'data\euclid_steps_1d-coprime-10001df.csv')
+#Hdf.to_csv(r'data\euclid_steps_1d-all-10001df.csv')
+```
+
+```python
+# Get the data back into data frames.
+# This code block uses pandas to import data from csv to data frame to dictionary.
+
+Adf = pd.read_csv(r'data\gcd_pairs_100001df.csv', index_col=0)
+Bdf = pd.read_csv(r'data\euclid_steps_coprime_100001df.csv', index_col=0)
+Cdf = pd.read_csv(r'data\euclid_steps_100001df.csv', index_col=0)
+
+H1df = pd.read_csv(r'data\euclid_steps_1d-coprime-10001df.csv', index_col=0)
+Hdf = pd.read_csv(r'data\euclid_steps_1d-all-10001df.csv', index_col=0)
+
+# Get original dictionaries back from the data frames.
+
+A = Adf.to_dict(orient='dict')
+B = Bdf.to_dict(orient='dict')
+C = Cdf.to_dict(orient='dict')
+
+H1 = H1df.to_dict(orient='dict') 
+H = Hdf.to_dict(orient='dict')
+
+# Without any modification, these dictionaries will now have strings for keys. 
+# That is, the keys will be '1001' and so on, instead of 1001.
+# This is presumably because the keys are taken from the column headers of the data frame, 
+# which are by default assumed to be strings? 
+# I'll use the below hack to convert cast the strings back to integers.
+
+fixA = {}
+fixB = {}
+fixC = {}
+
+fixH1 = {}
+fixH = {}
+
+for k in A.keys():
+    fixA[int(k)] = A[k]
+
+for k in B.keys():
+    fixB[int(k)] = B[k]
+
+for k in C.keys():
+    fixC[int(k)] = C[k]
+    
+for k in H1.keys():
+    fixH1[int(k)] = H1[k]
+    
+for k in H.keys():
+    fixH[int(k)] = H[k]    
+    
+A = fixA
+B = fixB
+C = fixC
+
+H1 = fixH1
+H = fixH
+
+# We also have the following difference between the original dictionaries and the above 
+# (after exporting data frame, importing data frame, sending to dict, and casting keys):
+# we will have items with zero-values. 
+# We can 'fix' this with the hack below, although it's not a big deal.
+
+fixA = {}
+fixB = {}
+fixC = {}
+
+fixH1 = {}
+fixH = {}
+
+for k in A.keys():
+    fixA[k] = {}
+    for s in A[k].keys():
+        if A[k][s] == 0:
+            pass
+        else:
+            fixA[k][s] = A[k][s]
+            
+for k in B.keys():
+    fixB[k] = {}
+    for s in B[k].keys():
+        if B[k][s] == 0:
+            pass
+        else:
+            fixB[k][s] = B[k][s] 
+            
+for k in C.keys():
+    fixC[k] = {}
+    for s in C[k].keys():
+        if C[k][s] == 0:
+            pass
+        else:
+            fixC[k][s] = C[k][s]          
+
+for k in H1.keys():
+    fixH1[k] = {}
+    for s in H1[k].keys():
+        if H1[k][s] == 0:
+            pass
+        else:
+            fixH1[k][s] = H1[k][s]
+
+for k in H.keys():
+    fixH[k] = {}
+    for s in H[k].keys():
+        if H[k][s] == 0:
+            pass
+        else:
+            fixH[k][s] = H[k][s]
+            
+A = fixA
+B = fixB
+C = fixC
+
+H1 = fixH1
+H = fixH           
+```
+
+```python
+# From the raw data, generate relative frequencies etc.
+
+Astats = basic_stats(A)
+Adist = dists(A)
+Bstats = basic_stats(B)
+Bdist = dists(B)
+Cstats = basic_stats(C)
+Cdist = dists(C)
+
+H1stats = basic_stats(H1)
+H1dist = dists(H1)
+Hstats = basic_stats(H)
+Hdist = dists(H)
+```
+
+```python
+# Column N row s of table C equals #{0 < b < a < N : T(a,b) = s} 
+# Table B is similar but we restrict to coprime (a,b).
+#tabulate(C)
+```
+
+```python
+# Column N row s of table Cdist equals #{0 < b < a < N : T(a,b) = s}/(N choose 2) 
+# Table Bdist is similar but we restrict to coprime (a,b).
+# tabulate(Cdist)
+```
+
+<a id='numerical-investigation'></a>
+### § 10. Numerical investigation & data visualisation
+
+<sup>Jump to: [Table of Contents](#toc) | ↑ [§ 9. Generating and exporting/importing the raw data](#raw-data) | ↓ [One-dimensional analysis: distribution](#1d-investigation)</sup>
+
+We will now visualise our data in various ways. Before each code block, we will explain the goal and give a sample frame from the animation we intend to produce. Some of the animations may take a few minutes to complete.
+
+<a id='1d-investigation'></a>
+#### One-dimensional analysis: distribution
+
+<sup>Jump to: [Table of Contents](#toc) | ↑ [§ 10. Numerical investigation & data visualisation](#numerical-investigation) | ↓ [One-dimensional analysis: mean and error term](#1d-investigation-mean) | ↑↑ [Theory](#1d-higher-moments)</sup>
+
+We now generate an animation consisting of a sequence of frames like the one below.
+
+![SegmentLocal](images/euclid_steps_distribution_1d_1000.png)
+
+This frame corresponds to $a = 1000$. Our animation will show 100 frames, corresponding to $a = 100, 200, \ldots, 10000$. Recall that for a given $a$, $Z$ is a random variable whose value at $b$ (chosen uniformly at random from among the totatives of $a$, i.e. from $\mathbb{Z}\_a^{\times}$), is $T(a,b)$. The horizontal axis shows the possible values $s$ that $Z$ may take (over all $a$ in our sequence). The histogram shows the probability that $Z = s$, i.e.
+
+$$
+\begin{align*}
+ \mathbb{P}(Z = s) = \frac{1}{\phi(a)} \\#\\\{b \in \mathbb{Z}_a^{\times} : T(a,b) = s\\\}.
+\end{align*}
+$$
+
+We also see the value of $\mathbb{E}[Z]$ and the estimate $\mu\_* = \lambda \log a + C_P - 1$ given by Porter's theorem ([Theorem 6.1](#thm:porter)), both truncated three places after the decimal point. As we will see, there is usually agreement between the two values up to one or two decimal places.
+
+We also show the variance $\sigma^2$ of $Z$, and a curve showing the PDF for the normal distribution with mean $\mu_*$ and variance $\sigma^2$. For most $a$ in our animation sequence, it would seem that the distribution of $Z$ is reasonably well-approximated by this normal distribution, i.e. for most $s$, 
+
+$$
+\begin{align*}
+ \mathbb{P}(Z = s) = \frac{1}{\sigma \sqrt{2\pi}} \exp\left(-\frac{1}{2}\left(\frac{s - \mu\_{\*}}{\sigma}\right)^2\right) + \mathrm{error},
+\end{align*}
+$$
+
+where "error" is "small". Such a result, even if we could precisely formulate and prove it, would be somewhat otiose without a good estimate for $\sigma$.
+
+```python
+# We might decide to change our data before proceeding, but we won't want to overwrite our existing dictionaries.
+# We'll use new variables (e.g. J, J1 instead of H, H1).
+# But we don't want to have to go through the below code and change H1 to J1 etc.
+# Hence we'll just do this, and work from hereon with Zstats etc.
+# If we want to work with different data, all we have to do is change the right-hand sides of the next two assignments.
+
+Z = H1
+Zstats = H1stats
+Zdist = H1dist
+
+fig, ax = plt.subplots()
+fig.suptitle('Number of divisions in Euclidean algorithm for gcd(a,b) \nfor totatives b of a')
+
+# We want to animate a sequence of plots, one plot for each a in the list frame_list.
+# We might want the frame_list to start at a = MiNa, end at a = MaXa, and go up by increments of skip.
+# We could also enter any frame_list we wish, with a's not necessarily going up by regular increments.
+
+MiNa = 100 # Set a-value for first frame.
+MaXa = 10000 # Set a-value for last frame.
+skip = 100 # Set increment.
+
+# Now we define the frame_list list. 
+# We just want to make sure we don't ask for a frame corresponding to an a we don't have data on.
+
+frame_list = []
+for a in range(MiNa,MaXa+skip,skip):
+    if a in list(Zdist.keys()):
+        frame_list.append(a)
+
+# This frame_list for a with the "worst" error term with respect to Porter's theorem.
+# frame_list = []
+# for a in err_champs.keys():
+#     if a >= MiNa:
+#         frame_list.append(a)
+
+# We want a common horizontal axis for each frame in our sequence of plots. 
+# It needs to cover every possible value for the number of divisions T(a,b), 
+# for each a in our frame_list.
+
+hor_axis_set = set()
+for a in frame_list:
+    hor_axis_set = hor_axis_set.union(list(Zdist[a].keys()))
+
+hor_axis_list = list(hor_axis_set)
+hor_axis_list.sort()
+
+# We can now define lower and upper bounds for the horizontal axis.
+# Likewise, we want a common vertical axis range for each plot in our sequence 
+# (otherwise it will appear to jump around).
+
+x_min, x_max = min(hor_axis_list), max(hor_axis_list)
+y_max = max([max(list(Zdist[a].values())) for a in frame_list])
+
+# We can now define a function that gives the plot we want for a given a in our frame_list.
+
+def dist_Z_seq(a):
+    ax.clear()
+    
+    # Bounds for the plot, and horizontal axis tick marks. 
+    xleft, xright, ybottom, ytop = x_min - 0.5, x_max + 0.5, 0, np.ceil(10*y_max)/10 
+    ax.set(xlim=(xleft, xright), ylim=(ybottom, ytop))
+    ax.set_xticks(hor_axis_list)
+    
+    # A grid is helpful, but we want it underneath everything else. 
+    ax.grid(True,zorder=0,alpha=0.7)
+    
+    # Plots of the actual data
+    ax.plot(list(Zdist[a].keys()), Zdist[a].values(), 'bx', zorder=4.5, label=r'$\mathrm{Prob}(Z = s)$')
+    ax.bar(list(Zdist[a].keys()), Zdist[a].values(), zorder=2.5)
+    
+    # Plot of normal curve with mean and variance the same as the mean and variance of the data
+    mu = Zstats[a]['mean']
+    var = Zstats[a]['var'] 
+    sigma = np.sqrt(var)
+    normal_points = np.linspace(list(Zdist[a].keys())[0], list(Zdist[a].keys())[-1]) 
+    #ax.plot(normal_points, stats.norm.pdf(normal_points, mu, sigma), '-', color='#ADD8E6', label=r'$\mathrm{Norm}(\mu,\sigma^2)$', zorder=3.5)
+    
+    # Plot of normal curve with estimate for mean given by Porter's theorem.
+    # As we don't have an estimate for the variance, we'll just use the actual variance in the data
+    mu_p = (lambda_dixon*np.log(a) + porter_constant - 1)
+    ax.plot(normal_points, stats.norm.pdf(normal_points, mu_p, sigma), ':', color='y', label=r'$\mathrm{Norm}(\mu_*,\sigma^2)$', zorder=3.5)
+    
+    # Label the axes
+    ax.set_xlabel(r'$s = \#$steps of the form $(u,v) \mapsto (v,u$ mod $v)$')
+    ax.set_ylabel('probability')
+    
+    # Add text on top of the plot
+    ax.text(0.05,0.93,fr'$a = $ {a},', transform=ax.transAxes)
+    ax.text(0.23,0.93,fr'$\mu_* = \lambda\log a + C_P - 1 = {mu_p:.3f}$', transform=ax.transAxes)
+    ax.text(0.455,0.85,r'$\mathbb{E}[Z] = $' + fr'${mu:.3f}$', transform=ax.transAxes)
+    #ax.text(0.7,0.78,fr'$\mu = $ {mu:.3f}, $\sigma^2 = $ {var:.3f}', transform=ax.transAxes)
+    ax.text(0.75,0.73,fr'$\mu_* = $ {mu_p:.3f}', transform=ax.transAxes)
+    ax.text(0.75,0.65,fr'$\sigma^2 = $ {sigma:.3f}', transform=ax.transAxes)
+    
+    # The legend...
+    ax.legend(loc=1, ncol=1, framealpha=0.5)
+
+# Generate the animation
+dist_Z_seq_anim = animation.FuncAnimation(fig, dist_Z_seq, frames=frame_list, interval=500, blit=False, repeat=False) 
+
+# This is supposed to remedy the blurry axis ticks/labels. 
+plt.rcParams['savefig.facecolor'] = 'white' 
+
+# Just a sample frame. See next code block for animation.
+dist_Z_seq(1000)
+plt.show()
+```
+
+![SegmentLocal](images/euclid_steps_distribution_1d_1000.png)
+
+```python
+# Save a video of the animation.
+HTML(dist_Z_seq_anim.to_html5_video())
+```
+
+```python
+# Alternatively...
+# rc('animation', html='html5')
+# dist_Z_seq_anim
+```
+
+```python
+# Save the animation as an animated GIF
+
+f = r"images\euclid_steps_distribution_1d_10001.gif" 
+dist_Z_seq_anim.save(f, dpi=100, writer='imagemagick', extra_args=['-loop','1'], fps=2)
+
+# extra_args=['-loop','1'] for no looping, '0' for looping.
+
+f = r"images\euclid_steps_distribution_1d_10001_loop.gif" 
+dist_Z_seq_anim.save(f, dpi=100, writer='imagemagick', extra_args=['-loop','0'], fps=2)
+```
+
+<a id='1d-investigation-mean'></a>
+#### One-dimensional analysis: mean and error term
+
+<sup>Jump to: [Table of Contents](#toc) | ↑ [One-dimensional analysis: distribution](#1d-investigation) | ↓ [One-dimensional analysis: variance](#1d-investigation-variance) | ↑↑ [Theory](#1d-average-case)</sup>
+
+We now generate an animation consisting of a sequence of frames like the one below.
+
+![SegmentLocal](images/sum_sign_error_term_porter_1000.png)
+
+This frame corresponds to $N = 1000$. Our animation will show 2000 frames, corresponding to $N = 1, 2, \ldots, 2000$. Recall that for a given $a$, $Z$ is a random variable whose value at $b$ (chosen uniformly at random from among the totatives of $a$, i.e. from $\mathbb{Z}\_a^{\times}$), is $T(a,b)$. Porter's theorem ([Theorem 6.1](#thm:porter)) gives a very precise estimate for $\mathbb{E}[Z]$, which is equivalent to
+
+$$
+\begin{align*}
+ \mathbb{E}[Z] - \left(\lambda \log a + C_P - 1\right) \ll\_{\epsilon} a^{\epsilon - 1/6},
+\end{align*}
+$$
+
+for all $a \ge 1$ and any $\epsilon > 0$. We believe $Z$ behaves roughly like a normal random variable, and so we would expect the error term in Porter's result (i.e. the left-hand side of the above bound), to be positive for about half of all values of $a$ up to $N$, for all large $N$.
+
+Thus, if we consider the sum of the sign of the error term, i.e.
+
+$$
+\begin{align*}
+ \sum_{a = 1}^N \mathrm{sgn}\left(\mathbb{E}[Z] - \left(\lambda \log a + C_P - 1\right)\right),
+\end{align*}
+$$
+
+we expect this to behave like the distance from the origin in a one-dimensional random walk, after $N$ steps, where at each step, the probability of moving right is $1/2$, and the probability of moving left is $1/2$. Thus, the value of the above sum should be equal to zero for infinitely many $N$, and so on. 
+
+The frame corresponding to $N$ in our animation shows $1,2,\ldots,N$ on the horizontal axis, and above each of these points it shows the value of the above sum. The animation does appear to be consistent with the random walk analogy. 
+
+We also produce a second animation in relation to the error term in Porter's theorem. Recall [Conjecture 6.1](#con:porter), effectively assering that $1/6$ can be replaced by $1/2$ in the $O$-term exponent in Porter's theorem. Equivalently, for all $a \ge 1$ and any $\epsilon > 0$, 
+
+$$
+\begin{align*}
+ \mathcal{E}(a) = \sum_{b \in \mathbb{Z}\_a^{\times}} \left[T(a,b) - \left(\lambda \log a + C_P - 1\right)\right] \ll\_{\epsilon} a^{\epsilon + 1/2}
+\end{align*}
+$$
+
+This is illustrated in a sequence of plots corresponding to $a \le 1,2,\ldots,2000$. Below is the frame corresponding to $a \le 650$.
+
+![SegmentLocal](images/error_term_porter_650.png)
+
+The horizontal axis shows $1,2,\ldots,650$, and above each point the value of $\mathcal{E}(a)$ is plotted. We also see the parabolas $y = \pm \sqrt{a}$ and $y = \pm c\sqrt{a}$, where $c$ is just large enough so that this parabola contains the graph $y = \mathcal{E}(a)$. We also note points like $a = 605$: this gives the maximum value $\mathcal{E}(a)/\sqrt{a}$ for $1 \le a \le 650$.
+
+In the data for $a$ up to $2000$, it would certainly seem that $\mathcal{E}(a)$ grows not much faster than $\sqrt{a}$.
+
 
