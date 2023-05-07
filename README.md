@@ -11,9 +11,9 @@ Euclid's algorithm "might be called the grandaddy of all algorithms", as Knuth a
 
 Indeed, one of our goals here is to shed some light (numerically) on a certain "obscure" constant that arises in the analysis of Euclid's algorithm. Our main goal, though, is simply to demonstrate how fun and instructive it can be to study introductory discrete mathematics and statistics alongside basic Python. We'll code Euclid's algorithm, apply it to almost five billion pairs of integers to produce some data, then tabulate and visualise the results (the above animation is just one example). Along the way, we'll discuss the Fibonacci numbers and touch on **dynamic programming**, among other things like **random walks**... [Libraries](#libraries) we'll use include **NumPy**, **SciPy**, **Matplotlib**, and **pandas**. 
 
-There are various ways of analysing Euclid's algorithm. Here is one example. Let $X$ be the random variable whose value is the number divisions performed in the computation of $\gcd(a,b)$ via Euclid's algorithm, with $(a,b)$ chosen uniformly at random from the region $1 \le b < a \le N$. It is known that $X$ is asymptotically normal (as $N \to \infty$), with mean close to $\lambda\log N + \nu - \frac{1}{2}$ and variance close to $\eta\log N + \kappa$, for certain constants $\lambda, \nu, \eta, \kappa$. While the constants associated with the mean can be written in closed form and easily calculated to any desired degree of accuracy ($\lambda = 0.8427659\ldots$ and $\nu = 0.0653514\ldots$), those associated with the variance cannot. Nevertheless, $\eta$ and $\kappa$ are polynomial-time computable, and the first seven digits of $\eta$ have been determined: $\eta = 0.5160524\ldots$. The "subdominant" constant $\kappa$ is even more mysterious, and our numerics will lead us to guess an approximate value for it (we believe it is around $-0.1$). 
+There are various ways of analysing Euclid's algorithm. Here is one example. Let $X$ be the random variable whose value is the number divisions performed in the computation of $\gcd(a,b)$ via Euclid's algorithm, with $(a,b)$ chosen uniformly at random from the region $1 \le b < a \le N$. It is known that $X$ is asymptotically normal (as $N \to \infty$), with mean close to $\lambda\log N + \nu - \frac{1}{2}$ and variance close to $\eta\log N + \kappa$, for certain constants $\lambda, \nu, \eta, \kappa$. While the constants associated with the mean can be written in closed form, and therefore calculated to any desired degree of accuracy with relative ease ($\lambda = 0.8427659\ldots$ and $\nu = 0.0653514\ldots$), this is not so for the constants associated with the variance. Nevertheless, $\eta$ and $\kappa$ are polynomial-time computable, and the first seven digits of $\eta$ have been determined: $\eta = 0.5160524\ldots$. The "subdominant" constant $\kappa$ is even more mysterious, and our numerics will lead us to guess an approximate value for it (we believe it is around $-0.1$). 
 
-In the above animation, the distribution of $X$ is shown for various $N$ up to $10^5$ (starting with $N = 1000$ and going up by $1000$ in each frame). The large blue dots give the probability that $X$ equals a given number on the horizontal axis. The dotted blue curve is normal with mean $\mu = \mathbb{E}[X]$ and variance $\sigma^2 = \mathrm{Var}(X)$, while the light blue curve is normal with mean $\mu_* = \lambda\log N + \nu - \frac{1}{2}$ and variance $\sigma_*^2 = \eta \log N - 0.1$. The red dots and curves are analagous, but only coprime pairs $(a,b)$ are considered. See [Two-dimensional analysis: distribution](#2d-distribution) for more detail and context.
+In the above animation, the distribution of $X$ is shown for various $N$ up to $10^5$ (starting with $N = 1000$ and going up by $1000$ in each frame). The large blue dots give the probability that $X$ equals a given number on the horizontal axis. The dotted blue curve is normal with mean $\mu = \mathbb{E}[X]$ and variance $\sigma^2 = \mathrm{Var}(X)$, while the light blue curve is normal with mean $\mu\_\* = \lambda\log N + \nu - \frac{1}{2}$ and variance $\sigma\_\*^2 = \eta \log N - 0.1$. The red dots and curves are analagous, but only coprime pairs $(a,b)$ are considered. See [Two-dimensional analysis: distribution](#2d-distribution) for more detail and context.
 
 <a id='pictures'></a>
 #### Some plots
@@ -77,7 +77,7 @@ See [Two-dimensional analysis: error terms & subdominant constant in the varianc
 <sup>Jump to: [Table of Contents](#toc) | ↓ [A quick recap of the GCD and Euclid's algorithm](#definitions)</sup>
 
 ```python
-# We'll use the following libraries (by the end of this Notebook).
+# We'll use the following libraries (by the end of this notebook).
 
 import numpy as np # Naturally, we'll need to do some numerics.
 import pandas as pd # We'll want to put data in data frames to import and export it, and to display it nicely.
@@ -366,9 +366,6 @@ for a in range(14):
     for b in range(14):
         test_dict[a][b] = gcd_steps(a,b,0)[1]
         
-# To "tabulate" our data, we'll use pandas. 
-# import pandas as pd # Only needed if not already pre-loaded.
-
 pd.DataFrame.from_dict(test_dict, orient='index')#.astype('int')
 ```
 
@@ -421,7 +418,6 @@ def naive_fib(n):
     if n < 0:
         return naive_fib(-n) # Why not?
 
-# from timeit import default_timer as timer # Only needed if not already pre-loaded.
 naive_time = []
 for n in range(31):
     start = timer()
@@ -474,7 +470,6 @@ for n in range(101):
     end = timer()
     dynamic_time.append(end - start)
 
-#import matplotlib.pyplot as plt # Only needed if not already pre-loaded.
 fig, ax = plt.subplots()
 fig.suptitle('Time to compute nth Fibonacci number')
 x = [n for n in range(101)]
@@ -500,8 +495,6 @@ For any root $\lambda$ of $x^2 - x - 1$ satisfies $\lambda^{n + 2} - \lambda^{n 
 ```python
 # Let's try this out. 
 # In fact, phi^n/sqrt(5) < f_n when n is odd, and phi^n/sqrt(5) > f_n when n is even.
-
-# import numpy as np # Only needed if not already pre-loaded.
 
 phi, psi = np.roots([1,-1,-1])
 
@@ -568,7 +561,7 @@ Note that $1/\log \phi = 2.0780869\ldots$.
 >
 >$$\max\\\{T(a,b) : 1 \le b \le a \le N\\\} = n - 1,$$
 >
->and the result follows by $(*)$. 
+>and the result follows by $(\*)$. 
 
 We see that, for a given $N \ge 2$, as the pair $(a,b)$ ranges over $1 \le b < a \le N$, $T(a,b)$ ranges from $1$ to around $2.078 \log N$. What is the average value of $T(a,b)$ over $(a,b)$ in the same region? How are the values of $T(a,b)$ distributed? We will answer these questions, and more, below.
 
@@ -1330,7 +1323,6 @@ def tabulate(meta_dictionary):
 # Here's where we generate the raw data (one-dimensional case).
 # We'll comment this code out once it's done because we don't want to re-do it every time we run our Notebook.
 #a_list = list(range(1,10001))
-#from timeit import default_timer as timer # Only needed if not already pre-loaded.
 #start = timer()
 #H1, H = heilbronn([1],a_list)
 #end = timer()
@@ -1349,7 +1341,6 @@ def tabulate(meta_dictionary):
 # We'll comment this code out once it's done because we don't want to re-do it every time we run our notebook.
 
 #checkpoints = list(range(1,101001,1000))
-#from timeit import default_timer as timer # Only needed if not already pre-loaded.
 #start = timer()
 #A, B, C = euclid_alg_frequencies([1], [], checkpoints, {}, {}, {})
 #end = timer()
@@ -1385,7 +1376,6 @@ def tabulate(meta_dictionary):
 
 ```python
 # Get the data back into data frames.
-# This code block uses pandas to import data from csv to data frame to dictionary.
 
 Adf = pd.read_csv(r'data\gcd_pairs_100001df.csv', index_col=0)
 Bdf = pd.read_csv(r'data\euclid_steps_coprime_100001df.csv', index_col=0)
