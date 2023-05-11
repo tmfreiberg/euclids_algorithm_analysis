@@ -2094,7 +2094,7 @@ skip = 100 # Set increment.
 frame_list = range(MiNN,MaXN + skip, skip)
 
 fig, ax = plt.subplots()
-fig.suptitle(r'Error in estimate variance of $Z$')
+fig.suptitle(r'Error in estimate for variance of $Z$')
 
 def var_err(N):
     ax.clear()
